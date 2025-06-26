@@ -1,6 +1,5 @@
 # BeatDock
 
-
 ![license](https://img.shields.io/github/license/lazaroagomez/BeatDock?style=flat-square)
 ![Discord.js](https://img.shields.io/badge/discord.js-v14.21.0-blue?style=flat-square)
 ![Lavalink](https://img.shields.io/badge/Lavalink-v4.1.1-orange?style=flat-square)
@@ -21,14 +20,16 @@ A modern, Docker-ready Discord music bot with **slash commands**, **multilingual
 
 ## Quick Start
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/lazaroagomez/BeatDock.git
-   cd BeatDock
-   ```
+### 1. Clone the repository
 
-2. **Create `.env` file**
-   ```dotenv
+```bash
+git clone https://github.com/lazaroagomez/BeatDock.git
+cd BeatDock
+```
+
+### 2. Create `.env` file
+
+```dotenv
 # Discord Bot Configuration
 # Get these from https://discord.com/developers/applications
 TOKEN=your_discord_bot_token_here
@@ -51,16 +52,17 @@ EMPTY_CHANNEL_DESTROY_MS=60000
 # Leave empty to allow everyone to use the bot
 # Example: ALLOWED_ROLES=123456789012345678,234567890123456789
 ALLOWED_ROLES=
-   ```
+```
 
-3. **Deploy commands & start the bot**
-   ```bash
-   # Deploy slash commands
-   docker compose run --rm bot npm run deploy
-   
-   # Start the bot
-   docker compose up -d
-   ```
+### 3. Deploy commands & start the bot
+
+```bash
+# Deploy slash commands
+docker compose run --rm bot npm run deploy
+
+# Start the bot
+docker compose up -d
+```
 
 ## Permissions
 
@@ -84,7 +86,7 @@ To restrict bot usage to specific roles:
 ## Commands
 
 | Slash Command | Description |
-| ------------- | ----------- |
+|---|---|
 | `/play <query>` | Play a song or playlist (searches YouTube if not a URL) |
 | `/skip` | Skip the current song |
 | `/stop` | Stop playback and clear the queue |
@@ -99,8 +101,11 @@ To restrict bot usage to specific roles:
 ## Docker Setup
 
 The bot runs in Docker with two services:
+
 - **BeatDock**: Discord bot (Node.js 22.16)
 - **Lavalink**: Audio server (v4.1.1)
+
+### Managing the Bot
 
 Stop the bot:
 ```bash
@@ -116,36 +121,39 @@ docker compose logs -f
 
 Running BeatDock on Windows:
 
-1. **Install Docker Desktop** – Get it from the [official website](https://www.docker.com/products/docker-desktop/) and make sure the WSL2 backend is enabled.
-2. **Clone the repo**
-   ```powershell
-   git clone https://github.com/lazaroagomez/BeatDock.git
-   cd BeatDock
-   ```
+### 1. Install Docker Desktop
+Get it from the [official website](https://www.docker.com/products/docker-desktop/) and make sure the WSL2 backend is enabled.
 
-3. **Create & edit your `.env** (you can copy the example):
-   ```powershell
-   copy .env.example .env
-   notepad .env  # or open with VS Code
-   ```
+### 2. Clone the repository
+```powershell
+git clone https://github.com/lazaroagomez/BeatDock.git
+cd BeatDock
+```
 
-4. **Deploy slash commands & start everything**
-   ```powershell
-   docker compose run --rm bot npm run deploy
-   docker compose up -d
-   ```
+### 3. Create & edit your `.env` file
+You can copy the example:
+```powershell
+copy .env.example .env
+notepad .env  # or open with VS Code
+```
 
-5. **Monitor logs / containers**
-   ```powershell
-   docker compose logs -f  # CTRL+C to stop viewing
-   ```
+### 4. Deploy slash commands & start everything
+```powershell
+docker compose run --rm bot npm run deploy
+docker compose up -d
+```
+
+### 5. Monitor logs / containers
+```powershell
+docker compose logs -f  # CTRL+C to stop viewing
+```
 
 Docker Desktop will automatically start the containers whenever you reboot (unless disabled in settings).
 
 ## Support
 
-- Issues: [GitHub Issues](https://github.com/lazaroagomez/BeatDock/issues)
-- Email: lazaroagomez@outlook.com
+- **Issues**: [GitHub Issues](https://github.com/lazaroagomez/BeatDock/issues)
+- **Email**: lazaroagomez@outlook.com
 
 ## License
 
