@@ -1,169 +1,455 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BeatDock - Your Ultimate Discord Music Bot</title>
-    <link rel="stylesheet" href="style.css">
+    <title>BeatDock - Ultimate Discord Music Bot</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/yesiamrocks/cssanimation.io@1.0.3/cssanimation.min.css">
+    
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 </head>
 <body>
-    <nav>
+    <!-- Animated Background -->
+    <div class="animated-bg">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top nav-glass">
         <div class="container">
-            <a href="#" class="logo">🎵 BeatDock</a>
-            <ul class="nav-links">
-                <li><a href="#features">Features</a></li>
-                <li><a href="#commands">Commands</a></li>
-                <li><a href="#setup">Setup</a></li>
-                <li><a href="https://github.com/lazaroagomez/BeatDock" target="_blank">GitHub <i class="fab fa-github"></i></a></li>
-            </ul>
+            <a class="navbar-brand gaming-font" href="#">
+                <i class="fas fa-music-pulse me-2"></i>
+                BeatDock
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#commands">Commands</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#setup">Setup</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#permissions">Permissions</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-outline-primary ms-3" href="https://github.com/lazaroagomez/BeatDock" target="_blank">
+                            <i class="fab fa-github me-2"></i>GitHub
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
 
-    <header class="hero">
+    <!-- Hero Section -->
+    <section class="hero-section" id="home">
         <div class="container">
-            <h1>The only Discord music bot you'll ever need.</h1>
-            <p class="subtitle">High-quality music, slash commands, multilingual support, and easy Docker deployment.</p>
-            <a href="#setup" class="btn btn-primary">Get Started</a>
-            <a href="https://github.com/lazaroagomez/BeatDock" class="btn btn-secondary" target="_blank">View on GitHub</a>
+            <div class="row align-items-center min-vh-100">
+                <div class="col-lg-12 text-center">
+                    <div class="hero-content animate__animated animate__fadeInUp">
+                        <div class="discord-badge mb-4">
+                            <i class="fab fa-discord me-2"></i>
+                            Discord Bot
+                        </div>
+                        <h1 class="gaming-font hero-title mb-4" data-text="BEATDOCK">
+                            BEATDOCK
+                        </h1>
+                        <p class="hero-subtitle mb-5">
+                            The Ultimate Music Bot for Discord
+                            <br>
+                            <span class="text-primary">Slash Commands • Multi-Language • Docker Ready</span>
+                        </p>
+                        <div class="hero-buttons d-flex flex-column flex-sm-row justify-content-center align-items-center gap-3">
+                            <a href="#setup" class="btn btn-primary btn-lg glow-button w-100" style="max-width: 250px;">
+                                <i class="fas fa-rocket me-2"></i>Get Started
+                            </a>
+                            <a href="https://github.com/lazaroagomez/BeatDock" class="btn btn-outline-light btn-lg w-100" style="max-width: 250px;" target="_blank">
+                                <i class="fab fa-github me-2"></i>View on GitHub
+                            </a>
+                        </div>
+                        <div class="hero-stats mt-5">
+                            <div class="stat-item">
+                                <i class="fas fa-music"></i>
+                                <span>YouTube Support</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-language"></i>
+                                <span>Multi-Language</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fab fa-docker"></i>
+                                <span>Docker Ready</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </header>
+    </section>
 
-    <main class="container">
-        <section id="features">
-            <h2>Why Choose BeatDock?</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <i class="fas fa-music"></i>
-                    <h3>Rich Music Playback</h3>
-                    <p>Play songs and playlists from YouTube with queue management, shuffle, volume control, and more.</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-bolt"></i>
-                    <h3>Modern Slash Commands</h3>
-                    <p>Utilizes Discord's fast and intuitive slash commands for a seamless user experience.</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-globe"></i>
-                    <h3>Multi-Language Support</h3>
-                    <p>Comes with English and Spanish translations out of the box, and can be easily extended.</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fab fa-docker"></i>
-                    <h3>One-Command Deployment</h3>
-                    <p>Get up and running in seconds with the power of Docker and docker compose.</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-shield-halved"></i>
-                    <h3>Role-Based Permissions</h3>
-                    <p>Control who can use the bot with a simple, role-based permission system.</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-box-open"></i>
-                    <h3>Stateless by Design</h3>
-                    <p>No database required. All state is kept in memory, perfect for containerized setups.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="commands">
-            <h2>Command Reference</h2>
-            <p>A complete list of all available slash commands.</p>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Command</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td><code>/play &lt;query&gt;</code></td><td>Play a song or playlist (searches YouTube if not a URL)</td></tr>
-                    <tr><td><code>/skip</code></td><td>Skip the current song</td></tr>
-                    <tr><td><code>/stop</code></td><td>Stop playback and clear the queue</td></tr>
-                    <tr><td><code>/pause</code></td><td>Toggle pause/resume</td></tr>
-                    <tr><td><code>/queue</code></td><td>Show the current queue</td></tr>
-                    <tr><td><code>/nowplaying</code></td><td>Show info about the current song</td></tr>
-                    <tr><td><code>/shuffle</code></td><td>Shuffle the queue</td></tr>
-                    <tr><td><code>/volume &lt;0-100&gt;</code></td><td>Set playback volume</td></tr>
-                    <tr><td><code>/clear</code></td><td>Clear the entire queue</td></tr>
-                    <tr><td><code>/back</code></td><td>Play the previous track</td></tr>
-                </tbody>
-            </table>
-        </section>
-
-        <section id="setup">
-            <h2>Quick Start Guide</h2>
-            <p>Deploying BeatDock is incredibly simple with Docker.</p>
-            <div class="setup-steps">
-                <div class="step">
-                    <h3>1. Clone the Repository</h3>
-                    <p>Get the source code on your machine.</p>
-                    <div class="code-block">
-                        <pre><code>git clone https://github.com/lazaroagomez/BeatDock.git
-cd BeatDock</code></pre>
-                        <button class="copy-btn"><i class="far fa-copy"></i></button>
-                    </div>
-                </div>
-                <div class="step">
-                    <h3>2. Configure your Bot</h3>
-                    <p>Create a <code>.env</code> file with your bot token and client ID.</p>
-                    <div class="code-block">
-                        <pre><code> # Required
-   TOKEN=your_discord_bot_token
-   CLIENT_ID=your_discord_client_id
-
-   # Lavalink connection
-   LAVALINK_HOST=lavalink
-   LAVALINK_PORT=2333
-   LAVALINK_PASSWORD=youshallnotpass
-
-   # Optional: Language (default is "en")
-   DEFAULT_LANGUAGE=en
-
-   # Optional: Timeout settings (milliseconds)
-   QUEUE_EMPTY_DESTROY_MS=30000  
-   EMPTY_CHANNEL_DESTROY_MS=60000 
-
-   # Optional: Permission Settings (comma-separated role IDs)
-   ALLOWED_ROLES=</code></pre>
-                        <button class="copy-btn"><i class="far fa-copy"></i></button>
-                    </div>
-                </div>
-                <div class="step">
-                    <h3>3. Deploy Commands</h3>
-                    <p>Run this one-time command to register the slash commands with Discord.</p>
-                    <div class="code-block">
-                        <pre><code>docker compose run --rm bot npm run deploy</code></pre>
-                        <button class="copy-btn"><i class="far fa-copy"></i></button>
-                    </div>
-                </div>
-                <div class="step">
-                    <h3>4. Start the Bot</h3>
-                    <p>That's it! Your bot is now online.</p>
-                    <div class="code-block">
-                        <pre><code>docker compose up -d</code></pre>
-                        <button class="copy-btn"><i class="far fa-copy"></i></button>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer>
+    <!-- Features Section -->
+    <section class="features-section py-5" id="features">
         <div class="container">
-            <p>&copy; 2024 Lázaro Gómez. All Rights Reserved.</p>
-            <p>BeatDock is licensed under the Apache-2.0 License.</p>
-            <div class="footer-links">
-                <a href="https://github.com/lazaroagomez/BeatDock" target="_blank">GitHub</a>
-                <a href="https://github.com/lazaroagomez/BeatDock/issues" target="_blank">Report an Issue</a>
+            <div class="section-header text-center mb-5">
+                <h2 class="gaming-font section-title">
+                    <span class="text-gradient">POWERFUL FEATURES</span>
+                </h2>
+                <p class="section-subtitle">Everything you need for the perfect music experience</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card h-100">
+                        <div class="feature-icon">
+                            <i class="fas fa-headphones-alt"></i>
+                        </div>
+                        <h4>High-Quality Audio</h4>
+                        <p>Powered by Lavalink for crystal-clear music playback with minimal latency</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card h-100">
+                        <div class="feature-icon">
+                            <i class="fas fa-slash"></i>
+                        </div>
+                        <h4>Slash Commands</h4>
+                        <p>Modern Discord slash commands with auto-completion for ease of use</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card h-100">
+                        <div class="feature-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <h4>Multi-Language</h4>
+                        <p>Built-in support for English and Spanish, easily extendable for more languages</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card h-100">
+                        <div class="feature-icon">
+                            <i class="fab fa-docker"></i>
+                        </div>
+                        <h4>Docker Ready</h4>
+                        <p>Deploy in seconds with Docker Compose - no complex setup required</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card h-100">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h4>Role Permissions</h4>
+                        <p>Control access with role-based permissions and admin overrides</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card h-100">
+                        <div class="feature-icon">
+                            <i class="fas fa-cloud"></i>
+                        </div>
+                        <h4>Stateless Design</h4>
+                        <p>No database required - perfect for containerized deployments</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Commands Section -->
+    <section class="commands-section py-5" id="commands">
+        <div class="container">
+            <div class="section-header text-center mb-5">
+                <h2 class="gaming-font section-title">
+                    <span class="text-gradient">COMMANDS</span>
+                </h2>
+                <p class="section-subtitle">All available slash commands at your fingertips</p>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-10 mx-auto">
+                    <div class="commands-grid">
+                        <div class="command-item">
+                            <div class="command-header">
+                                <code>/play</code>
+                                <span class="badge bg-primary">Essential</span>
+                            </div>
+                            <p>Play a song or playlist from YouTube</p>
+                        </div>
+                        
+                        <div class="command-item">
+                            <div class="command-header">
+                                <code>/skip</code>
+                                <span class="badge bg-info">Playback</span>
+                            </div>
+                            <p>Skip the current song</p>
+                        </div>
+                        
+                        <div class="command-item">
+                            <div class="command-header">
+                                <code>/stop</code>
+                                <span class="badge bg-danger">Control</span>
+                            </div>
+                            <p>Stop playback and clear the queue</p>
+                        </div>
+                        
+                        <div class="command-item">
+                            <div class="command-header">
+                                <code>/pause</code>
+                                <span class="badge bg-warning">Playback</span>
+                            </div>
+                            <p>Toggle pause/resume</p>
+                        </div>
+                        
+                        <div class="command-item">
+                            <div class="command-header">
+                                <code>/queue</code>
+                                <span class="badge bg-secondary">Info</span>
+                            </div>
+                            <p>Show the current queue</p>
+                        </div>
+                        
+                        <div class="command-item">
+                            <div class="command-header">
+                                <code>/nowplaying</code>
+                                <span class="badge bg-secondary">Info</span>
+                            </div>
+                            <p>Show current song info</p>
+                        </div>
+                        
+                        <div class="command-item">
+                            <div class="command-header">
+                                <code>/shuffle</code>
+                                <span class="badge bg-success">Queue</span>
+                            </div>
+                            <p>Shuffle the queue</p>
+                        </div>
+                        
+                        <div class="command-item">
+                            <div class="command-header">
+                                <code>/volume</code>
+                                <span class="badge bg-info">Control</span>
+                            </div>
+                            <p>Set playback volume (0-100)</p>
+                        </div>
+                        
+                        <div class="command-item">
+                            <div class="command-header">
+                                <code>/clear</code>
+                                <span class="badge bg-danger">Queue</span>
+                            </div>
+                            <p>Clear the entire queue</p>
+                        </div>
+                        
+                        <div class="command-item">
+                            <div class="command-header">
+                                <code>/back</code>
+                                <span class="badge bg-info">Playback</span>
+                            </div>
+                            <p>Play the previous track</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Setup Section -->
+    <section class="setup-section py-5" id="setup">
+        <div class="container">
+            <div class="section-header text-center mb-5">
+                <h2 class="gaming-font section-title">
+                    <span class="text-gradient">QUICK SETUP</span>
+                </h2>
+                <p class="section-subtitle">Get BeatDock running in just 4 simple steps</p>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-10 mx-auto">
+                    <div class="setup-timeline">
+                        <!-- Step 1 -->
+                        <div class="setup-step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>Clone the Repository</h4>
+                                <p>Get the source code on your machine</p>
+                                <div class="code-block">
+                                    <pre><code>git clone https://github.com/lazaroagomez/BeatDock.git
+cd BeatDock</code></pre>
+                                    <button class="copy-btn" data-clipboard-target="#code1">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 2 -->
+                        <div class="setup-step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>Configure Environment</h4>
+                                <p>Create a <code>.env</code> file with your bot credentials</p>
+                                <div class="code-block">
+                                    <pre><code># Discord Bot Configuration
+TOKEN=your_discord_bot_token_here
+CLIENT_ID=your_discord_client_id_here
+
+# Lavalink Configuration
+LAVALINK_HOST=lavalink
+LAVALINK_PORT=2333
+LAVALINK_PASSWORD=youshallnotpass
+
+# Optional Settings
+DEFAULT_LANGUAGE=en
+ALLOWED_ROLES=</code></pre>
+                                    <button class="copy-btn" data-clipboard-target="#code2">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 3 -->
+                        <div class="setup-step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>Deploy Commands</h4>
+                                <p>Register slash commands with Discord</p>
+                                <div class="code-block">
+                                    <pre><code>docker compose run --rm bot npm run deploy</code></pre>
+                                    <button class="copy-btn" data-clipboard-target="#code3">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 4 -->
+                        <div class="setup-step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h4>Start the Bot</h4>
+                                <p>Launch BeatDock with Docker Compose</p>
+                                <div class="code-block">
+                                    <pre><code>docker compose up -d</code></pre>
+                                    <button class="copy-btn" data-clipboard-target="#code4">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Permissions Section -->
+    <section class="permissions-section py-5" id="permissions">
+        <div class="container">
+            <div class="section-header text-center mb-5">
+                <h2 class="gaming-font section-title">
+                    <span class="text-gradient">PERMISSIONS</span>
+                </h2>
+                <p class="section-subtitle">Control who can use your bot</p>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="permission-card mb-4">
+                        <div class="permission-icon">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <div class="permission-content">
+                            <h4>Admin Override</h4>
+                            <p>Users with Administrator permissions always have full access to all bot commands</p>
+                        </div>
+                    </div>
+                    
+                    <div class="permission-card mb-4">
+                        <div class="permission-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="permission-content">
+                            <h4>Role-Based Access</h4>
+                            <p>Configure specific roles that can use the bot by adding role IDs to your <code>.env</code> file</p>
+                            <div class="code-snippet mt-3">
+                                <code>ALLOWED_ROLES=123456789012345678,234567890123456789</code>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="permission-card">
+                        <div class="permission-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <div class="permission-content">
+                            <h4>Default Behavior</h4>
+                            <p>If no roles are specified, everyone can use the bot</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer-section py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="footer-brand">
+                        <h5 class="gaming-font mb-3">BeatDock</h5>
+                        <p class="mb-0">A modern Discord music bot built with love</p>
+                    </div>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="footer-links">
+                        <a href="https://github.com/lazaroagomez/BeatDock" target="_blank" class="me-3">
+                            <i class="fab fa-github"></i> GitHub
+                        </a>
+                        <a href="https://github.com/lazaroagomez/BeatDock/issues" target="_blank">
+                            <i class="fas fa-bug"></i> Report Issue
+                        </a>
+                    </div>
+                    <p class="mt-3 mb-0">© 2024 Lázaro Gómez. Apache-2.0 License</p>
+                </div>
             </div>
         </div>
     </footer>
 
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    
+    <!-- Custom JS -->
     <script src="script.js"></script>
 </body>
 </html> 
