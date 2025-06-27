@@ -1,8 +1,8 @@
-# Global code owner for the entire repository
+# Set @lazaroagomez as the default owner for everything
 * @lazaroagomez
 
-# Specific patterns for dependency files
+# Dependency files
 package*.json @lazaroagomez
 Dockerfile @lazaroagomez
 docker-compose.yml @lazaroagomez
-.github/ @lazaroagomez 
+.github/ @lazaroagomez
