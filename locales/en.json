@@ -37,5 +37,6 @@
     "QUEUE_NO_TRACKS": "No tracks in queue",
     "UNKNOWN_TITLE": "Unknown Title",
     "LEFT_EMPTY": "Leaving voice channel because it is empty.",
-    "QUEUE_ENDED": "Leaving voice channel because the queue finished."
+    "QUEUE_ENDED": "Leaving voice channel because the queue finished.",
+    "LISTENING_TO_MUSIC": "music 🎵"
 } 

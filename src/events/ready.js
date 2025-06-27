@@ -8,7 +8,8 @@ module.exports = {
         await client.lavalink.init({ ...client.user });
         console.log('Lavalink initialized');
         
-        // Set presence
-        client.user.setActivity('música 🎵', { type: 2 }); // Type 2 = LISTENING
+        // Set default presence using translation
+        const defaultPresence = client.t('LISTENING_TO_MUSIC');
+        client.user.setActivity(defaultPresence, { type: 2 }); // Type 2 = LISTENING
     },
 }; 

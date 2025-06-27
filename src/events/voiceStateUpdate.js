@@ -19,6 +19,10 @@ module.exports = {
                 const player = client.lavalink.getPlayer(guildId);
                 if (player) player.destroy();
                 client.playerController.deletePlayer(guildId);
+                
+                // Update presence
+                client.activePlayers.delete(guildId);
+                client.updatePresence();
 
                 // Clear any pending empty-channel disconnect timers
                 if (emptyChannelTimeouts.has(guildId)) {
@@ -70,6 +74,10 @@ module.exports = {
                     const player = client.lavalink.getPlayer(guildId);
                     if (player) player.destroy();
                     client.playerController.deletePlayer(guildId);
+                    
+                    // Update presence
+                    client.activePlayers.delete(guildId);
+                    client.updatePresence();
                 }, timeoutMs);
 
                 emptyChannelTimeouts.set(guildId, timeout);

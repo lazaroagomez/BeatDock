@@ -37,5 +37,6 @@
     "QUEUE_NO_TRACKS": "No hay pistas en la cola",
     "UNKNOWN_TITLE": "Título Desconocido",
     "LEFT_EMPTY": "Abandonando el canal de voz porque está vacío.",
-    "QUEUE_ENDED": "Saliendo del canal de voz porque la lista de reproducción terminó."
+    "QUEUE_ENDED": "Saliendo del canal de voz porque la lista de reproducción terminó.",
+    "LISTENING_TO_MUSIC": "música 🎵"
 } 
