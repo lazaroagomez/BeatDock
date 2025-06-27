@@ -16,7 +16,7 @@ As the project maintainer, I am responsible for clarifying standards of acceptab
 This Code of Conduct applies within all project spaces and in public spaces when an individual is representing the project.
 
 ## Enforcement
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by opening a confidential GitHub *Security Advisory* or by emailing **lazaroagomez@outlook.com**. All complaints will be reviewed and investigated promptly and fairly.
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by opening a confidential GitHub *Security Advisory* or by emailing **lazaro98@duck.com**. All complaints will be reviewed and investigated promptly and fairly.
 
 ## Attribution
 This Code of Conduct is adapted from the [Contributor Covenant](https://contributor-covenant.org) version 2.1. 

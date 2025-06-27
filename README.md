@@ -153,7 +153,7 @@ Docker Desktop will automatically start the containers whenever you reboot (unle
 ## Support
 
 - **Issues**: [GitHub Issues](https://github.com/lazaroagomez/BeatDock/issues)
-- **Email**: lazaroagomez@outlook.com
+- **Email**: lazaro98@duck.com
 
 ## License
 

@@ -14,7 +14,7 @@ If you believe you have found a security vulnerability, please **do not open a p
 Instead, choose one of the following private channels:
 
 1. Open a confidential GitHub *Security Advisory*.
-2. Email **lazaroagomez@outlook.com**.
+2. Email **lazaro98@duck.com**.
 
 I aim to acknowledge reports within **48&nbsp;hours** and, if confirmed, release a fix within **7&nbsp;days**.
 
