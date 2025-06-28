@@ -162,6 +162,37 @@ module.exports = {
                         responded = true;
                         break;
 
+                    case 'player_loop':
+                        // Cycle through loop modes
+                        let newMode;
+                        let modeMessage;
+                        
+                        switch (player.repeatMode || 'off') {
+                            case 'off':
+                                newMode = 'track';
+                                modeMessage = client.languageManager.get(lang, 'LOOP_TRACK_ENABLED');
+                                break;
+                            case 'track':
+                                newMode = 'queue';
+                                modeMessage = client.languageManager.get(lang, 'LOOP_QUEUE_ENABLED');
+                                break;
+                            case 'queue':
+                                newMode = 'off';
+                                modeMessage = client.languageManager.get(lang, 'LOOP_DISABLED');
+                                break;
+                            default:
+                                newMode = 'track';
+                                modeMessage = client.languageManager.get(lang, 'LOOP_TRACK_ENABLED');
+                        }
+
+                        player.setRepeatMode(newMode);
+                        await interaction.reply({ 
+                            content: modeMessage, 
+                            ephemeral: true 
+                        });
+                        responded = true;
+                        break;
+
                 }
 
                 // Update the player message after any action

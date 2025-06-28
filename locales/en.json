@@ -38,5 +38,11 @@
     "UNKNOWN_TITLE": "Unknown Title",
     "LEFT_EMPTY": "Leaving voice channel because it is empty.",
     "QUEUE_ENDED": "Leaving voice channel because the queue finished.",
-    "LISTENING_TO_MUSIC": "music 🎵"
+    "LISTENING_TO_MUSIC": "music 🎵",
+    "LOOP_TRACK_ENABLED": "🔂 Track loop enabled",
+    "LOOP_QUEUE_ENABLED": "🔁 Queue loop enabled",
+    "LOOP_DISABLED": "➡️ Loop disabled",
+    "LOOP_STATUS": "Loop Mode",
+    "LOOP_STATUS_TRACK": "Track",
+    "LOOP_STATUS_QUEUE": "Queue"
 } 

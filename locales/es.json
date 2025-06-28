@@ -38,5 +38,11 @@
     "UNKNOWN_TITLE": "Título Desconocido",
     "LEFT_EMPTY": "Abandonando el canal de voz porque está vacío.",
     "QUEUE_ENDED": "Saliendo del canal de voz porque la lista de reproducción terminó.",
-    "LISTENING_TO_MUSIC": "música 🎵"
+    "LISTENING_TO_MUSIC": "música 🎵",
+    "LOOP_TRACK_ENABLED": "🔂 Bucle de pista activado",
+    "LOOP_QUEUE_ENABLED": "🔁 Bucle de cola activado",
+    "LOOP_DISABLED": "➡️ Bucle desactivado",
+    "LOOP_STATUS": "Modo de bucle",
+    "LOOP_STATUS_TRACK": "Pista",
+    "LOOP_STATUS_QUEUE": "Cola"
 } 

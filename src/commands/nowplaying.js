@@ -22,6 +22,20 @@ module.exports = {
 
         const embed = client.playerController.createPlayerEmbed(player, track);
 
+        // Add loop status to nowplaying
+        if (player.repeatMode && player.repeatMode !== 'off') {
+            const loopIcon = player.repeatMode === 'track' ? '🔂' : '🔁';
+            const loopText = player.repeatMode === 'track' 
+                ? client.languageManager.get(client.defaultLanguage, 'LOOP_STATUS_TRACK')
+                : client.languageManager.get(client.defaultLanguage, 'LOOP_STATUS_QUEUE');
+            
+            embed.addFields({
+                name: client.languageManager.get(client.defaultLanguage, 'LOOP_STATUS'),
+                value: `${loopIcon} ${loopText}`,
+                inline: true
+            });
+        }
+
         return interaction.reply({ embeds: [embed], ephemeral: true });
     },
 }; 
