@@ -91,6 +91,7 @@ To restrict bot usage to specific roles:
 | `/skip` | Skip the current song |
 | `/stop` | Stop playback and clear the queue |
 | `/pause` | Toggle pause/resume |
+| `/loop` | Toggle loop mode (off/track/queue) |
 | `/queue` | Show the current queue |
 | `/nowplaying` | Show info about the current song |
 | `/shuffle` | Shuffle the queue |
