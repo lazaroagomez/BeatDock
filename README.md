@@ -18,6 +18,32 @@ A modern, Docker-ready Discord music bot with **slash commands**, **multilingual
 - 🐳 **One-Command Deployment** – Ship with Docker & docker compose in seconds.
 - 📦 **Stateless** – No database; all state kept in memory (perfect for containerised environments).
 
+## Bot Requirements
+
+> ⚠️ **Important**: Before setting up BeatDock, you must enable the required Discord Privileged Gateway Intents in the Discord Developer Portal.
+
+### 🔒 Required Discord Intents
+
+BeatDock requires **all three** Discord Privileged Gateway Intents to function properly:
+
+- **✅ Presence Intent** - Allows the bot to see user presence information
+- **✅ Server Members Intent** - Enables access to server member data  
+- **✅ Message Content Intent** - Required for message content access
+
+### How to Enable Intents
+
+1. Go to the [Discord Developer Portal](https://discord.com/developers/applications)
+2. Select your bot application
+3. Navigate to **"Bot"** in the left sidebar
+4. Scroll down to **"Privileged Gateway Intents"**
+5. **Enable all three toggle switches:**
+   - ☑️ Presence Intent
+   - ☑️ Server Members Intent  
+   - ☑️ Message Content Intent
+6. Click **"Save Changes"**
+
+> 🚨 **Without these intents enabled, the bot will not function properly and may fail to start or respond to commands.**
+
 ## Quick Start
 
 ### 1. Clone the repository

@@ -289,12 +289,45 @@
                 <h2 class="gaming-font section-title">
                     <span class="text-gradient">QUICK SETUP</span>
                 </h2>
-                <p class="section-subtitle">Get BeatDock running in just 4 simple steps</p>
+                <p class="section-subtitle">Get BeatDock running in just 5 simple steps</p>
             </div>
             
             <div class="row">
                 <div class="col-lg-10 mx-auto">
                     <div class="setup-timeline">
+                        <!-- Step 0 - Discord Intents -->
+                        <div class="setup-step">
+                            <div class="step-number">0</div>
+                            <div class="step-content">
+                                <h4>🔒 Enable Discord Intents</h4>
+                                <p><strong>Required:</strong> Enable these three Privileged Gateway Intents in Discord Developer Portal</p>
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <div class="intent-item">
+                                            <i class="fas fa-eye text-success"></i>
+                                            <span>Presence Intent</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="intent-item">
+                                            <i class="fas fa-users text-info"></i>
+                                            <span>Server Members Intent</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="intent-item">
+                                            <i class="fas fa-comments text-warning"></i>
+                                            <span>Message Content Intent</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="alert alert-warning">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    <strong>Critical:</strong> The bot will not function without these intents enabled in your Discord Developer Portal under Bot → Privileged Gateway Intents.
+                                </div>
+                            </div>
+                        </div>
+                        
                         <!-- Step 1 -->
                         <div class="setup-step">
                             <div class="step-number">1</div>
