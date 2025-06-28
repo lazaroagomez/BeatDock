@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   bot:
     container_name: beatdock
@@ -7,7 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile
     depends_on:
-      lavalink:
+      - lavalink
     networks:
       - beatdock-network
     env_file: .env
