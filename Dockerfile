@@ -16,7 +16,7 @@ RUN npm ci --only=production
 FROM node:22.17-alpine
 
 # Add runtime dependencies
-RUN apk add --no-cache tini wget
+RUN apk add --no-cache tini
 
 # Create app user
 RUN addgroup -g 1001 -S nodejs && \
