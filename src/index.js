@@ -70,6 +70,19 @@ client.lavalink = new LavalinkManager({
     },
 });
 
+// Lavalink NodeManager events
+client.lavalink.nodeManager.on('connect', (node) => {
+    console.log(`Lavalink node "${node.options.id}" connected.`);
+});
+
+client.lavalink.nodeManager.on('error', (node, error) => {
+    console.error(`Lavalink node "${node.options.id}" encountered an error:`, error);
+});
+
+client.lavalink.nodeManager.on('disconnect', (node, reason) => {
+    console.log(`Lavalink node "${node.options.id}" disconnected. Reason: ${reason.reason || 'Unknown'}`);
+});
+
 // Lavalink events
 client.lavalink.on("trackStart", (player, track) => {
     // Update player UI

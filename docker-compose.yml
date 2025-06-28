@@ -7,16 +7,22 @@ services:
       context: .
       dockerfile: Dockerfile
     depends_on:
-      - lavalink
+      lavalink:
+        condition: service_healthy
     networks:
       - beatdock-network
     env_file: .env
 
   lavalink:
     container_name: beatdock-lavalink
-    image: fredboat/lavalink:4-alpine
+    image: ghcr.io/lavalink-devs/lavalink:4-alpine
     ports:
       - "2333:2333"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider --fail http://localhost:2333/v4/info || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
     networks:
       - beatdock-network
     volumes:
