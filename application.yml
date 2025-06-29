@@ -19,7 +19,7 @@ lavalink:
     - dependency: "dev.lavalink.youtube:youtube-plugin:1.13.3"
       snapshot: false
   server:
-    password: "youshallnotpass"
+    password: "${LAVALINK_PASSWORD:youshallnotpass}"
     sources:
       youtube: false
       soundcloud: true

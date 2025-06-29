@@ -19,6 +19,8 @@ services:
       - beatdock-network
     volumes:
       - ./application.yml:/opt/Lavalink/application.yml
+    environment:
+      - LAVALINK_PASSWORD=${LAVALINK_PASSWORD:-youshallnotpass}
 
 networks:
   beatdock-network:
