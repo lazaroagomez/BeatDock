@@ -455,6 +455,7 @@ body {
 .setup-step:nth-child(2) { animation-delay: 0.2s; }
 .setup-step:nth-child(3) { animation-delay: 0.3s; }
 .setup-step:nth-child(4) { animation-delay: 0.4s; }
+.setup-step:nth-child(5) { animation-delay: 0.5s; }
 
 @keyframes fadeInLeft {
     from {
@@ -889,6 +890,71 @@ body {
     .code-snippet {
         font-size: 0.75rem;
         padding: 0.5rem;
+    }
+}
+
+/* Discord Intents Styling */
+.intent-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: rgba(26, 31, 46, 0.6);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.intent-item:hover {
+    border-color: var(--wallpaper-purple);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(145, 70, 255, 0.2);
+}
+
+.intent-item i {
+    font-size: 1.25rem;
+    width: 20px;
+    text-align: center;
+}
+
+.intent-item span {
+    font-weight: 500;
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+.alert {
+    background: rgba(255, 193, 7, 0.1);
+    border: 1px solid rgba(255, 193, 7, 0.3);
+    border-radius: 10px;
+    padding: 1rem;
+    color: var(--text-light);
+    margin-top: 1rem;
+}
+
+.alert-warning {
+    background: rgba(255, 193, 7, 0.1);
+    border-color: rgba(255, 193, 7, 0.3);
+}
+
+.alert i {
+    color: var(--warning-color);
+}
+
+@media (max-width: 768px) {
+    .intent-item {
+        padding: 0.75rem;
+        font-size: 0.85rem;
+    }
+    
+    .intent-item i {
+        font-size: 1rem;
+    }
+    
+    .alert {
+        padding: 0.75rem;
+        font-size: 0.85rem;
     }
 }
 

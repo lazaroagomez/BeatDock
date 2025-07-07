@@ -1,6 +1,6 @@
 {
   "name": "beatdock",
-  "version": "1.0.2",
+  "version": "1.1.1",
   "description": "A modern and efficient Discord music bot with slash commands, multi-language support, and Docker deployment.",
   "main": "src/index.js",
   "scripts": {
@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "discord.js": "^14.21.0",
-    "dotenv": "^16.5.0",
+    "dotenv": "^17.0.0",
     "lavalink-client": "^2.5.6"
   }
 }

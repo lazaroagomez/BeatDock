@@ -27,14 +27,14 @@ module.exports = {
         
         // Handle button interactions
         if (interaction.isButton()) {
-            if (!interaction.customId.startsWith('player_')) return;
+            if (!interaction.customId.startsWith('player_') && !interaction.customId.startsWith('queue_')) return;
 
             // Check permissions
             const hasPermission = await checkInteractionPermission(interaction);
             if (!hasPermission) return;
 
             const { requirePlayer, requireSameVoice } = require('../utils/interactionHelpers');
-            const { playPrevious, shuffleQueue, clearQueue, formattedQueue } = require('../utils/PlayerActions');
+            const { playPrevious, shuffleQueue, clearQueue, createPaginatedQueueResponse } = require('../utils/PlayerActions');
 
             const player = await requirePlayer(interaction);
             if (!player) return;
@@ -123,18 +123,8 @@ module.exports = {
                         break;
 
                     case 'player_queue':
-                        if (player.queue.tracks.length === 0) {
-                            await interaction.reply({ 
-                                content: client.languageManager.get(lang, 'QUEUE_EMPTY'), 
-                                ephemeral: true 
-                            });
-                        } else {
-                            const queueString = formattedQueue(player, 10);
-                            await interaction.reply({ 
-                                content: client.languageManager.get(lang, 'PLAYER_QUEUE_DISPLAY', queueString), 
-                                ephemeral: true 
-                            });
-                        }
+                        const queueResponse = createPaginatedQueueResponse(client, player, 1);
+                        await interaction.reply(queueResponse);
                         responded = true;
                         break;
 
@@ -162,6 +152,61 @@ module.exports = {
                         responded = true;
                         break;
 
+                    case 'player_loop':
+                        // Cycle through loop modes
+                        let newMode;
+                        let modeMessage;
+                        
+                        switch (player.repeatMode || 'off') {
+                            case 'off':
+                                newMode = 'track';
+                                modeMessage = client.languageManager.get(lang, 'LOOP_TRACK_ENABLED');
+                                break;
+                            case 'track':
+                                newMode = 'queue';
+                                modeMessage = client.languageManager.get(lang, 'LOOP_QUEUE_ENABLED');
+                                break;
+                            case 'queue':
+                                newMode = 'off';
+                                modeMessage = client.languageManager.get(lang, 'LOOP_DISABLED');
+                                break;
+                            default:
+                                newMode = 'track';
+                                modeMessage = client.languageManager.get(lang, 'LOOP_TRACK_ENABLED');
+                        }
+
+                        player.setRepeatMode(newMode);
+                        await interaction.reply({ 
+                            content: modeMessage, 
+                            ephemeral: true 
+                        });
+                        responded = true;
+                        break;
+
+                }
+
+                // Handle pagination buttons
+                if (interaction.customId.startsWith('queue_prev_') || interaction.customId.startsWith('queue_next_')) {
+                    const parts = interaction.customId.split('_');
+                    if (parts.length !== 3) return;
+                    
+                    const [action, direction, targetPageStr] = parts;
+                    const targetPage = parseInt(targetPageStr);
+                    if (isNaN(targetPage)) return;
+                    
+                    // Validate player still has tracks
+                    if (!player.queue.tracks.length) {
+                        await interaction.update({ 
+                            content: client.languageManager.get(lang, 'QUEUE_EMPTY'), 
+                            embeds: [], 
+                            components: [] 
+                        });
+                        return;
+                    }
+                    
+                    const queueResponse = createPaginatedQueueResponse(client, player, targetPage);
+                    await interaction.update(queueResponse);
+                    responded = true;
                 }
 
                 // Update the player message after any action

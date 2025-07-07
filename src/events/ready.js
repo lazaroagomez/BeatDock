@@ -1,3 +1,5 @@
+const { ActivityType } = require('discord.js');
+
 module.exports = {
     name: 'ready',
     once: true,
@@ -10,6 +12,6 @@ module.exports = {
         
         // Set default presence using translation
         const defaultPresence = client.t('LISTENING_TO_MUSIC');
-        client.user.setActivity(defaultPresence, { type: 2 }); // Type 2 = LISTENING
+        client.user.setActivity(defaultPresence, { type: ActivityType.Listening });
     },
 }; 

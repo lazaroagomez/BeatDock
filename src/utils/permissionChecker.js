@@ -6,6 +6,8 @@
  * - If no roles are specified, everyone can use the bot
  */
 
+const { PermissionsBitField } = require('discord.js');
+
 /**
  * Check if user has permission to use the bot
  * @param {import('discord.js').GuildMember} member - The guild member to check
@@ -13,7 +15,7 @@
  */
 function hasPermission(member) {
     // Admins always have permission
-    if (member.permissions.has('Administrator')) {
+    if (member.permissions.has(PermissionsBitField.Flags.Administrator)) {
         return true;
     }
 

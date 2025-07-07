@@ -21,11 +21,23 @@ class PlayerController {
             .setFooter({ text: this.client.languageManager.get(lang, 'PLAYER_VOLUME', player.volume) })
             .setTimestamp();
 
+        // Add loop status to the embed
+        if (player.repeatMode && player.repeatMode !== 'off') {
+            const loopIcon = player.repeatMode === 'track' ? '🔂' : '🔁';
+            const loopText = player.repeatMode === 'track' 
+                ? this.client.languageManager.get(lang, 'LOOP_STATUS_TRACK')
+                : this.client.languageManager.get(lang, 'LOOP_STATUS_QUEUE');
+            embed.setFooter({ 
+                text: `${this.client.languageManager.get(lang, 'PLAYER_VOLUME', player.volume)} | ${loopIcon} ${loopText}` 
+            });
+        }
+
         return embed;
     }
 
     createPlayerButtons(player) {
         const isPaused = player.paused;
+        const loopIcon = player.repeatMode === 'track' ? '🔂' : player.repeatMode === 'queue' ? '🔁' : '➡️';
         
         const row1 = new ActionRowBuilder()
             .addComponents(
@@ -53,6 +65,10 @@ class PlayerController {
                     .setCustomId('player_shuffle')
                     .setEmoji('🔀')
                     .setStyle(ButtonStyle.Secondary),
+                new ButtonBuilder()
+                    .setCustomId('player_loop')
+                    .setEmoji(loopIcon)
+                    .setStyle(player.repeatMode !== 'off' ? ButtonStyle.Success : ButtonStyle.Secondary),
                 new ButtonBuilder()
                     .setCustomId('player_queue')
                     .setEmoji('📜')

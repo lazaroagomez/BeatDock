@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { Client, GatewayIntentBits } = require('discord.js');
+const { Client, GatewayIntentBits, ActivityType } = require('discord.js');
 const { LavalinkManager } = require('lavalink-client');
 const LanguageManager = require('./LanguageManager');
 const PlayerController = require('./utils/PlayerController');
@@ -35,7 +35,7 @@ client.updatePresence = function() {
     if (activePlayers.length === 0) {
         // No music playing, set default presence
         const defaultPresence = this.t('LISTENING_TO_MUSIC');
-        this.user.setActivity(defaultPresence, { type: 2 }); // Type 2 = LISTENING
+        this.user.setActivity(defaultPresence, { type: ActivityType.Listening });
     } else {
         // Show the most recently started track
         const mostRecent = activePlayers[activePlayers.length - 1];
@@ -43,7 +43,7 @@ client.updatePresence = function() {
         
         // Truncate if too long (Discord has a 128 character limit)
         const truncatedTitle = songTitle.length > 125 ? songTitle.substring(0, 122) + '...' : songTitle;
-        this.user.setActivity(truncatedTitle, { type: 2 }); // Type 2 = LISTENING
+        this.user.setActivity(truncatedTitle, { type: ActivityType.Listening });
     }
 };
 
@@ -68,6 +68,19 @@ client.lavalink = new LavalinkManager({
             destroyAfterMs: parseInt(process.env.QUEUE_EMPTY_DESTROY_MS || "30000", 10),
         }
     },
+});
+
+// Lavalink NodeManager events
+client.lavalink.nodeManager.on('connect', (node) => {
+    console.log(`Lavalink node "${node.options.id}" connected.`);
+});
+
+client.lavalink.nodeManager.on('error', (node, error) => {
+    console.error(`Lavalink node "${node.options.id}" encountered an error:`, error);
+});
+
+client.lavalink.nodeManager.on('disconnect', (node, reason) => {
+    console.log(`Lavalink node "${node.options.id}" disconnected. Reason: ${reason.reason || 'Unknown'}`);
 });
 
 // Lavalink events
