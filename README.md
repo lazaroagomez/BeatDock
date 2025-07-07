@@ -52,6 +52,9 @@ EMPTY_CHANNEL_DESTROY_MS=60000
 # Leave empty to allow everyone to use the bot
 # Example: ALLOWED_ROLES=123456789012345678,234567890123456789
 ALLOWED_ROLES=
+
+# Optional: Audio Settings
+DEFAULT_VOLUME=80
 ```
 
 ### 3. Deploy commands & start the bot
