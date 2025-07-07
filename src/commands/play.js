@@ -26,7 +26,7 @@ module.exports = {
             textChannelId: interaction.channel.id,
             selfDeaf: true,
             selfMute: false,
-            volume: 80,
+            volume: parseInt(process.env.DEFAULT_VOLUME || '80', 10),
         });
 
         if(player.voiceChannelId !== voiceChannel.id) {
@@ -70,4 +70,4 @@ module.exports = {
             await client.playerController.sendPlayer(interaction.channel, player);
         }
     },
-}; 
+};
