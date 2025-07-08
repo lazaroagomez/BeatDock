@@ -61,6 +61,12 @@ cd BeatDock
 TOKEN=your_discord_bot_token_here
 CLIENT_ID=your_discord_client_id_here
 
+# Optional: Spotify Configuration
+# Get your credentials from: https://developer.spotify.com/dashboard/applications
+SPOTIFY_ENABLED=true
+SPOTIFY_CLIENT_ID=your_spotify_client_id_here
+SPOTIFY_CLIENT_SECRET=your_spotify_client_secret_here
+
 # Lavalink Server Configuration
 LAVALINK_HOST=lavalink
 LAVALINK_PORT=2333

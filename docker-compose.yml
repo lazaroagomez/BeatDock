@@ -1,4 +1,4 @@
-services:
+Wservices:
   bot:
     container_name: beatdock
     build:
@@ -21,6 +21,7 @@ services:
       - ./application.yml:/opt/Lavalink/application.yml
     environment:
       - LAVALINK_PASSWORD=${LAVALINK_PASSWORD:-youshallnotpass}
+    env_file: .env
 
 networks:
   beatdock-network:

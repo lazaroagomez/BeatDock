@@ -13,10 +13,29 @@ plugins:
       - ANDROID_VR
       - WEB
       - WEBEMBEDDED
+  lavasrc:
+    providers:
+      - "ytsearch:\"%ISRC%\""
+      - "ytmsearch:%QUERY%"
+      - "ytsearch:%QUERY%"
+      - "scsearch:%QUERY%"
+      - "spsearch:%QUERY%"
+    sources:
+      spotify: ${SPOTIFY_ENABLED:false}
+      youtube: false
+    spotify:
+      clientId: "${SPOTIFY_CLIENT_ID:}"
+      clientSecret: "${SPOTIFY_CLIENT_SECRET:}"
+      countryCode: "US"
+      playlistLoadLimit: 6
+      albumLoadLimit: 6
 
 lavalink:
   plugins:
     - dependency: "dev.lavalink.youtube:youtube-plugin:1.13.3"
+      snapshot: false
+    - dependency: "com.github.topi314.lavasrc:lavasrc-plugin:4.2.0"
+      repository: "https://maven.lavalink.dev/releases"
       snapshot: false
   server:
     password: "${LAVALINK_PASSWORD:youshallnotpass}"
@@ -41,4 +60,4 @@ lavalink:
 logging:
   level:
     root: INFO
-    lavalink: INFO 
+    lavalink: INFO
