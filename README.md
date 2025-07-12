@@ -186,6 +186,26 @@ docker compose logs -f  # CTRL+C to stop viewing
 
 Docker Desktop will automatically start the containers whenever you reboot (unless disabled in settings).
 
+## Community-Contributed Prebuilt Docker Image (ARM64)
+
+A prebuilt Docker image for ARM64 platforms (e.g., Raspberry Pi 5) has been made available by community contributor **@driftywinds**. This is intended for users who don't want to rebuild the image on every update.
+
+> **Important Note**: This is a community-based contribution and not officially maintained by the BeatDock core team. We greatly appreciate @driftywinds for providing this resource to the community.
+
+### Available Images
+
+The following container registries host the ARM64 image (in order of recommendation):
+
+1. **GitHub Container Registry (recommended)**: `ghcr.io/driftywinds/beatdock-bot:latest`
+2. **Quay.io**: `quay.io/driftywinds/beatdock-bot:latest`
+3. **Docker Hub**: `docker.io/driftywinds/beatdock-bot:latest`
+
+### Usage Instructions
+
+Simply copy and paste the desired image tag into your `docker-compose.yml` file, and it should work out of the box on compatible ARM64 devices.
+
+For more details, see the original discussion in [Issue #32](https://github.com/lazaroagomez/BeatDock/issues/32).
+
 ## Support
 
 - **Issues**: [GitHub Issues](https://github.com/lazaroagomez/BeatDock/issues)
