@@ -401,10 +401,18 @@ DEFAULT_VOLUME=80</code></pre>
                         <div class="setup-step">
                             <div class="step-number">4</div>
                             <div class="step-content">
-                                <h4>Deploy Commands</h4>
-                                <p>Register slash commands with Discord</p>
+                                <h4>Use Official Docker Image</h4>
+                                <p>Update your <code>docker-compose.yml</code> to use the pre-built image</p>
                                 <div class="code-block">
-                                    <pre><code>docker compose run --rm bot npm run deploy</code></pre>
+                                    <pre><code>services:
+  bot:
+    container_name: beatdock
+    image: ghcr.io/lazaroagomez/beatdock:latest
+    depends_on:
+      - lavalink
+    networks:
+      - beatdock-network
+    env_file: .env</code></pre>
                                     <button class="copy-btn" data-clipboard-target="#code3">
                                         <i class="fas fa-copy"></i>
                                     </button>
@@ -416,10 +424,11 @@ DEFAULT_VOLUME=80</code></pre>
                         <div class="setup-step">
                             <div class="step-number">5</div>
                             <div class="step-content">
-                                <h4>Start the Bot</h4>
-                                <p>Launch BeatDock with Docker Compose</p>
+                                <h4>Deploy Commands & Start</h4>
+                                <p>Register slash commands and launch BeatDock</p>
                                 <div class="code-block">
-                                    <pre><code>docker compose up -d</code></pre>
+                                    <pre><code>docker compose run --rm bot npm run deploy
+docker compose up -d</code></pre>
                                     <button class="copy-btn" data-clipboard-target="#code4">
                                         <i class="fas fa-copy"></i>
                                     </button>
@@ -430,67 +439,37 @@ DEFAULT_VOLUME=80</code></pre>
                 </div>
             </div>
             
-            <!-- Community ARM64 Docker Image Section -->
+            <!-- Build from Source Section -->
             <div class="row mt-5">
                 <div class="col-lg-10 mx-auto">
                     <div class="section-header text-center mb-4">
                         <h3 class="gaming-font">
-                            <span class="text-gradient">Community-Contributed Prebuilt Docker Image (ARM64)</span>
+                            <span class="text-gradient">Build from Source</span>
                         </h3>
+                        <p class="text-muted">If you prefer to build the Docker image yourself</p>
                     </div>
                     
-                    <div class="alert alert-info mb-4">
+                    <div class="alert alert-secondary mb-4">
                         <div class="d-flex align-items-start">
-                            <i class="fas fa-users text-info me-3 mt-1"></i>
+                            <i class="fas fa-tools text-secondary me-3 mt-1"></i>
                             <div>
-                                <h5 class="alert-heading mb-2">Community Contribution</h5>
-                                <p class="mb-2">A prebuilt Docker image for ARM64 platforms (e.g., Raspberry Pi 5) has been made available by community contributor <strong>@driftywinds</strong>. This is intended for users who don't want to rebuild the image on every update.</p>
-                                <p class="mb-0"><strong>Important:</strong> This is a community-based contribution and not officially maintained by the BeatDock core team. We greatly appreciate @driftywinds for providing this resource to the community.</p>
+                                <h5 class="alert-heading mb-2">Alternative Setup</h5>
+                                <p class="mb-2">Keep the original <code>build</code> configuration in your docker-compose.yml instead of using the pre-built image.</p>
+                                <div class="code-block mt-3">
+                                    <pre><code>services:
+  bot:
+    container_name: beatdock
+    build:
+      context: .
+      dockerfile: Dockerfile</code></pre>
+                                </div>
+                                <p class="mb-0 mt-2">Then follow the same steps to deploy commands and start the bot.</p>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="row">
-                        <div class="col-md-8 mx-auto">
-                            <h5 class="mb-3"><i class="fas fa-microchip text-primary me-2"></i>Available Images</h5>
-                            <p class="mb-3">The following container registries host the ARM64 image (in order of recommendation):</p>
-                            
-                            <div class="list-group mb-4">
-                                <div class="list-group-item bg-dark border-secondary">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <h6 class="mb-1 text-success">GitHub Container Registry <span class="badge bg-success ms-2">Recommended</span></h6>
-                                            <code class="text-light">ghcr.io/driftywinds/beatdock-bot:latest</code>
-                                        </div>
-                                        <i class="fab fa-github text-success"></i>
-                                    </div>
-                                </div>
-                                <div class="list-group-item bg-dark border-secondary">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <h6 class="mb-1">Quay.io</h6>
-                                            <code class="text-light">quay.io/driftywinds/beatdock-bot:latest</code>
-                                        </div>
-                                        <i class="fas fa-cloud text-info"></i>
-                                    </div>
-                                </div>
-                                <div class="list-group-item bg-dark border-secondary">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <h6 class="mb-1">Docker Hub</h6>
-                                            <code class="text-light">docker.io/driftywinds/beatdock-bot:latest</code>
-                                        </div>
-                                        <i class="fab fa-docker text-primary"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="alert alert-light text-dark">
-                                <h6 class="alert-heading mb-2"><i class="fas fa-info-circle text-primary me-2"></i>Usage Instructions</h6>
-                                <p class="mb-2">Simply copy and paste the desired image tag into your <code>docker-compose.yml</code> file, and it should work out of the box on compatible ARM64 devices.</p>
-                                <p class="mb-0">For more details, see the original discussion in <a href="https://github.com/lazaroagomez/BeatDock/issues/32" target="_blank" class="text-primary"><i class="fas fa-external-link-alt me-1"></i>Issue #32</a>.</p>
-                            </div>
-                        </div>
+                    <div class="alert alert-info">
+                        <p class="mb-0"><strong>Community ARM64 Image:</strong> Thanks to <strong>@driftywinds</strong> for providing an ARM64 community image at <code>ghcr.io/driftywinds/beatdock-bot:latest</code>. See <a href="https://github.com/lazaroagomez/BeatDock/issues/32" target="_blank" class="text-light"><i class="fas fa-external-link-alt me-1"></i>Issue #32</a> for details.</p>
                     </div>
                 </div>
             </div>
