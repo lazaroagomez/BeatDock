@@ -91,18 +91,38 @@ DEFAULT_VOLUME=80
 
 ### 3. Update docker-compose.yml to use the official image
 
-Replace the `build` section in your `docker-compose.yml` with:
+Replace the bot service's `build` section with the pre-built image:
 
 ```yaml
+# Complete docker-compose.yml configuration
 services:
   bot:
     container_name: beatdock
-    image: ghcr.io/lazaroagomez/beatdock:latest
+    image: ghcr.io/lazaroagomez/beatdock:latest  # Use official image instead of build
     depends_on:
       - lavalink
     networks:
       - beatdock-network
     env_file: .env
+
+  lavalink:
+    container_name: beatdock-lavalink
+    image: ghcr.io/lavalink-devs/lavalink:4-alpine
+    ports:
+      - "2333:2333"
+    networks:
+      - beatdock-network
+    volumes:
+      - ./application.yml:/opt/Lavalink/application.yml
+    environment:
+      - LAVALINK_PASSWORD=${LAVALINK_PASSWORD:-youshallnotpass}
+      - SPOTIFY_ENABLED=${SPOTIFY_ENABLED:-false}
+      - SPOTIFY_CLIENT_ID=${SPOTIFY_CLIENT_ID:-}
+      - SPOTIFY_CLIENT_SECRET=${SPOTIFY_CLIENT_SECRET:-}
+
+networks:
+  beatdock-network:
+    name: beatdock_network
 ```
 
 ### 4. Deploy commands & start the bot

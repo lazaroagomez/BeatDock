@@ -402,17 +402,37 @@ DEFAULT_VOLUME=80</code></pre>
                             <div class="step-number">4</div>
                             <div class="step-content">
                                 <h4>Use Official Docker Image</h4>
-                                <p>Update your <code>docker-compose.yml</code> to use the pre-built image</p>
+                                <p>Replace the bot service's <code>build</code> section with the pre-built image:</p>
                                 <div class="code-block">
-                                    <pre><code>services:
+                                    <pre><code># Complete docker-compose.yml configuration
+services:
   bot:
     container_name: beatdock
-    image: ghcr.io/lazaroagomez/beatdock:latest
+    image: ghcr.io/lazaroagomez/beatdock:latest  # Use official image instead of build
     depends_on:
       - lavalink
     networks:
       - beatdock-network
-    env_file: .env</code></pre>
+    env_file: .env
+
+  lavalink:
+    container_name: beatdock-lavalink
+    image: ghcr.io/lavalink-devs/lavalink:4-alpine
+    ports:
+      - "2333:2333"
+    networks:
+      - beatdock-network
+    volumes:
+      - ./application.yml:/opt/Lavalink/application.yml
+    environment:
+      - LAVALINK_PASSWORD=${LAVALINK_PASSWORD:-youshallnotpass}
+      - SPOTIFY_ENABLED=${SPOTIFY_ENABLED:-false}
+      - SPOTIFY_CLIENT_ID=${SPOTIFY_CLIENT_ID:-}
+      - SPOTIFY_CLIENT_SECRET=${SPOTIFY_CLIENT_SECRET:-}
+
+networks:
+  beatdock-network:
+    name: beatdock_network</code></pre>
                                     <button class="copy-btn" data-clipboard-target="#code3">
                                         <i class="fas fa-copy"></i>
                                     </button>
