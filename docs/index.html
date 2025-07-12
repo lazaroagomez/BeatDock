@@ -432,63 +432,17 @@ DEFAULT_VOLUME=80</code></pre>
             
             <!-- Community ARM64 Docker Image Section -->
             <div class="row mt-5">
-                <div class="col-lg-10 mx-auto">
-                    <div class="section-header text-center mb-4">
-                        <h3 class="gaming-font">
-                            <span class="text-gradient">Community-Contributed Prebuilt Docker Image (ARM64)</span>
-                        </h3>
-                    </div>
-                    
-                    <div class="alert alert-info mb-4">
+                <div class="col-lg-8 mx-auto">
+                    <div class="alert alert-info">
                         <div class="d-flex align-items-start">
-                            <i class="fas fa-users text-info me-3 mt-1"></i>
+                            <i class="fas fa-microchip text-info me-3 mt-1"></i>
                             <div>
-                                <h5 class="alert-heading mb-2">Community Contribution</h5>
-                                <p class="mb-2">A prebuilt Docker image for ARM64 platforms (e.g., Raspberry Pi 5) has been made available by community contributor <strong>@driftywinds</strong>. This is intended for users who don't want to rebuild the image on every update.</p>
-                                <p class="mb-0"><strong>Important:</strong> This is a community-based contribution and not officially maintained by the BeatDock core team. We greatly appreciate @driftywinds for providing this resource to the community.</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-md-8 mx-auto">
-                            <h5 class="mb-3"><i class="fas fa-microchip text-primary me-2"></i>Available Images</h5>
-                            <p class="mb-3">The following container registries host the ARM64 image (in order of recommendation):</p>
-                            
-                            <div class="list-group mb-4">
-                                <div class="list-group-item bg-dark border-secondary">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <h6 class="mb-1 text-success">GitHub Container Registry <span class="badge bg-success ms-2">Recommended</span></h6>
-                                            <code class="text-light">ghcr.io/driftywinds/beatdock-bot:latest</code>
-                                        </div>
-                                        <i class="fab fa-github text-success"></i>
-                                    </div>
+                                <h5 class="alert-heading mb-2">ARM64 Support</h5>
+                                <p class="mb-2">Community-contributed ARM64 Docker image available for Raspberry Pi and other ARM64 devices:</p>
+                                <div class="code-snippet mb-2">
+                                    <code>ghcr.io/driftywinds/beatdock-bot:latest</code>
                                 </div>
-                                <div class="list-group-item bg-dark border-secondary">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <h6 class="mb-1">Quay.io</h6>
-                                            <code class="text-light">quay.io/driftywinds/beatdock-bot:latest</code>
-                                        </div>
-                                        <i class="fas fa-cloud text-info"></i>
-                                    </div>
-                                </div>
-                                <div class="list-group-item bg-dark border-secondary">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <h6 class="mb-1">Docker Hub</h6>
-                                            <code class="text-light">docker.io/driftywinds/beatdock-bot:latest</code>
-                                        </div>
-                                        <i class="fab fa-docker text-primary"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="alert alert-light text-dark">
-                                <h6 class="alert-heading mb-2"><i class="fas fa-info-circle text-primary me-2"></i>Usage Instructions</h6>
-                                <p class="mb-2">Simply copy and paste the desired image tag into your <code>docker-compose.yml</code> file, and it should work out of the box on compatible ARM64 devices.</p>
-                                <p class="mb-0">For more details, see the original discussion in <a href="https://github.com/lazaroagomez/BeatDock/issues/32" target="_blank" class="text-primary"><i class="fas fa-external-link-alt me-1"></i>Issue #32</a>.</p>
+                                <p class="mb-0 small">For more details, see <a href="https://github.com/lazaroagomez/BeatDock/issues/32" target="_blank" class="text-primary"><i class="fas fa-external-link-alt me-1"></i>Issue #32</a></p>
                             </div>
                         </div>
                     </div>
