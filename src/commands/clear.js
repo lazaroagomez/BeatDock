@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
+const {metrics} = require('../analytics/prometheusClient')
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -13,7 +14,7 @@ module.exports = {
         if (!player) return;
 
         clearQueue(player);
-
+        metrics.commandsExecuted.inc({ command: 'clear', status: 'success' });
         return interaction.reply({ 
             content: client.languageManager.get(client.defaultLanguage, 'QUEUE_CLEARED'), 
             ephemeral: true 

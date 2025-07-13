@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-
+const { metrics } = require("../analytics/prometheusClient");
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('queue')
@@ -13,6 +13,8 @@ module.exports = {
         if (!player) return;
 
         const queueResponse = createPaginatedQueueResponse(client, player, 1);
+        metrics.commandsExecuted.inc({
+            command: 'queue',status: 'success'});
         return interaction.reply(queueResponse);
     },
 }; 

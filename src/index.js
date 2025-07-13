@@ -5,6 +5,8 @@ const LanguageManager = require('./LanguageManager');
 const PlayerController = require('./utils/PlayerController');
 const loadCommands = require('./handlers/commandHandler');
 const registerEvents = require('./handlers/eventHandler');
+const { createMetricsServer } = require('./analytics/analyticsServer');
+const { metrics } = require('./analytics/prometheusClient');
 
 const client = new Client({
     intents: [
@@ -133,3 +135,15 @@ loadCommands(client);
 registerEvents(client);
 
 client.login(process.env.TOKEN); 
+
+const metricsPort = process.env.METRICS_PORT || 9090;
+createMetricsServer(metricsPort);
+
+// Update guild and user counts periodically
+setInterval(() => {
+    if (client.guilds && client.users) {
+        metrics.guildsCount.set(client.guilds.cache.size);
+        metrics.usersCount.set(client.users.cache.size);
+        metrics.activePlayers.set(client.lavalink?.players?.size || 0);
+    }
+}, 30000);

@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { requirePlayer } = require('../utils/interactionHelpers');
 const { playPrevious } = require('../utils/PlayerActions');
+const {metrics} = require('../analytics/prometheusClient')
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -15,12 +16,14 @@ module.exports = {
         const track = await playPrevious(player);
 
         if (!track) {
+            metrics.commandsExecuted.inc({ command: 'back', status: 'failed' });
             return interaction.reply({ 
                 content: client.languageManager.get(client.defaultLanguage, 'NO_PREVIOUS_SONG'), 
                 ephemeral: true 
             });
+            
         }
-
+        metrics.commandsExecuted.inc({ command: 'back', status: 'success' });
         return interaction.reply({ 
             content: client.languageManager.get(client.defaultLanguage, 'PLAYING_PREVIOUS', track.info?.title || 'Unknown'), 
             ephemeral: true 

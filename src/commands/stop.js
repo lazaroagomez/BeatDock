@@ -1,5 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { requirePlayer } = require('../utils/interactionHelpers');
+const { metrics } = require("../analytics/prometheusClient");
+
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -12,6 +14,7 @@ module.exports = {
         if (!player) return;
 
         await player.destroy();
+        metrics.commandsExecuted.inc({ command: 'stop', status: 'success' });
         return interaction.reply({ 
             content: client.languageManager.get(client.defaultLanguage, 'STOPPED_PLAYBACK'), 
             ephemeral: true 
