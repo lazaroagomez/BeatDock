@@ -55,8 +55,9 @@
                         <a class="nav-link" href="#permissions">Permissions</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link btn btn-outline-primary ms-3" href="https://github.com/lazaroagomez/BeatDock" target="_blank">
+                        <a class="nav-link btn btn-outline-primary ms-3" href="https://github.com/lazaroagomez/BeatDock" target="_blank" rel="noopener">
                             <i class="fab fa-github me-2"></i>GitHub
+                            <i class="fas fa-external-link-alt ms-1" style="font-size: 0.7rem;"></i>
                         </a>
                     </li>
                 </ul>
@@ -86,8 +87,9 @@
                             <a href="#setup" class="btn btn-primary btn-lg glow-button w-100" style="max-width: 250px;">
                                 <i class="fas fa-rocket me-2"></i>Get Started
                             </a>
-                            <a href="https://github.com/lazaroagomez/BeatDock" class="btn btn-outline-light btn-lg w-100" style="max-width: 250px;" target="_blank">
+                            <a href="https://github.com/lazaroagomez/BeatDock" class="btn btn-outline-light btn-lg w-100" style="max-width: 250px;" target="_blank" rel="noopener">
                                 <i class="fab fa-github me-2"></i>View on GitHub
+                                <i class="fas fa-external-link-alt ms-1" style="font-size: 0.75rem;"></i>
                             </a>
                         </div>
                         <div class="hero-stats mt-5">
@@ -367,28 +369,40 @@ cd BeatDock</code></pre>
                             <div class="step-number">3</div>
                             <div class="step-content">
                                 <h4>Configure Environment</h4>
-                                <p>Create a <code>.env</code> file with your bot credentials</p>
+                                <p>Create a <code>.env</code> file with your bot credentials (copy from <code>.env.example</code>)</p>
                                 <div class="code-block">
                                     <pre><code># Discord Bot Configuration
+# Get these from https://discord.com/developers/applications
 TOKEN=your_discord_bot_token_here
 CLIENT_ID=your_discord_client_id_here
 
 # Optional: Spotify Configuration
+# To enable Spotify support, set SPOTIFY_ENABLED=true and provide your credentials
 # Get your credentials from: https://developer.spotify.com/dashboard/applications
 SPOTIFY_ENABLED=false
 SPOTIFY_CLIENT_ID=your_spotify_client_id_here
 SPOTIFY_CLIENT_SECRET=your_spotify_client_secret_here
 
-# Lavalink Configuration
+# Lavalink Server Configuration
 LAVALINK_HOST=lavalink
 LAVALINK_PORT=2333
 LAVALINK_PASSWORD=youshallnotpass
 
-# Optional Settings
-DEFAULT_LANGUAGE=en
+# Optional: Language Settings
+#DEFAULT_LANGUAGE=en
+
+# Optional: Disconnection Settings
+QUEUE_EMPTY_DESTROY_MS=30000
+EMPTY_CHANNEL_DESTROY_MS=60000
+
+# Optional: Permission Settings
+# Comma-separated list of role IDs that can use the bot
+# Leave empty to allow everyone to use the bot
+# Example: ALLOWED_ROLES=123456789012345678,234567890123456789
 ALLOWED_ROLES=
 
 # Optional: Audio Settings
+# Default volume for music playback (0-100, defaults to 80 if not set or invalid)
 DEFAULT_VOLUME=80</code></pre>
                                     <button class="copy-btn" data-clipboard-target="#code2">
                                         <i class="fas fa-copy"></i>
@@ -401,57 +415,19 @@ DEFAULT_VOLUME=80</code></pre>
                         <div class="setup-step">
                             <div class="step-number">4</div>
                             <div class="step-content">
-                                <h4>Use Official Docker Image</h4>
-                                <p>Replace the bot service's <code>build</code> section with the pre-built image:</p>
+                                <h4>Deploy with Docker</h4>
+                                <p>The included <code>docker-compose.yml</code> uses the official pre-built image</p>
                                 <div class="code-block">
-                                    <pre><code># Complete docker-compose.yml configuration
-services:
-  bot:
-    container_name: beatdock
-    image: ghcr.io/lazaroagomez/beatdock:latest  # Use official image instead of build
-    depends_on:
-      - lavalink
-    networks:
-      - beatdock-network
-    env_file: .env
-
-  lavalink:
-    container_name: beatdock-lavalink
-    image: ghcr.io/lavalink-devs/lavalink:4-alpine
-    ports:
-      - "2333:2333"
-    networks:
-      - beatdock-network
-    volumes:
-      - ./application.yml:/opt/Lavalink/application.yml
-    environment:
-      - LAVALINK_PASSWORD=${LAVALINK_PASSWORD:-youshallnotpass}
-      - SPOTIFY_ENABLED=${SPOTIFY_ENABLED:-false}
-      - SPOTIFY_CLIENT_ID=${SPOTIFY_CLIENT_ID:-}
-      - SPOTIFY_CLIENT_SECRET=${SPOTIFY_CLIENT_SECRET:-}
-
-networks:
-  beatdock-network:
-    name: beatdock_network</code></pre>
+                                    <pre><code># Deploy slash commands and start the bot
+docker compose run --rm bot npm run deploy
+docker compose up -d</code></pre>
                                     <button class="copy-btn" data-clipboard-target="#code3">
                                         <i class="fas fa-copy"></i>
                                     </button>
                                 </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Step 5 -->
-                        <div class="setup-step">
-                            <div class="step-number">5</div>
-                            <div class="step-content">
-                                <h4>Deploy Commands & Start</h4>
-                                <p>Register slash commands and launch BeatDock</p>
-                                <div class="code-block">
-                                    <pre><code>docker compose run --rm bot npm run deploy
-docker compose up -d</code></pre>
-                                    <button class="copy-btn" data-clipboard-target="#code4">
-                                        <i class="fas fa-copy"></i>
-                                    </button>
+                                <div class="alert alert-info mt-3">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    <strong>Note:</strong> The default configuration uses <code>ghcr.io/lazaroagomez/beatdock:latest</code> for easy deployment.
                                 </div>
                             </div>
                         </div>
@@ -557,10 +533,10 @@ docker compose up -d</code></pre>
                 </div>
                 <div class="col-md-6 text-md-end">
                     <div class="footer-links">
-                        <a href="https://github.com/lazaroagomez/BeatDock" target="_blank" class="me-3">
+                        <a href="https://github.com/lazaroagomez/BeatDock" target="_blank" rel="noopener" class="me-3">
                             <i class="fab fa-github"></i> GitHub
                         </a>
-                        <a href="https://github.com/lazaroagomez/BeatDock/issues" target="_blank">
+                        <a href="https://github.com/lazaroagomez/BeatDock/issues" target="_blank" rel="noopener">
                             <i class="fas fa-bug"></i> Report Issue
                         </a>
                     </div>

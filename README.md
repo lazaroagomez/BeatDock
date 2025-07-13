@@ -1,50 +1,46 @@
 # BeatDock
 
+<div align="center">
+
 ![license](https://img.shields.io/github/license/lazaroagomez/BeatDock?style=flat-square)
 ![Discord.js](https://img.shields.io/badge/discord.js-v14.21.0-blue?style=flat-square)
 ![Lavalink](https://img.shields.io/badge/Lavalink-v4.1.1-orange?style=flat-square)
 ![Docker](https://img.shields.io/badge/docker-ready-success?style=flat-square)
 
-[🌐 View the Website / Docs](https://lazaroagomez.github.io/BeatDock)
+[🌐 **View the Website / Docs**](https://lazaroagomez.github.io/BeatDock)
+
+</div>
 
 A modern, Docker-ready Discord music bot with **slash commands**, **multilingual support**, and a **role-based permission system** – all powered by **Lavalink**.
 
-## Features
+## ✨ Features
 
-- 🎵 **Rich Music Playback** – YouTube search, playlists, queue management, shuffle, previous track, volume & more.
-- ⚡ **Slash Commands** – Fast, auto-completed slash commands for every feature.
-- 🌐 **Multi-language** – English & Spanish translations out of the box (easily extendable).
-- 🛡️ **Permission System** – Admin override + role-based access controlled via `.env` (no database required).
-- 🐳 **One-Command Deployment** – Ship with Docker & docker compose in seconds.
-- 📦 **Stateless** – No database; all state kept in memory (perfect for containerised environments).
+- 🎵 **Rich Music Playback** – YouTube search, playlists, queue management, shuffle, previous track, volume control
+- ⚡ **Slash Commands** – Fast, auto-completed slash commands for every feature
+- 🌐 **Multi-language Support** – English & Spanish translations (easily extendable)
+- 🛡️ **Permission System** – Admin override + role-based access via `.env` (no database required)
+- 🐳 **One-Command Deployment** – Deploy with Docker Compose in seconds
+- 📦 **Stateless Design** – No database; all state in memory (perfect for containerized environments)
+- 🎧 **Spotify Integration** – Optional Spotify support with smart track resolution
 
-## Bot Requirements
+## 🔒 Discord Bot Setup Requirements
 
-> ⚠️ **Important**: Before setting up BeatDock, you must enable the required Discord Privileged Gateway Intents in the Discord Developer Portal.
+> ⚠️ **Important**: Before setting up BeatDock, enable the required Discord Privileged Gateway Intents.
 
-### 🔒 Required Discord Intents
+BeatDock requires **all three** Discord Privileged Gateway Intents:
 
-BeatDock requires **all three** Discord Privileged Gateway Intents to function properly:
+- **✅ Presence Intent** - User presence information
+- **✅ Server Members Intent** - Server member data access  
+- **✅ Message Content Intent** - Message content access
 
-- **✅ Presence Intent** - Allows the bot to see user presence information
-- **✅ Server Members Intent** - Enables access to server member data  
-- **✅ Message Content Intent** - Required for message content access
+**To enable these intents:**
+1. Go to [Discord Developer Portal](https://discord.com/developers/applications)
+2. Select your bot application → **"Bot"** → **"Privileged Gateway Intents"**
+3. Enable all three toggles → **"Save Changes"**
 
-### How to Enable Intents
+> 🚨 **The bot will not function without these intents enabled.**
 
-1. Go to the [Discord Developer Portal](https://discord.com/developers/applications)
-2. Select your bot application
-3. Navigate to **"Bot"** in the left sidebar
-4. Scroll down to **"Privileged Gateway Intents"**
-5. **Enable all three toggle switches:**
-   - ☑️ Presence Intent
-   - ☑️ Server Members Intent  
-   - ☑️ Message Content Intent
-6. Click **"Save Changes"**
-
-> 🚨 **Without these intents enabled, the bot will not function properly and may fail to start or respond to commands.**
-
-## Quick Start
+## 🚀 Quick Start
 
 ### 1. Clone the repository
 
@@ -53,7 +49,9 @@ git clone https://github.com/lazaroagomez/BeatDock.git
 cd BeatDock
 ```
 
-### 2. Create `.env` file
+### 2. Configure environment variables
+
+Create a `.env` file (copy from `.env.example`):
 
 ```dotenv
 # Discord Bot Configuration
@@ -62,8 +60,9 @@ TOKEN=your_discord_bot_token_here
 CLIENT_ID=your_discord_client_id_here
 
 # Optional: Spotify Configuration
+# To enable Spotify support, set SPOTIFY_ENABLED=true and provide your credentials
 # Get your credentials from: https://developer.spotify.com/dashboard/applications
-SPOTIFY_ENABLED=true
+SPOTIFY_ENABLED=false
 SPOTIFY_CLIENT_ID=your_spotify_client_id_here
 SPOTIFY_CLIENT_SECRET=your_spotify_client_secret_here
 
@@ -86,46 +85,11 @@ EMPTY_CHANNEL_DESTROY_MS=60000
 ALLOWED_ROLES=
 
 # Optional: Audio Settings
+# Default volume for music playback (0-100, defaults to 80 if not set or invalid)
 DEFAULT_VOLUME=80
 ```
 
-### 3. Update docker-compose.yml to use the official image
-
-Replace the bot service's `build` section with the pre-built image:
-
-```yaml
-# Complete docker-compose.yml configuration
-services:
-  bot:
-    container_name: beatdock
-    image: ghcr.io/lazaroagomez/beatdock:latest  # Use official image instead of build
-    depends_on:
-      - lavalink
-    networks:
-      - beatdock-network
-    env_file: .env
-
-  lavalink:
-    container_name: beatdock-lavalink
-    image: ghcr.io/lavalink-devs/lavalink:4-alpine
-    ports:
-      - "2333:2333"
-    networks:
-      - beatdock-network
-    volumes:
-      - ./application.yml:/opt/Lavalink/application.yml
-    environment:
-      - LAVALINK_PASSWORD=${LAVALINK_PASSWORD:-youshallnotpass}
-      - SPOTIFY_ENABLED=${SPOTIFY_ENABLED:-false}
-      - SPOTIFY_CLIENT_ID=${SPOTIFY_CLIENT_ID:-}
-      - SPOTIFY_CLIENT_SECRET=${SPOTIFY_CLIENT_SECRET:-}
-
-networks:
-  beatdock-network:
-    name: beatdock_network
-```
-
-### 4. Deploy commands & start the bot
+### 3. Start with Docker (recommended)
 
 ```bash
 # Deploy slash commands
@@ -135,56 +99,54 @@ docker compose run --rm bot npm run deploy
 docker compose up -d
 ```
 
-## Build from Source
+> 💡 **Note**: The default `docker-compose.yml` uses the official pre-built image `ghcr.io/lazaroagomez/beatdock:latest`
 
-If you prefer to build the Docker image yourself instead of using the pre-built image:
+## ⚙️ Advanced Setup
 
-### 1. Use the original docker-compose.yml
+### Build from Source (Alternative)
 
-Keep the original `build` configuration:
+If you prefer to build the Docker image yourself:
 
-```yaml
-services:
-  bot:
-    container_name: beatdock
-    build:
-      context: .
-      dockerfile: Dockerfile
-```
+1. **Modify docker-compose.yml** to use build instead of image:
+   ```yaml
+   services:
+     bot:
+       container_name: beatdock
+       build:
+         context: .
+         dockerfile: Dockerfile
+   ```
 
-### 2. Build and start
+2. **Build and start**:
+   ```bash
+   docker compose run --rm bot npm run deploy
+   docker compose up -d
+   ```
 
-```bash
-# Deploy slash commands
-docker compose run --rm bot npm run deploy
+### Community ARM64 Image
 
-# Start the bot
-docker compose up -d
-```
+Thanks to **@driftywinds** for providing an ARM64 community image:
+- Image: `ghcr.io/driftywinds/beatdock-bot:latest`
+- Details: [Issue #32](https://github.com/lazaroagomez/BeatDock/issues/32)
 
-## Permissions
+## 🛡️ Permission System
 
-The bot includes a modular permission system:
+The bot includes a flexible permission system:
 
 - **Admin Override**: Users with Administrator permissions always have access
 - **Role-Based Access**: Configure allowed roles via `ALLOWED_ROLES` in `.env`
-- **Default Behavior**: If no roles are specified, everyone can use the bot
+- **Default Behavior**: If no roles specified, everyone can use the bot
 
-### Configuring Permissions
+**To restrict access to specific roles:**
+1. Enable Developer Mode in Discord settings
+2. Get role IDs from Discord
+3. Add to `.env`: `ALLOWED_ROLES=123456789012345678,234567890123456789`
+4. Restart the bot
 
-To restrict bot usage to specific roles:
+## 🎵 Available Commands
 
-1. Get the role IDs from Discord (enable Developer Mode in Discord settings)
-2. Add role IDs to your `.env` file:
-   ```dotenv
-   ALLOWED_ROLES=123456789012345678,234567890123456789
-   ```
-3. Restart the bot
-
-## Commands
-
-| Slash Command | Description |
-|---|---|
+| Command | Description |
+|---------|-------------|
 | `/play <query>` | Play a song or playlist (searches YouTube if not a URL) |
 | `/skip` | Skip the current song |
 | `/stop` | Stop playback and clear the queue |
@@ -197,67 +159,70 @@ To restrict bot usage to specific roles:
 | `/clear` | Clear the entire queue |
 | `/back` | Play the previous track |
 
-## Docker Setup
+## 🐳 Docker Management
 
-The bot runs in Docker with two services:
+### Basic Operations
 
-- **BeatDock**: Discord bot (Node.js 22.16)
+```bash
+# Stop the bot
+docker compose down
+
+# View logs
+docker compose logs -f
+
+# Restart services
+docker compose restart
+
+# Update to latest image
+docker compose pull && docker compose up -d
+```
+
+### Services Overview
+
+- **BeatDock**: Discord bot (Node.js 22.16+)
 - **Lavalink**: Audio server (v4.1.1)
 
-### Managing the Bot
+## 🖥️ Platform-Specific Instructions
 
-Stop the bot:
-```bash
-docker compose down
-```
+### Windows (Docker Desktop)
 
-View logs:
-```bash
-docker compose logs -f
-```
+1. **Install Docker Desktop**: [Download here](https://www.docker.com/products/docker-desktop/) (ensure WSL2 backend is enabled)
 
-## Windows (Docker Desktop)
+2. **Setup**:
+   ```powershell
+   git clone https://github.com/lazaroagomez/BeatDock.git
+   cd BeatDock
+   copy .env.example .env
+   notepad .env  # or code .env
+   ```
 
-Running BeatDock on Windows:
+3. **Deploy**:
+   ```powershell
+   docker compose run --rm bot npm run deploy
+   docker compose up -d
+   ```
 
-### 1. Install Docker Desktop
-Get it from the [official website](https://www.docker.com/products/docker-desktop/) and make sure the WSL2 backend is enabled.
+4. **Monitor**:
+   ```powershell
+   docker compose logs -f
+   ```
 
-### 2. Clone the repository
-```powershell
-git clone https://github.com/lazaroagomez/BeatDock.git
-cd BeatDock
-```
+### Linux/macOS
 
-### 3. Create & edit your `.env` file
-You can copy the example:
-```powershell
-copy .env.example .env
-notepad .env  # or open with VS Code
-```
+Follow the standard [Quick Start](#-quick-start) instructions above.
 
-### 4. Deploy slash commands & start everything
-```powershell
-docker compose run --rm bot npm run deploy
-docker compose up -d
-```
-
-### 5. Monitor logs / containers
-```powershell
-docker compose logs -f  # CTRL+C to stop viewing
-```
-
-Docker Desktop will automatically start the containers whenever you reboot (unless disabled in settings).
-
-## Community ARM64 Image
-
-Thanks to **@driftywinds** for providing an ARM64 community image at `ghcr.io/driftywinds/beatdock-bot:latest`. See [Issue #32](https://github.com/lazaroagomez/BeatDock/issues/32) for details.
-
-## Support
+## 📞 Support & Contributing
 
 - **Issues**: [GitHub Issues](https://github.com/lazaroagomez/BeatDock/issues)
 - **Email**: lazaro98@duck.com
+- **Documentation**: [Project Website](https://lazaroagomez.github.io/BeatDock)
 
-## License
+## 📄 License
 
-Apache-2.0
+[Apache-2.0](LICENSE)
+
+---
+
+<div align="center">
+<b>Built with ❤️ for the Discord community</b>
+</div>
