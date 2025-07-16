@@ -39,9 +39,13 @@
   },
   "dependencies": {
     "discord.js": "^14.21.0",
-    "dotenv": "^17.0.1",
+
+    "dotenv": "^17.0.2",
     "express": "^5.1.0",
     "lavalink-client": "^2.5.6",
     "prom-client": "^15.1.3"
+
+    
+
   }
 }
