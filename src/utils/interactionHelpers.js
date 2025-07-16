@@ -1,5 +1,6 @@
 const requirePlayer = async (interaction, { requireQueue = false } = {}) => {
     const { client, guild } = interaction;
+    console.log(`Interaction from guild: ${guild.id}, user: ${interaction.user.id}`);
     const lang = client.defaultLanguage;
 
     const player = client.lavalink.getPlayer(guild.id);

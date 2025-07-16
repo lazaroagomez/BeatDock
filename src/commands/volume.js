@@ -1,5 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { requirePlayer } = require('../utils/interactionHelpers');
+const { metrics } = require("../analytics/prometheusClient");
+
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -21,7 +23,10 @@ module.exports = {
 
         // Set the volume
         player.setVolume(volume);
-
+        metrics.commandsExecuted.inc({ 
+            command: 'volume', 
+            status: 'success' 
+        });
         return interaction.reply({ 
             content: client.languageManager.get(client.defaultLanguage, 'VOLUME_SET', volume), 
             ephemeral: true 

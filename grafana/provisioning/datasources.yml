@@ -1,0 +1,7 @@
+datasources:
+  - name: prometheus
+    type: prometheus
+    access: proxy
+    url: http://beatdock-prometheus:9090
+    isDefault: true
+  

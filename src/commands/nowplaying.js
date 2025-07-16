@@ -1,4 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
+const { metrics } = require("../analytics/prometheusClient");
+
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -35,7 +37,10 @@ module.exports = {
                 inline: true
             });
         }
-
+        metrics.commandsExecuted.inc({
+            command: 'nowplaying',
+            status: 'success'
+        });
         return interaction.reply({ embeds: [embed], ephemeral: true });
     },
 }; 
