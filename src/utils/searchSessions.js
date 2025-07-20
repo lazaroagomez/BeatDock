@@ -5,8 +5,13 @@
 
 class SearchSessionManager {
     constructor() {
-        // Map structure: userId -> sessionData
+        // Map structure: sessionId -> sessionData
         this.sessions = new Map();
+        
+        // Start automatic cleanup interval (every 5 minutes)
+        this.cleanupInterval = setInterval(() => {
+            this.cleanupOldSessions(1800000); // Clean sessions older than 30 minutes
+        }, 300000); // Check every 5 minutes
     }
 
     /**
@@ -231,6 +236,65 @@ class SearchSessionManager {
             }
         }
         return userSessions;
+    }
+
+    /**
+     * Gets all sessions for a specific guild
+     * @param {string} guildId - Discord guild ID
+     * @returns {Array} Array of session data for the guild
+     */
+    getGuildSessions(guildId) {
+        const guildSessions = [];
+        for (const session of this.sessions.values()) {
+            if (session.guildId === guildId) {
+                guildSessions.push(session);
+            }
+        }
+        return guildSessions;
+    }
+
+    /**
+     * Cleans up all sessions for a specific guild
+     * @param {string} guildId - Discord guild ID
+     * @returns {number} Number of sessions cleaned up
+     */
+    cleanupGuildSessions(guildId) {
+        let cleaned = 0;
+        for (const [sessionId, session] of this.sessions.entries()) {
+            if (session.guildId === guildId) {
+                this.sessions.delete(sessionId);
+                cleaned++;
+            }
+        }
+        return cleaned;
+    }
+
+    /**
+     * Cleans up all sessions for a specific user in a specific guild
+     * @param {string} userId - Discord user ID
+     * @param {string} guildId - Discord guild ID
+     * @returns {number} Number of sessions cleaned up
+     */
+    cleanupUserGuildSessions(userId, guildId) {
+        let cleaned = 0;
+        for (const [sessionId, session] of this.sessions.entries()) {
+            if (session.userId === userId && session.guildId === guildId) {
+                this.sessions.delete(sessionId);
+                cleaned++;
+            }
+        }
+        return cleaned;
+    }
+
+    /**
+     * Cleanup method for graceful shutdown
+     */
+    destroy() {
+        if (this.cleanupInterval) {
+            clearInterval(this.cleanupInterval);
+            this.cleanupInterval = null;
+        }
+        this.sessions.clear();
     }
 }
 

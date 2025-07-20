@@ -1,4 +1,5 @@
 const { Events } = require('discord.js');
+const searchSessions = require('../utils/searchSessions');
 
 // Keep track of disconnect timers per guild
 const emptyChannelTimeouts = new Map();
@@ -19,6 +20,9 @@ module.exports = {
                 const player = client.lavalink.getPlayer(guildId);
                 if (player) player.destroy();
                 client.playerController.deletePlayer(guildId);
+                
+                // Clean up search sessions for this guild
+                searchSessions.cleanupGuildSessions(guildId);
                 
                 // Update presence
                 client.activePlayers.delete(guildId);
@@ -74,6 +78,9 @@ module.exports = {
                     const player = client.lavalink.getPlayer(guildId);
                     if (player) player.destroy();
                     client.playerController.deletePlayer(guildId);
+                    
+                    // Clean up search sessions for this guild
+                    searchSessions.cleanupGuildSessions(guildId);
                     
                     // Update presence
                     client.activePlayers.delete(guildId);
