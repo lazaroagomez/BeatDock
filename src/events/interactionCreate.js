@@ -1,4 +1,5 @@
 const { checkInteractionPermission } = require('../utils/permissionChecker');
+const { handleSearchNavigation } = require('../interactions/searchNavigation');
 
 module.exports = {
     name: 'interactionCreate',
@@ -27,6 +28,11 @@ module.exports = {
         
         // Handle button interactions
         if (interaction.isButton()) {
+            // Handle search navigation buttons
+            if (interaction.customId.startsWith('search_')) {
+                return handleSearchNavigation(interaction);
+            }
+            
             if (!interaction.customId.startsWith('player_') && !interaction.customId.startsWith('queue_')) return;
 
             // Check permissions
