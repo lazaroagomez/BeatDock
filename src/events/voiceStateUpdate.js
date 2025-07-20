@@ -1,7 +1,32 @@
 const { Events } = require('discord.js');
 
-// Keep track of disconnect timers per guild
+// Keep track of disconnect timers per guild with memory leak prevention
 const emptyChannelTimeouts = new Map();
+const MAX_TIMEOUT_ENTRIES = 500; // Prevent unbounded growth
+const TIMEOUT_CLEANUP_INTERVAL = 300000; // 5 minutes
+
+// Periodic cleanup for timeout map
+setInterval(() => {
+    try {
+        if (emptyChannelTimeouts.size > MAX_TIMEOUT_ENTRIES) {
+            // Clear oldest entries if map grows too large
+            const entriesToRemove = emptyChannelTimeouts.size - MAX_TIMEOUT_ENTRIES;
+            const oldestEntries = Array.from(emptyChannelTimeouts.keys()).slice(0, entriesToRemove);
+            
+            for (const guildId of oldestEntries) {
+                const timeout = emptyChannelTimeouts.get(guildId);
+                if (timeout) {
+                    clearTimeout(timeout);
+                }
+                emptyChannelTimeouts.delete(guildId);
+            }
+            
+            console.log(`Cleaned up ${entriesToRemove} old timeout entries`);
+        }
+    } catch (error) {
+        console.error('Error during timeout cleanup:', error);
+    }
+}, TIMEOUT_CLEANUP_INTERVAL);
 
 module.exports = {
     name: Events.VoiceStateUpdate,
@@ -90,4 +115,4 @@ module.exports = {
             }
         }
     },
-}; 
+};

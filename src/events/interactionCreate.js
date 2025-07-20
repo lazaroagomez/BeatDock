@@ -36,17 +36,22 @@ module.exports = {
             const { requirePlayer, requireSameVoice } = require('../utils/interactionHelpers');
             const { playPrevious, shuffleQueue, clearQueue, createPaginatedQueueResponse } = require('../utils/PlayerActions');
 
-            const player = await requirePlayer(interaction);
-            if (!player) return;
+            // Add timeout wrapper for button interactions
+            const BUTTON_TIMEOUT = 10000; // 10 seconds
+            const timeoutPromise = new Promise((_, reject) => 
+                setTimeout(() => reject(new Error('Button interaction timed out')), BUTTON_TIMEOUT)
+            );
 
-            const lang = client.defaultLanguage;
-
-            const sameVoice = await requireSameVoice(interaction, player);
-            if (!sameVoice) return;
-
-            let responded = false;
-            
             try {
+                const player = await requirePlayer(interaction);
+                if (!player) return;
+
+                const lang = client.defaultLanguage;
+
+                const sameVoice = await requireSameVoice(interaction, player);
+                if (!sameVoice) return;
+
+                let responded = false;
                 switch (interaction.customId) {
                     case 'player_back':
                         const track = await playPrevious(player);
@@ -227,4 +232,4 @@ module.exports = {
             }
         }
     },
-}; 
+};

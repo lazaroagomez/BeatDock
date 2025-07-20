@@ -4,6 +4,46 @@ class PlayerController {
     constructor(client) {
         this.client = client;
         this.playerMessages = new Map(); // Guild ID -> Message ID
+        this.MAX_PLAYER_MESSAGES = 1000; // Prevent unbounded growth
+        this.CLEANUP_INTERVAL = 180000; // 3 minutes
+        
+        // Start periodic cleanup
+        setInterval(() => {
+            this.cleanupPlayerMessages();
+        }, this.CLEANUP_INTERVAL);
+    }
+
+    // Cleanup stale player message references
+    cleanupPlayerMessages() {
+        try {
+            let cleanedCount = 0;
+            
+            for (const [guildId, messageInfo] of this.playerMessages.entries()) {
+                // Remove if guild no longer exists or channel no longer exists
+                if (!this.client.guilds.cache.has(guildId) || 
+                    !this.client.channels.cache.has(messageInfo.channelId)) {
+                    this.playerMessages.delete(guildId);
+                    cleanedCount++;
+                }
+            }
+            
+            // Enforce maximum size
+            if (this.playerMessages.size > this.MAX_PLAYER_MESSAGES) {
+                const excess = this.playerMessages.size - this.MAX_PLAYER_MESSAGES;
+                const oldestEntries = Array.from(this.playerMessages.keys()).slice(0, excess);
+                
+                for (const guildId of oldestEntries) {
+                    this.playerMessages.delete(guildId);
+                    cleanedCount++;
+                }
+            }
+            
+            if (cleanedCount > 0) {
+                console.log(`Cleaned up ${cleanedCount} stale player message references`);
+            }
+        } catch (error) {
+            console.error('Error during player message cleanup:', error);
+        }
     }
 
     createPlayerEmbed(player, track) {
@@ -82,19 +122,44 @@ class PlayerController {
         return [row1, row2];
     }
 
+    // Timeout wrapper for Discord API operations
+    async withTimeout(promise, timeoutMs = 5000, operation = 'Discord operation') {
+        const timeout = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error(`${operation} timed out after ${timeoutMs}ms`)), timeoutMs)
+        );
+        
+        try {
+            return await Promise.race([promise, timeout]);
+        } catch (error) {
+            console.error(`Error in ${operation}:`, error.message);
+            throw error;
+        }
+    }
+
     async sendPlayer(channel, player) {
         const track = player.queue.current;
         if (!track) return;
 
-        const embed = this.createPlayerEmbed(player, track);
-        const components = this.createPlayerButtons(player);
+        try {
+            const embed = this.createPlayerEmbed(player, track);
+            const components = this.createPlayerButtons(player);
 
-        const message = await channel.send({ embeds: [embed], components });
-        this.playerMessages.set(player.guildId, {
-            messageId: message.id,
-            channelId: channel.id,
-        });
-        return message;
+            const message = await this.withTimeout(
+                channel.send({ embeds: [embed], components }),
+                8000,
+                'sendPlayer'
+            );
+
+            this.playerMessages.set(player.guildId, {
+                messageId: message.id,
+                channelId: channel.id,
+                createdAt: Date.now()
+            });
+            return message;
+        } catch (error) {
+            console.error(`Failed to send player message for guild ${player.guildId}:`, error.message);
+            return null;
+        }
     }
 
     async updatePlayer(guildId) {
@@ -105,16 +170,30 @@ class PlayerController {
         if (!playerMessage) return;
 
         const channel = this.client.channels.cache.get(playerMessage.channelId);
-        if (!channel) return;
+        if (!channel) {
+            // Channel no longer exists, cleanup
+            this.playerMessages.delete(guildId);
+            return;
+        }
 
         try {
-            const message = await channel.messages.fetch(playerMessage.messageId);
+            const message = await this.withTimeout(
+                channel.messages.fetch(playerMessage.messageId),
+                5000,
+                'fetchPlayerMessage'
+            );
+
             const embed = this.createPlayerEmbed(player, player.queue.current);
             const components = this.createPlayerButtons(player);
             
-            await message.edit({ embeds: [embed], components });
+            await this.withTimeout(
+                message.edit({ embeds: [embed], components }),
+                5000,
+                'updatePlayerMessage'
+            );
         } catch (error) {
-            console.error('Error updating player:', error);
+            console.error(`Error updating player for guild ${guildId}:`, error.message);
+            // If update fails, remove the stale reference
             this.playerMessages.delete(guildId);
         }
     }
@@ -126,10 +205,20 @@ class PlayerController {
         const channel = this.client.channels.cache.get(playerMessage.channelId);
         if (channel) {
             try {
-                const message = await channel.messages.fetch(playerMessage.messageId);
-                await message.delete();
+                const message = await this.withTimeout(
+                    channel.messages.fetch(playerMessage.messageId),
+                    3000,
+                    'fetchPlayerMessageForDeletion'
+                );
+                
+                await this.withTimeout(
+                    message.delete(),
+                    3000,
+                    'deletePlayerMessage'
+                );
             } catch (error) {
-                // We can ignore errors here, as the message might have been deleted manually.
+                // Silent fail - message might have been deleted manually or channel removed
+                console.log(`Could not delete player message for guild ${guildId}: ${error.message}`);
             }
         }
 
@@ -149,4 +238,4 @@ class PlayerController {
     }
 }
 
-module.exports = PlayerController; 
+module.exports = PlayerController;

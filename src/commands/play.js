@@ -27,54 +27,94 @@ module.exports = {
 
         await interaction.deferReply();
 
-        const player = client.lavalink.createPlayer({
-            guildId: guild.id,
-            voiceChannelId: voiceChannel.id,
-            textChannelId: interaction.channel.id,
-            selfDeaf: true,
-            selfMute: false,
-            volume: getValidVolume(process.env.DEFAULT_VOLUME, 80),
-        });
-
-        if(player.voiceChannelId !== voiceChannel.id) {
-            return interaction.editReply({ 
-                content: client.languageManager.get(client.defaultLanguage, 'ERROR_SAME_VOICE_CHANNEL'), 
-                ephemeral: true 
+        try {
+            const player = client.lavalink.createPlayer({
+                guildId: guild.id,
+                voiceChannelId: voiceChannel.id,
+                textChannelId: interaction.channel.id,
+                selfDeaf: true,
+                selfMute: false,
+                volume: getValidVolume(process.env.DEFAULT_VOLUME, 80),
             });
-        }
-        
-        player.connect();
-        
-        const res = await player.search({
-            query: query,
-        }, interaction.user);
 
-        if (!res || !res.tracks.length) {
-            return interaction.editReply({ content: client.languageManager.get(lang, 'NO_RESULTS') });
-        }
+            if(player.voiceChannelId !== voiceChannel.id) {
+                return interaction.editReply({ 
+                    content: client.languageManager.get(client.defaultLanguage, 'ERROR_SAME_VOICE_CHANNEL'), 
+                    ephemeral: true 
+                });
+            }
+            
+            // Connect with timeout protection
+            const connectPromise = player.connect();
+            const connectTimeout = new Promise((_, reject) => 
+                setTimeout(() => reject(new Error('Connection timeout')), 10000)
+            );
+            
+            await Promise.race([connectPromise, connectTimeout]);
+            
+            // Search with timeout protection
+            const searchPromise = player.search({
+                query: query,
+            }, interaction.user);
+            
+            const searchTimeout = new Promise((_, reject) => 
+                setTimeout(() => reject(new Error('Search timeout')), 15000)
+            );
+            
+            const res = await Promise.race([searchPromise, searchTimeout]);
 
-        player.queue.add(res.loadType === "playlist" ? res.tracks : res.tracks[0]);
+            if (!res || !res.tracks.length) {
+                return interaction.editReply({ content: client.languageManager.get(lang, 'NO_RESULTS') });
+            }
 
-        if (!player.playing) {
-            player.play();
-        }
+            player.queue.add(res.loadType === "playlist" ? res.tracks : res.tracks[0]);
 
-        let replyContent;
-        if (res.loadType === "playlist") {
-            replyContent = client.languageManager.get(lang, 'PLAYLIST_ADDED', res.playlist?.title);
-        } else {
-            const trackTitle = res.tracks[0].info?.title || client.languageManager.get(lang, 'UNKNOWN_TITLE');
-            replyContent = client.languageManager.get(lang, 'SONG_ADDED', trackTitle);
-        }
+            if (!player.playing) {
+                await player.play();
+            }
 
-        await interaction.editReply({ content: replyContent });
+            let replyContent;
+            if (res.loadType === "playlist") {
+                replyContent = client.languageManager.get(lang, 'PLAYLIST_ADDED', res.playlist?.title);
+            } else {
+                const trackTitle = res.tracks[0].info?.title || client.languageManager.get(lang, 'UNKNOWN_TITLE');
+                replyContent = client.languageManager.get(lang, 'SONG_ADDED', trackTitle);
+            }
 
-        // Send or update the player controller
-        const existingMessageId = client.playerController.playerMessages.get(guild.id);
-        if (existingMessageId) {
-            await client.playerController.updatePlayer(guild.id);
-        } else {
-            await client.playerController.sendPlayer(interaction.channel, player);
+            await interaction.editReply({ content: replyContent });
+
+            // Send or update the player controller with error handling
+            try {
+                const existingMessageId = client.playerController.playerMessages.get(guild.id);
+                if (existingMessageId) {
+                    await client.playerController.updatePlayer(guild.id);
+                } else {
+                    await client.playerController.sendPlayer(interaction.channel, player);
+                }
+            } catch (playerError) {
+                console.error('Error updating player UI:', playerError.message);
+                // Don't fail the entire command if UI update fails
+            }
+            
+        } catch (error) {
+            console.error('Error in play command:', error);
+            
+            // Clean up on error
+            const player = client.lavalink.getPlayer(guild.id);
+            if (player) {
+                try {
+                    await player.destroy();
+                } catch (destroyError) {
+                    console.error('Error destroying player on cleanup:', destroyError);
+                }
+            }
+            
+            // Send appropriate error message
+            const errorMessage = error.message.includes('timeout') 
+                ? client.languageManager.get(lang, 'SEARCH_TIMEOUT') || 'Operation timed out. Please try again.'
+                : client.languageManager.get(lang, 'PLAY_ERROR') || 'An error occurred while trying to play the track.';
+            
+            await interaction.editReply({ content: errorMessage }).catch(() => {});
         }
     },
 };
