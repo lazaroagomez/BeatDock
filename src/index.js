@@ -3,7 +3,9 @@ const { Client, GatewayIntentBits, ActivityType } = require('discord.js');
 const { LavalinkManager } = require('lavalink-client');
 const LanguageManager = require('./LanguageManager');
 const PlayerController = require('./utils/PlayerController');
+const PlayerService = require('./services/PlayerService');
 const searchSessions = require('./utils/searchSessions');
+const shutdownManager = require('./utils/shutdownManager');
 const loadCommands = require('./handlers/commandHandler');
 const registerEvents = require('./handlers/eventHandler');
 
@@ -25,6 +27,9 @@ client.t = function (key, ...args) {
 };
 
 client.playerController = new PlayerController(client);
+
+// Initialize PlayerService after lavalink is configured
+client.playerService = new PlayerService(client);
 
 // Presence management
 client.activePlayers = new Map(); // Guild ID -> Track info
@@ -133,19 +138,18 @@ client.lavalink.on("queueEnd", (player) => {
 loadCommands(client);
 registerEvents(client);
 
-// Graceful shutdown handling
-process.on('SIGINT', () => {
-    console.log('Received SIGINT, shutting down gracefully...');
+// Register cleanup tasks for graceful shutdown
+shutdownManager.registerCleanupTask(async () => {
+    console.log('Cleaning up search sessions...');
     searchSessions.destroy();
-    client.destroy();
-    process.exit(0);
-});
+}, 'Search Sessions Cleanup');
 
-process.on('SIGTERM', () => {
-    console.log('Received SIGTERM, shutting down gracefully...');
-    searchSessions.destroy();
+shutdownManager.registerCleanupTask(async () => {
+    console.log('Destroying Discord client...');
     client.destroy();
-    process.exit(0);
-});
+}, 'Discord Client Cleanup');
+
+// Setup signal handlers
+shutdownManager.setupSignalHandlers();
 
 client.login(process.env.TOKEN);
