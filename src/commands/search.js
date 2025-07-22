@@ -1,3 +1,16 @@
+// Helper function to create a player
+async function createPlayer(client, guildId, voiceChannelId, textChannelId) {
+    const player = client.lavalink.createPlayer({
+        guildId,
+        voiceChannelId,
+        textChannelId,
+        selfDeaf: true,
+        selfMute: false,
+        volume: getValidVolume(process.env.DEFAULT_VOLUME, 80),
+    });
+    await player.connect();
+    return player;
+}
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const searchSessions = require('../utils/searchSessions');
 
@@ -10,10 +23,16 @@ function getValidVolume(envValue, defaultValue = 80) {
 
 /**
  * Creates the search results embed with pagination
- * @param {Object} client - Discord client
- * @param {Object} pageData - Page data from search session
+ *
+ * Generates a Discord embed containing the current page of search results,
+ * including track information, selection status, and pagination metadata.
+ * The embed displays the search query, current page/total pages, total results,
+ * and number of selected tracks.
+ *
+ * @param {Object} client - Discord client instance
+ * @param {Object} pageData - Page data from search session containing tracks and pagination info
  * @param {string} query - Original search query
- * @returns {EmbedBuilder} Search results embed
+ * @returns {EmbedBuilder} Configured embed builder for search results
  */
 function createSearchEmbed(client, pageData, query) {
     const lang = client.defaultLanguage;
@@ -47,40 +66,65 @@ function createSearchEmbed(client, pageData, query) {
 
 /**
  * Creates action buttons for search navigation and selection
- * @param {Object} client - Discord client
- * @param {Object} pageData - Page data from search session
- * @param {string} sessionId - Search session ID
- * @returns {Array} Array of ActionRowBuilder components
+ *
+ * Generates interactive button components for the search interface, including:
+ * - Navigation buttons (previous/next page)
+ * - Cancel button
+ * - Track selection buttons for the current page
+ *
+ * Ensures compliance with Discord's 5-button per ActionRow limit and properly
+ * disables navigation buttons when at page boundaries.
+ *
+ * @param {Object} client - Discord client instance
+ * @param {Object} pageData - Page data from search session containing tracks and selection info
+ * @param {string} sessionId - Unique search session identifier
+ * @returns {Array} Array of ActionRowBuilder components for the search interface
  */
 function createSearchButtons(client, pageData, sessionId) {
     const lang = client.defaultLanguage;
     const { currentPage, hasNext, hasPrevious, selectedCount, tracks } = pageData;
 
-    // Navigation row
-    const navRow = new ActionRowBuilder()
-        .addComponents(
+    // Navigation row - ensure maximum of 5 buttons per ActionRow
+    const navRow = new ActionRowBuilder();
+    
+    // Add navigation buttons with proper validation
+    if (hasPrevious) {
+        navRow.addComponents(
             new ButtonBuilder()
                 .setCustomId(`search_prev_${sessionId}`)
                 .setEmoji('⬅️')
                 .setStyle(ButtonStyle.Secondary)
-                .setDisabled(!hasPrevious),
+        );
+    }
+    
+    if (hasNext) {
+        navRow.addComponents(
             new ButtonBuilder()
                 .setCustomId(`search_next_${sessionId}`)
                 .setEmoji('➡️')
                 .setStyle(ButtonStyle.Secondary)
-                .setDisabled(!hasNext),
-            new ButtonBuilder()
-                .setCustomId(`search_cancel_${sessionId}`)
-                .setLabel(client.languageManager.get(lang, 'SEARCH_CANCEL'))
-                .setEmoji('❌')
-                .setStyle(ButtonStyle.Danger)
         );
+    }
+    
+    // Always include cancel button
+    navRow.addComponents(
+        new ButtonBuilder()
+            .setCustomId(`search_cancel_${sessionId}`)
+            .setLabel(client.languageManager.get(lang, 'SEARCH_CANCEL'))
+            .setEmoji('❌')
+            .setStyle(ButtonStyle.Danger)
+    );
 
     // Selection row - individual track buttons (max 5 per page)
     const selectionRow = new ActionRowBuilder();
+    const MAX_BUTTONS_PER_ROW = 5;
+    
+    // Create a Set for O(1) lookup instead of using Array.includes()
+    const selectedTrackSet = new Set(pageData.selectedTracks);
+    
     tracks.forEach((track, index) => {
         const globalIndex = pageData.startIndex + index;
-        const isSelected = pageData.selectedTracks.includes(globalIndex);
+        const isSelected = selectedTrackSet.has(globalIndex);
         
         selectionRow.addComponents(
             new ButtonBuilder()
@@ -89,6 +133,11 @@ function createSearchButtons(client, pageData, sessionId) {
                 .setEmoji(isSelected ? '✅' : '⬜')
                 .setStyle(isSelected ? ButtonStyle.Success : ButtonStyle.Secondary)
         );
+        
+        // Enforce Discord's limit of 5 buttons per ActionRow
+        if (selectionRow.components.length >= MAX_BUTTONS_PER_ROW) {
+            return;
+        }
     });
 
     return [navRow, selectionRow];
@@ -96,8 +145,15 @@ function createSearchButtons(client, pageData, sessionId) {
 
 /**
  * Formats duration from milliseconds to readable format
+ *
+ * Converts a duration in milliseconds to a human-readable string format.
+ * Returns "MM:SS" for durations under an hour, and "HH:MM:SS" for longer durations.
+ *
  * @param {number} ms - Duration in milliseconds
- * @returns {string} Formatted duration
+ * @returns {string} Formatted duration string (e.g., "3:45" or "1:23:45")
+ * @example
+ * formatDuration(225000) // returns "3:45"
+ * formatDuration(5025000) // returns "1:23:45"
  */
 function formatDuration(ms) {
     const seconds = Math.floor((ms / 1000) % 60);
@@ -112,6 +168,15 @@ function formatDuration(ms) {
 }
 
 module.exports = {
+    /**
+     * Slash command data for the /search command
+     *
+     * Defines the command structure, name, description, and required options
+     * for the search functionality. The command requires a search query string
+     * with a maximum length of 200 characters.
+     *
+     * @type {SlashCommandBuilder}
+     */
     data: new SlashCommandBuilder()
         .setName('search')
         .setDescription('Search for music and select tracks to add to the queue.')
@@ -119,6 +184,21 @@ module.exports = {
             option.setName('query')
                 .setDescription('Search query for music (max 200 characters).')
                 .setRequired(true)),
+    
+    /**
+     * Executes the search command
+     *
+     * Handles the /search command interaction by:
+     * 1. Validating user input and voice channel membership
+     * 2. Creating or retrieving a Lavalink player
+     * 3. Searching for tracks using the provided query
+     * 4. Creating a search session with results
+     * 5. Displaying paginated search results with interactive buttons
+     *
+     * @param {CommandInteraction} interaction - Discord command interaction
+     * @returns {Promise<void>} Resolves when command execution is complete
+     * @throws {Error} If command execution fails
+     */
     async execute(interaction) {
         const { client, guild, member, options } = interaction;
         const query = options.getString('query');
@@ -153,17 +233,9 @@ module.exports = {
             // Create or get player
             let player = client.lavalink.getPlayer(guild.id);
             if (!player) {
-                player = client.lavalink.createPlayer({
-                    guildId: guild.id,
-                    voiceChannelId: voiceChannel.id,
-                    textChannelId: interaction.channel.id,
-                    selfDeaf: true,
-                    selfMute: false,
-                    volume: getValidVolume(process.env.DEFAULT_VOLUME, 80),
-                });
-                player.connect();
+                player = await createPlayer(client, guild.id, voiceChannel.id, interaction.channel.id);
             } else if (player.voiceChannelId !== voiceChannel.id) {
-                return interaction.editReply({ 
+                return interaction.editReply({
                     content: client.languageManager.get(lang, 'ERROR_SAME_VOICE_CHANNEL')
                 });
             }

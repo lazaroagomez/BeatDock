@@ -134,18 +134,24 @@ loadCommands(client);
 registerEvents(client);
 
 // Graceful shutdown handling
-process.on('SIGINT', () => {
-    console.log('Received SIGINT, shutting down gracefully...');
+const shutdown = async (signal) => {
+    console.log(`Received ${signal}, shutting down gracefully...`);
+    
+    // Clear cleanup interval
     searchSessions.destroy();
-    client.destroy();
+    
+    // Destroy Lavalink nodes
+    for (const node of client.lavalink.nodeManager.nodes.values()) {
+        await node.destroy();
+    }
+    
+    // Destroy Discord client
+    await client.destroy();
+    
     process.exit(0);
-});
+};
 
-process.on('SIGTERM', () => {
-    console.log('Received SIGTERM, shutting down gracefully...');
-    searchSessions.destroy();
-    client.destroy();
-    process.exit(0);
-});
+process.on('SIGINT', () => shutdown('SIGINT'));
+process.on('SIGTERM', () => shutdown('SIGTERM'));
 
 client.login(process.env.TOKEN);

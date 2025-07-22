@@ -1,6 +1,14 @@
 /**
  * Search Session Manager
  * Manages search results and user selections for the /search command
+ *
+ * This class handles the lifecycle of search sessions, including:
+ * - Creating and retrieving search sessions
+ * - Managing track selections and pagination
+ * - Automatic cleanup of old sessions
+ * - Graceful shutdown procedures
+ *
+ * @class SearchSessionManager
  */
 
 class SearchSessionManager {
@@ -8,22 +16,35 @@ class SearchSessionManager {
         // Map structure: sessionId -> sessionData
         this.sessions = new Map();
         
-        // Start automatic cleanup interval (every 5 minutes)
+        // Define constants for cleanup intervals
+        this.SESSION_MAX_AGE = 1800000; // 30 minutes in milliseconds
+        this.CLEANUP_INTERVAL = 300000; // 5 minutes in milliseconds
+        
+        // Start automatic cleanup interval
         this.cleanupInterval = setInterval(() => {
-            this.cleanupOldSessions(1800000); // Clean sessions older than 30 minutes
-        }, 300000); // Check every 5 minutes
+            this.cleanupOldSessions(this.SESSION_MAX_AGE);
+        }, this.CLEANUP_INTERVAL);
     }
 
     /**
      * Creates a new search session for a user
+     *
+     * Generates a unique session ID and stores session data including tracks,
+     * user selections, and pagination state. Each session is tied to a specific
+     * user, guild, and search query.
+     *
      * @param {string} userId - Discord user ID
      * @param {string} guildId - Discord guild ID
      * @param {Array} tracks - Array of track objects from Lavalink
      * @param {string} query - Original search query
-     * @returns {string} sessionId
+     * @returns {string} Unique session identifier
+     * @throws {Error} If required parameters are missing or invalid
      */
     createSession(userId, guildId, tracks, query) {
-        const sessionId = `${userId}-${Date.now()}`;
+        // Use a more robust session ID generation to prevent duplicates
+        const timestamp = Date.now();
+        const randomSuffix = Math.random().toString(36).substr(2, 9);
+        const sessionId = `${userId}-${timestamp}-${randomSuffix}`;
         
         const sessionData = {
             sessionId,
@@ -44,8 +65,12 @@ class SearchSessionManager {
 
     /**
      * Gets a search session by ID
+     *
+     * Retrieves session data for a given session ID. Returns null if the session
+     * does not exist or has expired.
+     *
      * @param {string} sessionId - Session identifier
-     * @returns {Object|null} Session data or null if not found
+     * @returns {Object|null} Session data object or null if not found
      */
     getSession(sessionId) {
         return this.sessions.get(sessionId) || null;
@@ -53,9 +78,14 @@ class SearchSessionManager {
 
     /**
      * Updates the current page for a session
+     *
+     * Changes the current page of a search session, ensuring the page number
+     * is within valid bounds (1 to total pages). This is used for pagination
+     * navigation in search results.
+     *
      * @param {string} sessionId - Session identifier
-     * @param {number} page - New page number
-     * @returns {boolean} Success status
+     * @param {number} page - New page number (1-indexed)
+     * @returns {boolean} True if page was successfully updated, false otherwise
      */
     updatePage(sessionId, page) {
         const session = this.sessions.get(sessionId);
@@ -72,20 +102,24 @@ class SearchSessionManager {
      * Toggles track selection for a session
      * @param {string} sessionId - Session identifier
      * @param {number} trackIndex - Index of track to toggle
-     * @returns {boolean} New selection state (true if selected, false if deselected)
+     * @returns {Object} Result object with success status and optional error message
      */
     toggleTrackSelection(sessionId, trackIndex) {
         const session = this.sessions.get(sessionId);
-        if (!session || trackIndex < 0 || trackIndex >= session.tracks.length) {
-            return false;
+        if (!session) {
+            return { success: false, error: 'SESSION_NOT_FOUND' };
+        }
+        
+        if (trackIndex < 0 || trackIndex >= session.tracks.length) {
+            return { success: false, error: 'INVALID_TRACK_INDEX' };
         }
 
         if (session.selectedTracks.has(trackIndex)) {
             session.selectedTracks.delete(trackIndex);
-            return false;
+            return { success: true, action: 'DESELECTED' };
         } else {
             session.selectedTracks.add(trackIndex);
-            return true;
+            return { success: true, action: 'SELECTED' };
         }
     }
 
@@ -201,7 +235,7 @@ class SearchSessionManager {
      * @param {number} maxAge - Maximum age in milliseconds (default: 1 hour)
      * @returns {number} Number of sessions cleaned up
      */
-    cleanupOldSessions(maxAge = 3600000) { // 1 hour default
+    cleanupOldSessions(maxAge = this.SESSION_MAX_AGE * 2) { // Default to twice the session max age
         const now = Date.now();
         let cleaned = 0;
 

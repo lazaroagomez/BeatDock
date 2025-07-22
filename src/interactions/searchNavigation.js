@@ -3,10 +3,16 @@ const searchSessions = require('../utils/searchSessions');
 
 /**
  * Creates the search results embed with pagination
- * @param {Object} client - Discord client
- * @param {Object} pageData - Page data from search session
+ *
+ * Generates a Discord embed containing the current page of search results,
+ * including track information, selection status, and pagination metadata.
+ * The embed displays the search query, current page/total pages, total results,
+ * and number of selected tracks.
+ *
+ * @param {Object} client - Discord client instance
+ * @param {Object} pageData - Page data from search session containing tracks and pagination info
  * @param {string} query - Original search query
- * @returns {EmbedBuilder} Search results embed
+ * @returns {EmbedBuilder} Configured embed builder for search results
  */
 function createSearchEmbed(client, pageData, query) {
     const lang = client.defaultLanguage;
@@ -40,40 +46,65 @@ function createSearchEmbed(client, pageData, query) {
 
 /**
  * Creates action buttons for search navigation and selection
- * @param {Object} client - Discord client
- * @param {Object} pageData - Page data from search session
- * @param {string} sessionId - Search session ID
- * @returns {Array} Array of ActionRowBuilder components
+ *
+ * Generates interactive button components for the search interface, including:
+ * - Navigation buttons (previous/next page)
+ * - Cancel button
+ * - Track selection buttons for the current page
+ *
+ * Ensures compliance with Discord's 5-button per ActionRow limit and properly
+ * disables navigation buttons when at page boundaries.
+ *
+ * @param {Object} client - Discord client instance
+ * @param {Object} pageData - Page data from search session containing tracks and selection info
+ * @param {string} sessionId - Unique search session identifier
+ * @returns {Array} Array of ActionRowBuilder components for the search interface
  */
 function createSearchButtons(client, pageData, sessionId) {
     const lang = client.defaultLanguage;
     const { currentPage, hasNext, hasPrevious, selectedCount, tracks } = pageData;
 
-    // Navigation row
-    const navRow = new ActionRowBuilder()
-        .addComponents(
+    // Navigation row - ensure maximum of 5 buttons per ActionRow
+    const navRow = new ActionRowBuilder();
+    
+    // Add navigation buttons with proper validation
+    if (hasPrevious) {
+        navRow.addComponents(
             new ButtonBuilder()
                 .setCustomId(`search_prev_${sessionId}`)
                 .setEmoji('⬅️')
                 .setStyle(ButtonStyle.Secondary)
-                .setDisabled(!hasPrevious),
+        );
+    }
+    
+    if (hasNext) {
+        navRow.addComponents(
             new ButtonBuilder()
                 .setCustomId(`search_next_${sessionId}`)
                 .setEmoji('➡️')
                 .setStyle(ButtonStyle.Secondary)
-                .setDisabled(!hasNext),
-            new ButtonBuilder()
-                .setCustomId(`search_cancel_${sessionId}`)
-                .setLabel(client.languageManager.get(lang, 'SEARCH_CANCEL'))
-                .setEmoji('❌')
-                .setStyle(ButtonStyle.Danger)
         );
+    }
+    
+    // Always include cancel button
+    navRow.addComponents(
+        new ButtonBuilder()
+            .setCustomId(`search_cancel_${sessionId}`)
+            .setLabel(client.languageManager.get(lang, 'SEARCH_CANCEL'))
+            .setEmoji('❌')
+            .setStyle(ButtonStyle.Danger)
+    );
 
     // Selection row - individual track buttons (max 5 per page)
     const selectionRow = new ActionRowBuilder();
+    const MAX_BUTTONS_PER_ROW = 5;
+    
+    // Create a Set for O(1) lookup instead of using Array.includes()
+    const selectedTrackSet = new Set(pageData.selectedTracks);
+    
     tracks.forEach((track, index) => {
         const globalIndex = pageData.startIndex + index;
-        const isSelected = pageData.selectedTracks.includes(globalIndex);
+        const isSelected = selectedTrackSet.has(globalIndex);
         
         selectionRow.addComponents(
             new ButtonBuilder()
@@ -82,6 +113,11 @@ function createSearchButtons(client, pageData, sessionId) {
                 .setEmoji(isSelected ? '✅' : '⬜')
                 .setStyle(isSelected ? ButtonStyle.Success : ButtonStyle.Secondary)
         );
+        
+        // Enforce Discord's limit of 5 buttons per ActionRow
+        if (selectionRow.components.length >= MAX_BUTTONS_PER_ROW) {
+            return;
+        }
     });
 
     return [navRow, selectionRow];
@@ -89,8 +125,15 @@ function createSearchButtons(client, pageData, sessionId) {
 
 /**
  * Formats duration from milliseconds to readable format
+ *
+ * Converts a duration in milliseconds to a human-readable string format.
+ * Returns "MM:SS" for durations under an hour, and "HH:MM:SS" for longer durations.
+ *
  * @param {number} ms - Duration in milliseconds
- * @returns {string} Formatted duration
+ * @returns {string} Formatted duration string (e.g., "3:45" or "1:23:45")
+ * @example
+ * formatDuration(225000) // returns "3:45"
+ * formatDuration(5025000) // returns "1:23:45"
  */
 function formatDuration(ms) {
     const seconds = Math.floor((ms / 1000) % 60);
@@ -106,58 +149,97 @@ function formatDuration(ms) {
 
 /**
  * Handles search navigation button interactions
- * @param {Object} interaction - Discord button interaction
- * @returns {Promise<void>}
+ *
+ * Processes button interactions from the search interface, including:
+ * - Pagination (previous/next page)
+ * - Track selection/deselection
+ * - Session cancellation
+ *
+ * Validates user permissions, session ownership, and input data before
+ * processing actions. Implements proper error handling and user feedback.
+ *
+ * @param {Object} interaction - Discord button interaction object
+ * @returns {Promise<void>} Resolves when interaction is fully processed
+ * @throws {Error} If interaction processing fails
  */
 async function handleSearchNavigation(interaction) {
     const { client, customId, user, guild } = interaction;
     const lang = client.defaultLanguage;
 
     try {
-        // Parse custom ID to determine action and session
-        const parts = customId.split('_');
-        
-        if (parts.length < 3) {
+        // Validate and parse custom ID
+        if (!customId || typeof customId !== 'string') {
             return;
         }
-
-        const [prefix, action, ...rest] = parts;
-        if (prefix !== 'search') {
+        
+        // Use regex for safer parsing with input validation
+        const customIdPattern = /^search_(?<action>[a-z]+)(?:_(?<subaction>[a-z]+))?(?:_(?<sessionId>[^_]+))?(?:_(?<extra>[^_]+))?$/;
+        const match = customId.match(customIdPattern);
+        
+        if (!match || !match.groups) {
             return;
         }
-
-        // Handle different action types and extract sessionId properly
-        let sessionId, extra = [];
         
-        if (action === 'toggle') {
+        const { action, subaction, sessionId, extra } = match.groups;
+        
+        // Validate action type
+        const validActions = ['prev', 'next', 'toggle', 'add', 'cancel'];
+        if (!validActions.includes(action)) {
+            return;
+        }
+        
+        // Handle different action types
+        let parsedExtra = [];
+        
+        if (action === 'toggle' && sessionId && extra) {
             // Format: search_toggle_sessionId_trackIndex
-            if (rest.length < 2) {
-                return;
-            }
-            sessionId = rest[0];
-            extra = rest.slice(1);
-        } else if (action === 'add' && rest[0] === 'selected') {
+            parsedExtra = [extra];
+        } else if (action === 'add' && subaction === 'selected' && sessionId) {
             // Format: search_add_selected_sessionId
-            if (rest.length < 2) {
-                return;
-            }
-            sessionId = rest[1];
-            extra = ['selected'];
-        } else {
+            parsedExtra = ['selected'];
+        } else if (sessionId) {
             // Format: search_action_sessionId
-            if (rest.length < 1) {
-                return;
+            if (subaction) {
+                parsedExtra = [subaction];
             }
-            sessionId = rest[0];
-            extra = rest.slice(1);
+        } else {
+            // Invalid format
+            return;
         }
+        
+        // Sanitize sessionId to prevent injection attacks
+        const sessionIdPattern = /^[a-zA-Z0-9-]+$/;
+        if (!sessionId || !sessionIdPattern.test(sessionId)) {
+            return;
+        }
+        
+        // Use parsed values
+        const parsedAction = action;
+        const parsedSessionId = sessionId;
+        const parsedExtraArray = parsedExtra;
 
         // Get search session
-        const session = searchSessions.getSession(sessionId);
+        const session = searchSessions.getSession(parsedSessionId);
         
         if (!session) {
             return interaction.reply({
                 content: client.languageManager.get(lang, 'SEARCH_SESSION_EXPIRED'),
+                ephemeral: true
+            });
+        }
+        
+        // Validate session ownership
+        if (session.userId !== user.id) {
+            return interaction.reply({
+                content: client.languageManager.get(lang, 'SEARCH_NOT_YOUR_SESSION'),
+                ephemeral: true
+            });
+        }
+        
+        // Validate guild membership
+        if (session.guildId !== guild.id) {
+            return interaction.reply({
+                content: client.languageManager.get(lang, 'SEARCH_NOT_YOUR_SESSION'),
                 ephemeral: true
             });
         }
@@ -191,11 +273,11 @@ async function handleSearchNavigation(interaction) {
         let shouldUpdate = false;
         let responseMessage = null;
 
-        switch (action) {
+        switch (parsedAction) {
             case 'prev':
                 // Navigate to previous page
                 const prevPage = session.currentPage - 1;
-                if (searchSessions.updatePage(sessionId, prevPage)) {
+                if (searchSessions.updatePage(parsedSessionId, prevPage)) {
                     shouldUpdate = true;
                 }
                 break;
@@ -203,29 +285,36 @@ async function handleSearchNavigation(interaction) {
             case 'next':
                 // Navigate to next page
                 const nextPage = session.currentPage + 1;
-                if (searchSessions.updatePage(sessionId, nextPage)) {
+                if (searchSessions.updatePage(parsedSessionId, nextPage)) {
                     shouldUpdate = true;
                 }
                 break;
 
             case 'toggle':
                 // Toggle track selection and auto-add/remove from queue
-                if (extra.length > 0) {
-                    const trackIndex = parseInt(extra[0]);
+                if (parsedExtraArray.length > 0) {
+                    const trackIndex = parseInt(parsedExtraArray[0]);
                     if (!isNaN(trackIndex)) {
-                        const isSelected = searchSessions.toggleTrackSelection(sessionId, trackIndex);
-                        shouldUpdate = true;
-                        
-                        const track = session.tracks[trackIndex];
+                        // Get fresh session data
+                        const currentSession = searchSessions.getSession(parsedSessionId);
+                        const track = currentSession.tracks[trackIndex];
                         if (track) {
-                            if (isSelected) {
+                            // Check current selection state before toggling
+                            const wasSelected = currentSession.selectedTracks.has(trackIndex);
+                            
+                            // Toggle the selection
+                            const result = searchSessions.toggleTrackSelection(parsedSessionId, trackIndex);
+                            shouldUpdate = true;
+                            
+                            if (!wasSelected) {
+                                // Track was selected (added)
                                 responseMessage = client.languageManager.get(lang, 'SEARCH_TRACK_ADDED', track.info?.title || 'Unknown');
                                 
                                 // Do heavy work after responding to interaction
                                 setImmediate(() => {
                                     try {
                                         player.queue.add(track);
-                                        searchSessions.markTrackQueued(sessionId, trackIndex);
+                                        searchSessions.markTrackQueued(parsedSessionId, trackIndex);
                                         
                                         // Start playing if not already playing
                                         if (!player.playing) {
@@ -246,6 +335,7 @@ async function handleSearchNavigation(interaction) {
                                     }
                                 });
                             } else {
+                                // Track was deselected (removed)
                                 responseMessage = client.languageManager.get(lang, 'SEARCH_TRACK_REMOVED', track.info?.title || 'Unknown');
                                 
                                 // Do heavy work after responding to interaction
@@ -259,7 +349,7 @@ async function handleSearchNavigation(interaction) {
                                         
                                         if (queueIndex !== -1) {
                                             player.queue.tracks.splice(queueIndex, 1);
-                                            searchSessions.unmarkTrackQueued(sessionId, trackIndex);
+                                            searchSessions.unmarkTrackQueued(parsedSessionId, trackIndex);
                                             
                                             // Update player controller
                                             setTimeout(() => {
@@ -278,7 +368,7 @@ async function handleSearchNavigation(interaction) {
 
             case 'cancel':
                 // Cancel search and delete session
-                searchSessions.deleteSession(sessionId);
+                searchSessions.deleteSession(parsedSessionId);
                 return interaction.update({
                     content: client.languageManager.get(lang, 'SEARCH_CANCELLED'),
                     embeds: [],
