@@ -5,7 +5,8 @@ services:
       context: .
       dockerfile: Dockerfile
     depends_on:
-      - lavalink
+      lavalink:
+        condition: service_healthy
     networks:
       - beatdock-network
     env_file: .env
@@ -24,6 +25,12 @@ services:
       - SPOTIFY_ENABLED=${SPOTIFY_ENABLED:-false}
       - SPOTIFY_CLIENT_ID=${SPOTIFY_CLIENT_ID:-}
       - SPOTIFY_CLIENT_SECRET=${SPOTIFY_CLIENT_SECRET:-}
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "--header=Authorization: ${LAVALINK_PASSWORD:-youshallnotpass}", "http://localhost:2333/version"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
 networks:
   beatdock-network:

@@ -67,6 +67,8 @@
     "SEARCH_CANCELLED": "Búsqueda cancelada.",
     "SEARCH_INTERACTION_ERROR": "Ocurrió un error al procesar tu solicitud.",
     "SEARCH_TRACK_ADDED": "Añadido **{0}** a la cola.",
-    "SEARCH_TRACK_REMOVED": "Removido **{0}** de la cola.",
-    "SEARCH_PLAYER_STOPPED": "El reproductor de música ha sido detenido. Por favor únete a un canal de voz y comienza a reproducir música para usar las funciones de búsqueda."
+    "SEARCH_TRACK_REMOVED": "Eliminado **{0}** de la cola.",
+    "SEARCH_PLAYER_STOPPED": "El reproductor de música se ha detenido. Únete a un canal de voz y comienza a reproducir música para usar las funciones de búsqueda.",
+    "LAVALINK_UNAVAILABLE": "❌ El servicio de música no está disponible en este momento. Por favor, inténtalo de nuevo en unos momentos.",
+    "GENERIC_ERROR": "❌ Ocurrió un error al intentar reproducir música. Por favor, inténtalo de nuevo."
 }
