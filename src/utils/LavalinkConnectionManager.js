@@ -47,7 +47,7 @@ class LavalinkConnectionManager {
             const isCurrentlyHealthy = mainNode && mainNode.connected;
             
             if (!isCurrentlyHealthy) {
-                console.log('Health check: Node not connected, attempting reconnection...');
+                console.error('Health check: Node not connected, attempting reconnection...');
                 lastHealthStatus = false;
                 this.attemptReconnection();
             } else {
@@ -56,7 +56,7 @@ class LavalinkConnectionManager {
                 
                 // Only log if status changed from unhealthy to healthy
                 if (!lastHealthStatus) {
-                    console.log('Health check: Node is healthy');
+                    console.info('Health check: Node is healthy');
                     lastHealthStatus = true;
                 }
                 
@@ -80,7 +80,8 @@ class LavalinkConnectionManager {
             const timeSinceLastPing = Date.now() - this.state.lastPing;
             
             // If we haven't had a successful ping in the last 30 minutes, try reconnecting
-            if (!mainNode || !mainNode.connected || timeSinceLastPing > 30 * 60 * 1000) {
+            const PING_TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes
+            if (!mainNode || !mainNode.connected || timeSinceLastPing > PING_TIMEOUT_MS) {
                 console.log('🔄 Periodic reset: No recent connection activity, attempting reconnection...');
                 this.state.reconnectAttempts = 0; // Reset attempts
                 this.attemptReconnection();
@@ -219,7 +220,7 @@ class LavalinkConnectionManager {
 
     // Handle connection events
     onConnect(node) {
-        console.log(`Lavalink node "${node.options.id}" connected.`);
+        console.log('Lavalink node connected successfully.');
         this.state.lastPing = Date.now();
         this.state.reconnectAttempts = 0;
         this.state.isReconnecting = false;
@@ -252,7 +253,7 @@ class LavalinkConnectionManager {
         
         // Only log errors if we've had a successful connection before
         if (this.state.hasHadSuccessfulConnection) {
-            console.error(`Lavalink node "${node.options.id}" encountered an error:`, error);
+            console.error('Lavalink node encountered an error:', error);
             
             // Only trigger reconnection for connection-related errors
             if (error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND' || error.message.includes('Unable to connect')) {
@@ -270,12 +271,18 @@ class LavalinkConnectionManager {
         
         // Only log disconnects if we've had a successful connection before
         if (this.state.hasHadSuccessfulConnection) {
-            console.log(`Lavalink node "${node.options.id}" disconnected. Reason: ${reason.reason || 'Unknown'}`);
+            console.log(`Lavalink node disconnected. Reason: ${reason.reason || 'Unknown'}`);
             
             // Clear health check interval
             if (this.state.healthCheckInterval) {
                 clearInterval(this.state.healthCheckInterval);
                 this.state.healthCheckInterval = null;
+            }
+            
+            // Clear periodic reset interval
+            if (this.state.periodicResetInterval) {
+                clearInterval(this.state.periodicResetInterval);
+                this.state.periodicResetInterval = null;
             }
             
             // Attempt reconnection for unexpected disconnections

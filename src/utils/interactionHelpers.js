@@ -7,7 +7,7 @@ const isLavalinkAvailable = (client) => {
 const handleLavalinkError = async (interaction, error, client) => {
     const lang = client.defaultLanguage;
     
-    if (error.message.includes('No available Node') || error.message.includes('Unable to connect')) {
+    if (/No available Node|Unable to connect/.test(error.message)) {
         await interaction.editReply({ 
             content: client.languageManager.get(lang, 'LAVALINK_UNAVAILABLE'), 
             ephemeral: true 
