@@ -1,5 +1,6 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const searchSessions = require('../utils/searchSessions');
+const { isLavalinkAvailable } = require('../utils/interactionHelpers');
 
 /**
  * Creates the search results embed with pagination
@@ -248,6 +249,14 @@ async function handleSearchNavigation(interaction) {
         if (session.userId !== user.id) {
             return interaction.reply({
                 content: client.languageManager.get(lang, 'SEARCH_NOT_YOUR_SESSION'),
+                ephemeral: true
+            });
+        }
+
+        // Check if Lavalink is available
+        if (!isLavalinkAvailable(client)) {
+            return interaction.reply({
+                content: client.languageManager.get(lang, 'LAVALINK_UNAVAILABLE'),
                 ephemeral: true
             });
         }

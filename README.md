@@ -78,6 +78,18 @@ LAVALINK_PASSWORD=youshallnotpass
 QUEUE_EMPTY_DESTROY_MS=30000
 EMPTY_CHANNEL_DESTROY_MS=60000
 
+# Optional: Lavalink Reconnection Settings
+# Maximum number of reconnection attempts (default: 10)
+LAVALINK_MAX_RECONNECT_ATTEMPTS=10
+# Base delay for exponential backoff in milliseconds (default: 1000)
+LAVALINK_BASE_DELAY_MS=1000
+# Maximum delay for exponential backoff in milliseconds (default: 30000)
+LAVALINK_MAX_DELAY_MS=30000
+# Health check interval in milliseconds (default: 30000)
+LAVALINK_HEALTH_CHECK_INTERVAL_MS=30000
+# Reset reconnection attempts after this many minutes (default: 5)
+LAVALINK_RESET_ATTEMPTS_AFTER_MINUTES=5
+
 # Optional: Permission Settings
 # Comma-separated list of role IDs that can use the bot
 # Leave empty to allow everyone to use the bot

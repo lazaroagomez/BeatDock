@@ -11,8 +11,10 @@ async function createPlayer(client, guildId, voiceChannelId, textChannelId) {
     await player.connect();
     return player;
 }
+
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const searchSessions = require('../utils/searchSessions');
+const { isLavalinkAvailable, handleLavalinkError } = require('../utils/interactionHelpers');
 
 // Validate and clamp volume to valid range (0-100)
 function getValidVolume(envValue, defaultValue = 80) {
@@ -227,6 +229,14 @@ module.exports = {
             });
         }
 
+        // Check if Lavalink is available
+        if (!isLavalinkAvailable(client)) {
+            return interaction.reply({ 
+                content: client.languageManager.get(lang, 'LAVALINK_UNAVAILABLE'), 
+                ephemeral: true 
+            });
+        }
+
         await interaction.deferReply();
 
         try {
@@ -278,9 +288,7 @@ module.exports = {
 
         } catch (error) {
             console.error('Error in search command:', error);
-            await interaction.editReply({ 
-                content: client.languageManager.get(lang, 'SEARCH_ERROR') 
-            });
+            await handleLavalinkError(interaction, error, client);
         }
     },
 };

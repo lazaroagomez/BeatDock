@@ -3,6 +3,7 @@ const { Client, GatewayIntentBits, ActivityType } = require('discord.js');
 const { LavalinkManager } = require('lavalink-client');
 const LanguageManager = require('./LanguageManager');
 const PlayerController = require('./utils/PlayerController');
+const LavalinkConnectionManager = require('./utils/LavalinkConnectionManager');
 const searchSessions = require('./utils/searchSessions');
 const loadCommands = require('./handlers/commandHandler');
 const registerEvents = require('./handlers/eventHandler');
@@ -55,6 +56,8 @@ client.lavalink = new LavalinkManager({
             port: parseInt(process.env.LAVALINK_PORT),
             authorization: process.env.LAVALINK_PASSWORD,
             id: "main-node",
+            reconnectTimeout: 10000,
+            reconnectTries: 3,
         },
     ],
     sendToShard: (guildId, payload) => {
@@ -71,17 +74,23 @@ client.lavalink = new LavalinkManager({
     },
 });
 
+// Initialize connection manager
+client.lavalinkConnectionManager = new LavalinkConnectionManager(client);
+
+// Initialize the connection manager immediately - it will monitor for Lavalink availability
+client.lavalinkConnectionManager.initialize();
+
 // Lavalink NodeManager events
 client.lavalink.nodeManager.on('connect', (node) => {
-    console.log(`Lavalink node "${node.options.id}" connected.`);
+    client.lavalinkConnectionManager.onConnect(node);
 });
 
 client.lavalink.nodeManager.on('error', (node, error) => {
-    console.error(`Lavalink node "${node.options.id}" encountered an error:`, error);
+    client.lavalinkConnectionManager.onError(node, error);
 });
 
 client.lavalink.nodeManager.on('disconnect', (node, reason) => {
-    console.log(`Lavalink node "${node.options.id}" disconnected. Reason: ${reason.reason || 'Unknown'}`);
+    client.lavalinkConnectionManager.onDisconnect(node, reason);
 });
 
 // Lavalink events
@@ -136,6 +145,9 @@ registerEvents(client);
 // Graceful shutdown handling
 const shutdown = async (signal) => {
     console.log(`Received ${signal}, shutting down gracefully...`);
+    
+    // Cleanup connection manager
+    client.lavalinkConnectionManager.destroy();
     
     // Clear cleanup interval
     searchSessions.destroy();

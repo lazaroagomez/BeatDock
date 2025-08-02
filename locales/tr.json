@@ -68,5 +68,7 @@
     "SEARCH_INTERACTION_ERROR": "İsteğiniz işlenirken bir hata oluştu.",
     "SEARCH_TRACK_ADDED": "**{0}** kuyruğa eklendi.",
     "SEARCH_TRACK_REMOVED": "**{0}** kuyruktan kaldırıldı.",
-    "SEARCH_PLAYER_STOPPED": "Müzik çalar durduruldu. Arama özelliklerini kullanmak için lütfen bir ses kanalına katılın ve müzik çalmaya başlayın."
+    "SEARCH_PLAYER_STOPPED": "Müzik çalar durduruldu. Arama özelliklerini kullanmak için bir ses kanalına katılın ve müzik çalmaya başlayın.",
+    "LAVALINK_UNAVAILABLE": "❌ Müzik servisi şu anda kullanılamıyor. Lütfen birkaç dakika sonra tekrar deneyin.",
+    "GENERIC_ERROR": "❌ Müzik çalmaya çalışırken bir hata oluştu. Lütfen tekrar deneyin."
 }

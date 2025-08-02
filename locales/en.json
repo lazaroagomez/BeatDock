@@ -68,5 +68,7 @@
     "SEARCH_INTERACTION_ERROR": "An error occurred while processing your request.",
     "SEARCH_TRACK_ADDED": "Added **{0}** to the queue.",
     "SEARCH_TRACK_REMOVED": "Removed **{0}** from the queue.",
-    "SEARCH_PLAYER_STOPPED": "The music player has been stopped. Please join a voice channel and start playing music to use search features."
+    "SEARCH_PLAYER_STOPPED": "The music player has been stopped. Please join a voice channel and start playing music to use search features.",
+    "LAVALINK_UNAVAILABLE": "❌ Music service is currently unavailable. Please try again in a few moments.",
+    "GENERIC_ERROR": "❌ An error occurred while trying to play music. Please try again."
 }

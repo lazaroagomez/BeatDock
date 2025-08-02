@@ -1,6 +1,37 @@
+// Check if Lavalink is available
+const isLavalinkAvailable = (client) => {
+    return client.lavalinkConnectionManager.isAvailable();
+};
+
+// Handle Lavalink connection errors consistently
+const handleLavalinkError = async (interaction, error, client) => {
+    const lang = client.defaultLanguage;
+    
+    if (error.message.includes('No available Node') || error.message.includes('Unable to connect')) {
+        await interaction.editReply({ 
+            content: client.languageManager.get(lang, 'LAVALINK_UNAVAILABLE'), 
+            ephemeral: true 
+        });
+    } else {
+        await interaction.editReply({ 
+            content: client.languageManager.get(lang, 'GENERIC_ERROR'), 
+            ephemeral: true 
+        });
+    }
+};
+
 const requirePlayer = async (interaction, { requireQueue = false } = {}) => {
     const { client, guild } = interaction;
     const lang = client.defaultLanguage;
+
+    // Check if Lavalink is available first
+    if (!isLavalinkAvailable(client)) {
+        await interaction.reply({
+            content: client.languageManager.get(lang, 'LAVALINK_UNAVAILABLE'),
+            ephemeral: true,
+        }).catch(() => {});
+        return null;
+    }
 
     const player = client.lavalink.getPlayer(guild.id);
     if (!player) {
@@ -44,4 +75,6 @@ const requireSameVoice = async (interaction, player) => {
 module.exports = {
     requirePlayer,
     requireSameVoice,
+    isLavalinkAvailable,
+    handleLavalinkError,
 }; 
