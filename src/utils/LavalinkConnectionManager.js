@@ -126,7 +126,7 @@ class LavalinkConnectionManager {
             
             // Create new node
             console.log(`Attempting to reconnect Lavalink (attempt ${this.state.reconnectAttempts + 1}/${this.state.maxReconnectAttempts})...`);
-            console.log(`Connecting to ${process.env.LAVALINK_HOST}:${process.env.LAVALINK_PORT}`);
+            console.log('Attempting to connect to Lavalink server...');
             
             let newNode;
             try {
@@ -150,16 +150,31 @@ class LavalinkConnectionManager {
             // Wait for connection with proper error handling
             await new Promise((resolve, reject) => {
                 const timeout = setTimeout(() => {
+                    // Clean up event listeners before rejecting
+                    if (typeof newNode.off === 'function') {
+                        newNode.off('connect', onConnect);
+                        newNode.off('error', onError);
+                    }
                     reject(new Error('Connection timeout'));
                 }, 15000); // 15 second timeout
                 
                 const onConnect = () => {
                     clearTimeout(timeout);
+                    // Clean up event listeners on success
+                    if (typeof newNode.off === 'function') {
+                        newNode.off('connect', onConnect);
+                        newNode.off('error', onError);
+                    }
                     resolve();
                 };
                 
                 const onError = (error) => {
                     clearTimeout(timeout);
+                    // Clean up event listeners on error
+                    if (typeof newNode.off === 'function') {
+                        newNode.off('connect', onConnect);
+                        newNode.off('error', onError);
+                    }
                     reject(error);
                 };
                 
