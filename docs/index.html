@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BeatDock - Ultimate Discord Music Bot</title>
+    <title>BeatDock - Modern Discord Music Bot</title>
+    <meta name="description" content="BeatDock is a modern Discord music bot with slash commands, multi-language support, and Docker deployment. High-quality audio powered by Lavalink.">
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
@@ -33,9 +34,10 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top nav-glass">
         <div class="container">
-            <a class="navbar-brand gaming-font" href="#">
-                <i class="fas fa-music-pulse me-2"></i>
+            <a class="navbar-brand gaming-font" href="#home">
+                <i class="fas fa-music me-2"></i>
                 BeatDock
+                <span class="badge bg-primary ms-2">v2.0</span>
             </a>
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -52,7 +54,7 @@
                         <a class="nav-link" href="#setup">Setup</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#permissions">Permissions</a>
+                        <a class="nav-link" href="#configuration">Configuration</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link btn btn-outline-primary ms-3" href="https://github.com/lazaroagomez/BeatDock" target="_blank" rel="noopener">
@@ -73,19 +75,19 @@
                     <div class="hero-content animate__animated animate__fadeInUp">
                         <div class="discord-badge mb-4">
                             <i class="fab fa-discord me-2"></i>
-                            Discord Bot
+                            Discord Music Bot
                         </div>
                         <h1 class="gaming-font hero-title mb-4" data-text="BEATDOCK">
                             BEATDOCK
                         </h1>
                         <p class="hero-subtitle mb-5">
-                            The Ultimate Music Bot for Discord
+                            Modern Discord Music Bot with High-Quality Audio
                             <br>
-                            <span class="text-primary">Slash Commands • Multi-Language • Docker Ready</span>
+                            <span class="text-primary">Slash Commands • Multi-Language • Docker Ready • Interactive Search</span>
                         </p>
                         <div class="hero-buttons d-flex flex-column flex-sm-row justify-content-center align-items-center gap-3">
                             <a href="#setup" class="btn btn-primary btn-lg glow-button w-100" style="max-width: 250px;">
-                                <i class="fas fa-rocket me-2"></i>Get Started
+                                <i class="fas fa-rocket me-2"></i>Quick Start
                             </a>
                             <a href="https://github.com/lazaroagomez/BeatDock" class="btn btn-outline-light btn-lg w-100" style="max-width: 250px;" target="_blank" rel="noopener">
                                 <i class="fab fa-github me-2"></i>View on GitHub
@@ -95,7 +97,11 @@
                         <div class="hero-stats mt-5">
                             <div class="stat-item">
                                 <i class="fas fa-music"></i>
-                                <span>YouTube & Spotify</span>
+                                <span>High-Quality Audio</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-search"></i>
+                                <span>Interactive Search</span>
                             </div>
                             <div class="stat-item">
                                 <i class="fas fa-language"></i>
@@ -129,7 +135,17 @@
                             <i class="fas fa-headphones-alt"></i>
                         </div>
                         <h4>High-Quality Audio</h4>
-                        <p>Powered by Lavalink for crystal-clear music playback with minimal latency</p>
+                        <p>Powered by Lavalink for crystal-clear music playback with minimal latency and robust connection management</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card h-100">
+                        <div class="feature-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h4>Interactive Search</h4>
+                        <p>Advanced search with pagination, multi-selection, and visual navigation for discovering new music</p>
                     </div>
                 </div>
                 
@@ -138,8 +154,8 @@
                         <div class="feature-icon">
                             <i class="fas fa-slash"></i>
                         </div>
-                        <h4>Slash Commands</h4>
-                        <p>Modern Discord slash commands with auto-completion for ease of use</p>
+                        <h4>Modern Slash Commands</h4>
+                        <p>Discord.js v14 slash commands with auto-completion and parameter validation for ease of use</p>
                     </div>
                 </div>
                 
@@ -148,8 +164,18 @@
                         <div class="feature-icon">
                             <i class="fas fa-globe"></i>
                         </div>
-                        <h4>Multi-Language</h4>
-                        <p>Built-in support for English and Spanish, easily extendable for more languages</p>
+                        <h4>Multi-Language Support</h4>
+                        <p>Built-in support for English, Spanish, and Turkish with easy extensibility for additional languages</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card h-100">
+                        <div class="feature-icon">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <h4>Visual Player Controller</h4>
+                        <p>Rich embeds with interactive buttons for complete playback control and queue management</p>
                     </div>
                 </div>
                 
@@ -158,8 +184,8 @@
                         <div class="feature-icon">
                             <i class="fab fa-docker"></i>
                         </div>
-                        <h4>Docker Ready</h4>
-                        <p>Deploy in seconds with Docker Compose - no complex setup required</p>
+                        <h4>One-Command Deployment</h4>
+                        <p>Deploy instantly with Docker Compose using official pre-built images - no complex setup required</p>
                     </div>
                 </div>
                 
@@ -168,8 +194,8 @@
                         <div class="feature-icon">
                             <i class="fas fa-shield-alt"></i>
                         </div>
-                        <h4>Role Permissions</h4>
-                        <p>Control access with role-based permissions and admin overrides</p>
+                        <h4>Role-Based Permissions</h4>
+                        <p>Flexible permission system with admin override and role-based access control for server management</p>
                     </div>
                 </div>
                 
@@ -178,8 +204,8 @@
                         <div class="feature-icon">
                             <i class="fab fa-spotify"></i>
                         </div>
-                        <h4>Spotify Integration</h4>
-                        <p>Optional Spotify support with smart track resolution and ISRC matching</p>
+                        <h4>Optional Spotify Integration</h4>
+                        <p>Smart track resolution with ISRC matching for accurate Spotify track discovery and playback</p>
                     </div>
                 </div>
                 
@@ -189,7 +215,7 @@
                             <i class="fas fa-cloud"></i>
                         </div>
                         <h4>Stateless Design</h4>
-                        <p>No database required - perfect for containerized deployments</p>
+                        <p>No database required - perfect for containerized deployments with automatic queue state management</p>
                     </div>
                 </div>
             </div>
@@ -201,100 +227,311 @@
         <div class="container">
             <div class="section-header text-center mb-5">
                 <h2 class="gaming-font section-title">
-                    <span class="text-gradient">COMMANDS</span>
+                    <span class="text-gradient">COMPLETE COMMAND SET</span>
                 </h2>
-                <p class="section-subtitle">All available slash commands at your fingertips</p>
+                <p class="section-subtitle">12 comprehensive slash commands for total music control</p>
             </div>
             
             <div class="row">
-                <div class="col-lg-10 mx-auto">
+                <div class="col-12">
+
                     <div class="commands-grid">
-                        <div class="command-item">
+                        <!-- Playback Control Commands -->
+                        <div class="command-item" data-category="playback">
                             <div class="command-header">
                                 <code>/play</code>
                                 <span class="badge bg-primary">Essential</span>
                             </div>
-                            <p>Play a song or playlist from YouTube</p>
+                            <div class="command-description">
+                                <p>Play music from URL or search query</p>
+                                <div class="command-params">
+                                    <strong>Parameters:</strong> <code>&lt;query&gt;</code> - Song URL or search terms
+                                </div>
+                                <div class="command-example">
+                                    <strong>Example:</strong> <code>/play Rick Astley Never Gonna Give You Up</code>
+                                </div>
+                            </div>
                         </div>
                         
-                        <div class="command-item">
+                        <div class="command-item" data-category="playback">
+                            <div class="command-header">
+                                <code>/pause</code>
+                                <span class="badge bg-warning">Control</span>
+                            </div>
+                            <div class="command-description">
+                                <p>Toggle pause/resume playback</p>
+                                <div class="command-example">
+                                    <strong>Example:</strong> <code>/pause</code>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="command-item" data-category="playback">
                             <div class="command-header">
                                 <code>/skip</code>
                                 <span class="badge bg-info">Playback</span>
                             </div>
-                            <p>Skip the current song</p>
-                        </div>
-                        
-                        <div class="command-item">
-                            <div class="command-header">
-                                <code>/stop</code>
-                                <span class="badge bg-danger">Control</span>
+                            <div class="command-description">
+                                <p>Skip to the next track in queue</p>
+                                <div class="command-example">
+                                    <strong>Example:</strong> <code>/skip</code>
+                                </div>
                             </div>
-                            <p>Stop playback and clear the queue</p>
                         </div>
                         
-                        <div class="command-item">
-                            <div class="command-header">
-                                <code>/pause</code>
-                                <span class="badge bg-warning">Playback</span>
-                            </div>
-                            <p>Toggle pause/resume</p>
-                        </div>
-                        
-                        <div class="command-item">
-                            <div class="command-header">
-                                <code>/loop</code>
-                                <span class="badge bg-info">Playback</span>
-                            </div>
-                            <p>Toggle loop mode for current track or queue</p>
-                        </div>
-                        
-                        <div class="command-item">
-                            <div class="command-header">
-                                <code>/queue</code>
-                                <span class="badge bg-secondary">Info</span>
-                            </div>
-                            <p>Show the current queue</p>
-                        </div>
-                        
-                        <div class="command-item">
-                            <div class="command-header">
-                                <code>/nowplaying</code>
-                                <span class="badge bg-secondary">Info</span>
-                            </div>
-                            <p>Show current song info</p>
-                        </div>
-                        
-                        <div class="command-item">
-                            <div class="command-header">
-                                <code>/shuffle</code>
-                                <span class="badge bg-success">Queue</span>
-                            </div>
-                            <p>Shuffle the queue</p>
-                        </div>
-                        
-                        <div class="command-item">
-                            <div class="command-header">
-                                <code>/volume</code>
-                                <span class="badge bg-info">Control</span>
-                            </div>
-                            <p>Set playback volume (0-100)</p>
-                        </div>
-                        
-                        <div class="command-item">
-                            <div class="command-header">
-                                <code>/clear</code>
-                                <span class="badge bg-danger">Queue</span>
-                            </div>
-                            <p>Clear the entire queue</p>
-                        </div>
-                        
-                        <div class="command-item">
+                        <div class="command-item" data-category="playback">
                             <div class="command-header">
                                 <code>/back</code>
                                 <span class="badge bg-info">Playback</span>
                             </div>
-                            <p>Play the previous track</p>
+                            <div class="command-description">
+                                <p>Play the previous track from history</p>
+                                <div class="command-example">
+                                    <strong>Example:</strong> <code>/back</code>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="command-item" data-category="playback">
+                            <div class="command-header">
+                                <code>/stop</code>
+                                <span class="badge bg-danger">Control</span>
+                            </div>
+                            <div class="command-description">
+                                <p>Stop playback and disconnect from voice channel</p>
+                                <div class="command-example">
+                                    <strong>Example:</strong> <code>/stop</code>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="command-item" data-category="playback">
+                            <div class="command-header">
+                                <code>/volume</code>
+                                <span class="badge bg-info">Control</span>
+                            </div>
+                            <div class="command-description">
+                                <p>Adjust playback volume</p>
+                                <div class="command-params">
+                                    <strong>Parameters:</strong> <code>&lt;level&gt;</code> - Volume level (1-100)
+                                </div>
+                                <div class="command-example">
+                                    <strong>Example:</strong> <code>/volume 75</code>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Search & Discovery -->
+                        <div class="command-item" data-category="search">
+                            <div class="command-header">
+                                <code>/search</code>
+                                <span class="badge bg-success">Interactive</span>
+                            </div>
+                            <div class="command-description">
+                                <p>Interactive search with pagination and multi-selection</p>
+                                <div class="command-params">
+                                    <strong>Parameters:</strong> <code>&lt;query&gt;</code> - Search terms (max 200 characters)
+                                </div>
+                                <div class="command-example">
+                                    <strong>Example:</strong> <code>/search ambient music</code>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Queue Management -->
+                        <div class="command-item" data-category="queue">
+                            <div class="command-header">
+                                <code>/queue</code>
+                                <span class="badge bg-secondary">Info</span>
+                            </div>
+                            <div class="command-description">
+                                <p>Display current queue with pagination</p>
+                                <div class="command-example">
+                                    <strong>Example:</strong> <code>/queue</code>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="command-item" data-category="queue">
+                            <div class="command-header">
+                                <code>/clear</code>
+                                <span class="badge bg-danger">Queue</span>
+                            </div>
+                            <div class="command-description">
+                                <p>Clear the entire queue</p>
+                                <div class="command-example">
+                                    <strong>Example:</strong> <code>/clear</code>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="command-item" data-category="queue">
+                            <div class="command-header">
+                                <code>/shuffle</code>
+                                <span class="badge bg-success">Queue</span>
+                            </div>
+                            <div class="command-description">
+                                <p>Shuffle the current queue randomly</p>
+                                <div class="command-example">
+                                    <strong>Example:</strong> <code>/shuffle</code>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="command-item" data-category="queue">
+                            <div class="command-header">
+                                <code>/loop</code>
+                                <span class="badge bg-info">Queue</span>
+                            </div>
+                            <div class="command-description">
+                                <p>Cycle through loop modes (off → track → queue)</p>
+                                <div class="command-example">
+                                    <strong>Example:</strong> <code>/loop</code>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Information -->
+                        <div class="command-item" data-category="info">
+                            <div class="command-header">
+                                <code>/nowplaying</code>
+                                <span class="badge bg-secondary">Info</span>
+                            </div>
+                            <div class="command-description">
+                                <p>Show detailed information about the current track</p>
+                                <div class="command-example">
+                                    <strong>Example:</strong> <code>/nowplaying</code>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced Features Info -->
+            <div class="row mt-5">
+                <div class="col-lg-10 mx-auto">
+                    <div class="advanced-features-info">
+                        <h4 class="text-center mb-4">🎛️ Advanced Features</h4>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="feature-info">
+                                    <h6><i class="fas fa-search text-primary me-2"></i>Interactive Search</h6>
+                                    <p>Browse search results with navigation buttons, select multiple tracks, and add them to the queue with visual feedback.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="feature-info">
+                                    <h6><i class="fas fa-gamepad text-success me-2"></i>Visual Player Controller</h6>
+                                    <p>Automatic player interface with interactive buttons for all playback controls and real-time status updates.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="feature-info">
+                                    <h6><i class="fas fa-repeat text-info me-2"></i>Loop Modes</h6>
+                                    <p><strong>Off</strong> - No looping | <strong>Track</strong> - Loop current track | <strong>Queue</strong> - Loop entire queue</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="feature-info">
+                                    <h6><i class="fas fa-shield-alt text-warning me-2"></i>Permission System</h6>
+                                    <p>All commands respect role-based permissions with admin override functionality.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Prerequisites Section -->
+    <section class="prerequisites-section py-5 bg-dark">
+        <div class="container">
+            <div class="section-header text-center mb-5">
+                <h2 class="gaming-font section-title">
+                    <span class="text-gradient">CRITICAL REQUIREMENTS</span>
+                </h2>
+                <p class="section-subtitle">Essential setup before deployment</p>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-10 mx-auto">
+                    <div class="alert alert-danger mb-4">
+                        <div class="d-flex align-items-start">
+                            <i class="fas fa-exclamation-triangle text-danger me-3 mt-1" style="font-size: 1.5rem;"></i>
+                            <div>
+                                <h5 class="alert-heading mb-3">🔒 Discord Privileged Gateway Intents Required</h5>
+                                <p class="mb-3">BeatDock requires <strong>ALL THREE</strong> Discord Privileged Gateway Intents to function properly:</p>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <div class="intent-requirement">
+                                            <i class="fas fa-eye text-success me-2"></i>
+                                            <strong>Presence Intent</strong>
+                                            <div class="text-muted small">User presence information</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="intent-requirement">
+                                            <i class="fas fa-users text-info me-2"></i>
+                                            <strong>Server Members Intent</strong>
+                                            <div class="text-muted small">Server member data access</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="intent-requirement">
+                                            <i class="fas fa-comments text-warning me-2"></i>
+                                            <strong>Message Content Intent</strong>
+                                            <div class="text-muted small">Message content access</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <strong>How to enable:</strong>
+                                    <ol class="mb-0 mt-2">
+                                        <li>Go to <a href="https://discord.com/developers/applications" target="_blank" rel="noopener" class="text-light">Discord Developer Portal</a></li>
+                                        <li>Select your bot application → <strong>"Bot"</strong> → <strong>"Privileged Gateway Intents"</strong></li>
+                                        <li>Enable all three toggles → <strong>"Save Changes"</strong></li>
+                                    </ol>
+                                </div>
+
+                                <div class="alert alert-warning mt-3 mb-0">
+                                    <i class="fas fa-bomb me-2"></i>
+                                    <strong>The bot will not start without these intents enabled.</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="system-requirements">
+                        <h4 class="mb-3">📋 System Requirements</h4>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="requirement-item">
+                                    <i class="fab fa-node-js text-success me-2"></i>
+                                    <strong>Node.js ≥22.16.0</strong>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="requirement-item">
+                                    <i class="fab fa-npm text-danger me-2"></i>
+                                    <strong>npm ≥11.4.2</strong>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="requirement-item">
+                                    <i class="fab fa-docker text-primary me-2"></i>
+                                    <strong>Docker (for deployment)</strong>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="requirement-item">
+                                    <i class="fab fa-discord text-info me-2"></i>
+                                    <strong>Discord Bot Token</strong>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -309,41 +546,24 @@
                 <h2 class="gaming-font section-title">
                     <span class="text-gradient">QUICK SETUP</span>
                 </h2>
-                <p class="section-subtitle">Get BeatDock running in just 5 simple steps</p>
+                <p class="section-subtitle">Deploy BeatDock in just 4 simple steps</p>
             </div>
             
             <div class="row">
                 <div class="col-lg-10 mx-auto">
                     <div class="setup-timeline">
-                        <!-- Step 1 - Discord Intents -->
+                        <!-- Step 1 -->
                         <div class="setup-step">
                             <div class="step-number">1</div>
                             <div class="step-content">
-                                <h4>🔒 Enable Discord Intents</h4>
-                                <p><strong>Required:</strong> Enable these three Privileged Gateway Intents in Discord Developer Portal</p>
-                                <div class="row mb-3">
-                                    <div class="col-md-4">
-                                        <div class="intent-item">
-                                            <i class="fas fa-eye text-success"></i>
-                                            <span>Presence Intent</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="intent-item">
-                                            <i class="fas fa-users text-info"></i>
-                                            <span>Server Members Intent</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="intent-item">
-                                            <i class="fas fa-comments text-warning"></i>
-                                            <span>Message Content Intent</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="alert alert-warning">
-                                    <i class="fas fa-exclamation-triangle me-2"></i>
-                                    <strong>Critical:</strong> The bot will not function without these intents enabled in your Discord Developer Portal under Bot → Privileged Gateway Intents.
+                                <h4><i class="fab fa-github me-2"></i>Clone Repository</h4>
+                                <p>Download the BeatDock source code to your server</p>
+                                <div class="code-block">
+                                    <pre><code>git clone https://github.com/lazaroagomez/BeatDock.git
+cd BeatDock</code></pre>
+                                    <button class="copy-btn" onclick="copyToClipboard(this)" data-code="git clone https://github.com/lazaroagomez/BeatDock.git&#10;cd BeatDock">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -352,14 +572,38 @@
                         <div class="setup-step">
                             <div class="step-number">2</div>
                             <div class="step-content">
-                                <h4>Clone the Repository</h4>
-                                <p>Get the source code on your machine</p>
+                                <h4><i class="fas fa-cog me-2"></i>Configure Environment</h4>
+                                <p>Create <code>.env</code> file with your Discord bot credentials</p>
                                 <div class="code-block">
-                                    <pre><code>git clone https://github.com/lazaroagomez/BeatDock.git
-cd BeatDock</code></pre>
-                                    <button class="copy-btn" data-clipboard-target="#code1">
+                                    <pre><code># Copy the example file
+cp .env.example .env
+
+# Edit with your credentials
+# Discord Bot Configuration (Required)
+TOKEN=your_discord_bot_token_here
+CLIENT_ID=your_discord_client_id_here
+
+# Lavalink Configuration
+LAVALINK_HOST=lavalink
+LAVALINK_PORT=2333
+LAVALINK_PASSWORD=youshallnotpass
+
+# Optional: Spotify Integration
+SPOTIFY_ENABLED=false
+SPOTIFY_CLIENT_ID=your_spotify_client_id_here
+SPOTIFY_CLIENT_SECRET=your_spotify_client_secret_here
+
+# Optional: Additional Settings
+DEFAULT_LANGUAGE=en
+DEFAULT_VOLUME=80
+ALLOWED_ROLES=</code></pre>
+                                    <button class="copy-btn" onclick="copyToClipboard(this)" data-code="cp .env.example .env">
                                         <i class="fas fa-copy"></i>
                                     </button>
+                                </div>
+                                <div class="alert alert-info mt-3">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    Get your Discord credentials from the <a href="https://discord.com/developers/applications" target="_blank" rel="noopener" class="text-light">Discord Developer Portal</a>
                                 </div>
                             </div>
                         </div>
@@ -368,45 +612,17 @@ cd BeatDock</code></pre>
                         <div class="setup-step">
                             <div class="step-number">3</div>
                             <div class="step-content">
-                                <h4>Configure Environment</h4>
-                                <p>Create a <code>.env</code> file with your bot credentials (copy from <code>.env.example</code>)</p>
+                                <h4><i class="fas fa-terminal me-2"></i>Deploy Commands</h4>
+                                <p>Register slash commands with Discord</p>
                                 <div class="code-block">
-                                    <pre><code># Discord Bot Configuration
-# Get these from https://discord.com/developers/applications
-TOKEN=your_discord_bot_token_here
-CLIENT_ID=your_discord_client_id_here
-
-# Optional: Spotify Configuration
-# To enable Spotify support, set SPOTIFY_ENABLED=true and provide your credentials
-# Get your credentials from: https://developer.spotify.com/dashboard/applications
-SPOTIFY_ENABLED=false
-SPOTIFY_CLIENT_ID=your_spotify_client_id_here
-SPOTIFY_CLIENT_SECRET=your_spotify_client_secret_here
-
-# Lavalink Server Configuration
-LAVALINK_HOST=lavalink
-LAVALINK_PORT=2333
-LAVALINK_PASSWORD=youshallnotpass
-
-# Optional: Language Settings
-#DEFAULT_LANGUAGE=en
-
-# Optional: Disconnection Settings
-QUEUE_EMPTY_DESTROY_MS=30000
-EMPTY_CHANNEL_DESTROY_MS=60000
-
-# Optional: Permission Settings
-# Comma-separated list of role IDs that can use the bot
-# Leave empty to allow everyone to use the bot
-# Example: ALLOWED_ROLES=123456789012345678,234567890123456789
-ALLOWED_ROLES=
-
-# Optional: Audio Settings
-# Default volume for music playback (0-100, defaults to 80 if not set or invalid)
-DEFAULT_VOLUME=80</code></pre>
-                                    <button class="copy-btn" data-clipboard-target="#code2">
+                                    <pre><code>docker compose run --rm bot npm run deploy</code></pre>
+                                    <button class="copy-btn" onclick="copyToClipboard(this)" data-code="docker compose run --rm bot npm run deploy">
                                         <i class="fas fa-copy"></i>
                                     </button>
+                                </div>
+                                <div class="alert alert-warning mt-3">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    This step must be completed before starting the bot to register commands with Discord
                                 </div>
                             </div>
                         </div>
@@ -415,111 +631,472 @@ DEFAULT_VOLUME=80</code></pre>
                         <div class="setup-step">
                             <div class="step-number">4</div>
                             <div class="step-content">
-                                <h4>Deploy with Docker</h4>
-                                <p>The included <code>docker-compose.yml</code> uses the official pre-built image</p>
+                                <h4><i class="fas fa-rocket me-2"></i>Start BeatDock</h4>
+                                <p>Launch the bot and Lavalink server with Docker Compose</p>
                                 <div class="code-block">
-                                    <pre><code># Deploy slash commands and start the bot
-docker compose run --rm bot npm run deploy
-docker compose up -d</code></pre>
-                                    <button class="copy-btn" data-clipboard-target="#code3">
+                                    <pre><code># Start all services
+docker compose up -d
+
+# View logs (optional)
+docker compose logs -f</code></pre>
+                                    <button class="copy-btn" onclick="copyToClipboard(this)" data-code="docker compose up -d">
                                         <i class="fas fa-copy"></i>
                                     </button>
                                 </div>
-                                <div class="alert alert-info mt-3">
-                                    <i class="fas fa-info-circle me-2"></i>
-                                    <strong>Note:</strong> The default configuration uses <code>ghcr.io/lazaroagomez/beatdock:latest</code> for easy deployment.
+                                <div class="alert alert-success mt-3">
+                                    <i class="fas fa-check-circle me-2"></i>
+                                    BeatDock is now running! The bot will automatically connect to your Discord server.
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <!-- Build from Source Section -->
+
+            <!-- Docker Management -->
             <div class="row mt-5">
                 <div class="col-lg-10 mx-auto">
-                    <div class="section-header text-center mb-4">
-                        <h3 class="gaming-font">
-                            <span class="text-gradient">Build from Source</span>
-                        </h3>
-                        <p class="text-muted">If you prefer to build the Docker image yourself</p>
-                    </div>
-                    
-                    <div class="alert alert-secondary mb-4">
-                        <div class="d-flex align-items-start">
-                            <i class="fas fa-tools text-secondary me-3 mt-1"></i>
-                            <div>
-                                <h5 class="alert-heading mb-2">Alternative Setup</h5>
-                                <p class="mb-2">Keep the original <code>build</code> configuration in your docker-compose.yml instead of using the pre-built image.</p>
-                                <div class="code-block mt-3">
-                                    <pre><code>services:
-  bot:
-    container_name: beatdock
-    build:
-      context: .
-      dockerfile: Dockerfile</code></pre>
+                    <div class="docker-management">
+                        <h3 class="text-center mb-4">🐳 Docker Management</h3>
+                        <div class="row g-4">
+                            <div class="col-md-6 col-lg-3">
+                                <div class="docker-card text-center">
+                                    <div class="docker-icon">
+                                        <i class="fas fa-stop"></i>
+                                    </div>
+                                    <h6>Stop Services</h6>
+                                    <div class="docker-command">
+                                        <code>docker compose down</code>
+                                        <button class="copy-btn-small" onclick="copyToClipboard(this)" data-code="docker compose down">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </div>
                                 </div>
-                                <p class="mb-0 mt-2">Then follow the same steps to deploy commands and start the bot.</p>
+                            </div>
+                            <div class="col-md-6 col-lg-3">
+                                <div class="docker-card text-center">
+                                    <div class="docker-icon">
+                                        <i class="fas fa-redo"></i>
+                                    </div>
+                                    <h6>Restart Services</h6>
+                                    <div class="docker-command">
+                                        <code>docker compose restart</code>
+                                        <button class="copy-btn-small" onclick="copyToClipboard(this)" data-code="docker compose restart">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-3">
+                                <div class="docker-card text-center">
+                                    <div class="docker-icon">
+                                        <i class="fas fa-file-alt"></i>
+                                    </div>
+                                    <h6>View Logs</h6>
+                                    <div class="docker-command">
+                                        <code>docker compose logs -f</code>
+                                        <button class="copy-btn-small" onclick="copyToClipboard(this)" data-code="docker compose logs -f">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-3">
+                                <div class="docker-card text-center">
+                                    <div class="docker-icon">
+                                        <i class="fas fa-download"></i>
+                                    </div>
+                                    <h6>Update Bot</h6>
+                                    <div class="docker-command">
+                                        <code>docker compose pull && docker compose up -d</code>
+                                        <button class="copy-btn-small" onclick="copyToClipboard(this)" data-code="docker compose pull && docker compose up -d">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <style>
+                .docker-card {
+                    background: rgba(255, 255, 255, 0.05);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    border-radius: 12px;
+                    padding: 2rem 1rem;
+                    height: 100%;
+                    transition: all 0.3s ease;
+                    position: relative;
+                    overflow: hidden;
+                }
+
+                .docker-card:hover {
+                    background: rgba(255, 255, 255, 0.08);
+                    border-color: rgba(255, 255, 255, 0.2);
+                    transform: translateY(-2px);
+                    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+                }
+
+                .docker-icon {
+                    width: 60px;
+                    height: 60px;
+                    background: linear-gradient(135deg, #007bff, #0056b3);
+                    border-radius: 12px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 0 auto 1rem;
+                    font-size: 1.5rem;
+                    color: white;
+                    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+                }
+
+                .docker-card h6 {
+                    color: #fff;
+                    font-weight: 600;
+                    margin-bottom: 1rem;
+                }
+
+                .docker-command {
+                    position: relative;
+                    background: rgba(0, 0, 0, 0.3);
+                    border-radius: 8px;
+                    padding: 0.75rem;
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                }
+
+                .docker-command code {
+                    background: none;
+                    color: #00ff88;
+                    font-size: 0.85rem;
+                    padding: 0;
+                    display: block;
+                    word-break: break-all;
+                }
+
+                .copy-btn-small {
+                    position: absolute;
+                    top: 8px;
+                    right: 8px;
+                    background: rgba(255, 255, 255, 0.1);
+                    border: none;
+                    color: #ccc;
+                    padding: 4px 8px;
+                    border-radius: 4px;
+                    font-size: 0.75rem;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                }
+
+                .copy-btn-small:hover {
+                    background: rgba(255, 255, 255, 0.2);
+                    color: #fff;
+                }
+
+                @media (max-width: 768px) {
+                    .docker-card {
+                        padding: 1.5rem 1rem;
+                    }
                     
-                    <div class="alert alert-info">
-                        <p class="mb-0"><strong>Community ARM64 Image:</strong> Thanks to <strong>@driftywinds</strong> for providing an ARM64 community image at <code>ghcr.io/driftywinds/beatdock-bot:latest</code>. See <a href="https://github.com/lazaroagomez/BeatDock/issues/32" target="_blank" class="text-light"><i class="fas fa-external-link-alt me-1"></i>Issue #32</a> for details.</p>
+                    .docker-icon {
+                        width: 50px;
+                        height: 50px;
+                        font-size: 1.25rem;
+                    }
+                    
+                    .docker-command code {
+                        font-size: 0.8rem;
+                    }
+                }
+            </style>
+        </div>
+    </section>
+
+    <!-- Configuration Section -->
+    <section class="configuration-section py-5 bg-dark" id="configuration">
+        <div class="container">
+            <div class="section-header text-center mb-5">
+                <h2 class="gaming-font section-title">
+                    <span class="text-gradient">CONFIGURATION REFERENCE</span>
+                </h2>
+                <p class="section-subtitle">Complete .env file template</p>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-10 mx-auto">
+                    <!-- Nano Editor Style Environment File -->
+                    <div class="nano-editor">
+                        <div class="nano-header">
+                            <div class="nano-title">GNU nano 6.2</div>
+                            <div class="nano-filename">.env</div>
+                            <div class="nano-modified">Modified</div>
+                        </div>
+                        <div class="nano-content">
+                            <div class="line-numbers">
+                                <span>1</span>
+                                <span>2</span>
+                                <span>3</span>
+                                <span>4</span>
+                                <span>5</span>
+                                <span>6</span>
+                                <span>7</span>
+                                <span>8</span>
+                                <span>9</span>
+                                <span>10</span>
+                                <span>11</span>
+                                <span>12</span>
+                                <span>13</span>
+                                <span>14</span>
+                                <span>15</span>
+                                <span>16</span>
+                                <span>17</span>
+                                <span>18</span>
+                                <span>19</span>
+                                <span>20</span>
+                                <span>21</span>
+                                <span>22</span>
+                                <span>23</span>
+                                <span>24</span>
+                                <span>25</span>
+                                <span>26</span>
+                                <span>27</span>
+                                <span>28</span>
+                                <span>29</span>
+                                <span>30</span>
+                                <span>31</span>
+                                <span>32</span>
+                                <span>33</span>
+                                <span>34</span>
+                                <span>35</span>
+                            </div>
+                            <div class="env-content">
+<pre><span class="comment"># =============================================================================
+# BEATDOCK CONFIGURATION FILE
+# =============================================================================</span>
+
+<span class="comment"># Discord Bot Configuration (Required)</span>
+<span class="variable">TOKEN</span>=<span class="value">your_discord_bot_token_here</span>
+<span class="variable">CLIENT_ID</span>=<span class="value">123456789012345678</span>
+
+<span class="comment"># Lavalink Configuration (Required for Docker setup)</span>
+<span class="variable">LAVALINK_HOST</span>=<span class="value">lavalink</span>
+<span class="variable">LAVALINK_PORT</span>=<span class="value">2333</span>
+<span class="variable">LAVALINK_PASSWORD</span>=<span class="value">youshallnotpass</span>
+
+<span class="comment"># Optional: Spotify Integration</span>
+<span class="variable">SPOTIFY_ENABLED</span>=<span class="value">false</span>
+<span class="variable">SPOTIFY_CLIENT_ID</span>=<span class="value">your_spotify_client_id_here</span>
+<span class="variable">SPOTIFY_CLIENT_SECRET</span>=<span class="value">your_spotify_client_secret_here</span>
+
+<span class="comment"># Optional: Bot Behavior Settings</span>
+<span class="variable">DEFAULT_LANGUAGE</span>=<span class="value">en</span>
+<span class="variable">QUEUE_EMPTY_DESTROY_MS</span>=<span class="value">30000</span>
+<span class="variable">EMPTY_CHANNEL_DESTROY_MS</span>=<span class="value">60000</span>
+<span class="variable">DEFAULT_VOLUME</span>=<span class="value">80</span>
+<span class="variable">ALLOWED_ROLES</span>=<span class="value"></span>
+
+<span class="comment"># Optional: Advanced Lavalink Reconnection Settings</span>
+<span class="variable">LAVALINK_MAX_RECONNECT_ATTEMPTS</span>=<span class="value">10</span>
+<span class="variable">LAVALINK_BASE_DELAY_MS</span>=<span class="value">1000</span>
+<span class="variable">LAVALINK_MAX_DELAY_MS</span>=<span class="value">30000</span>
+<span class="variable">LAVALINK_HEALTH_CHECK_INTERVAL_MS</span>=<span class="value">30000</span>
+<span class="variable">LAVALINK_RESET_ATTEMPTS_AFTER_MINUTES</span>=<span class="value">5</span>
+
+<span class="comment"># =============================================================================
+# END OF CONFIGURATION
+# =============================================================================</span></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Configuration Guide -->
+                    <div class="config-guide mt-4">
+                        <h4 class="mb-3">Configuration Guide</h4>
+                        
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="config-info-card">
+                                    <h6>Required Variables</h6>
+                                    <ul class="list-unstyled mb-0">
+                                        <li><code>TOKEN</code> - Discord bot token from <a href="https://discord.com/developers/applications" target="_blank" rel="noopener">Developer Portal</a></li>
+                                        <li><code>CLIENT_ID</code> - Discord application/client ID</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="config-info-card">
+                                    <h6>Permission System</h6>
+                                    <ul class="list-unstyled mb-0">
+                                        <li><strong>Empty ALLOWED_ROLES:</strong> Everyone can use the bot</li>
+                                        <li><strong>Admin Override:</strong> Administrators always have access</li>
+                                        <li><strong>Role-Based:</strong> Only specified roles can use the bot</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="config-info-card">
+                                    <h6>Language Options</h6>
+                                    <ul class="list-unstyled mb-0">
+                                        <li><code>en</code> - English (default)</li>
+                                        <li><code>es</code> - Spanish</li>
+                                        <li><code>tr</code> - Turkish</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="config-info-card">
+                                    <h6>Spotify Integration</h6>
+                                    <ul class="list-unstyled mb-0">
+                                        <li>Get credentials from <a href="https://developer.spotify.com/dashboard" target="_blank" rel="noopener">Spotify Dashboard</a></li>
+                                        <li>Enable ISRC matching for accurate track resolution</li>
+                                        <li>Optional feature - bot works without it</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Permissions Section -->
-    <section class="permissions-section py-5" id="permissions">
-        <div class="container">
-            <div class="section-header text-center mb-5">
-                <h2 class="gaming-font section-title">
-                    <span class="text-gradient">PERMISSIONS</span>
-                </h2>
-                <p class="section-subtitle">Control who can use your bot</p>
-            </div>
+    <style>
+        .nano-editor {
+            background: #1a1a1a;
+            border: 2px solid #333;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        .nano-header {
+            background: #2a2a2a;
+            color: #fff;
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #444;
+            font-weight: bold;
+        }
+
+        .nano-filename {
+            color: #00ff00;
+        }
+
+        .nano-modified {
+            color: #ffff00;
+        }
+
+        .nano-content {
+            display: flex;
+            background: #0c0c0c;
+            min-height: 500px;
+        }
+
+        .line-numbers {
+            background: #1a1a1a;
+            color: #666;
+            padding: 16px 8px;
+            text-align: right;
+            user-select: none;
+            border-right: 1px solid #333;
+            min-width: 50px;
+        }
+
+        .line-numbers span {
+            display: block;
+            line-height: 1.4;
+        }
+
+        .env-content {
+            flex: 1;
+            padding: 16px;
+            color: #fff;
+            overflow-x: auto;
+        }
+
+        .env-content pre {
+            margin: 0;
+            background: none;
+            border: none;
+            padding: 0;
+            color: inherit;
+            font-family: inherit;
+            font-size: inherit;
+        }
+
+        .comment {
+            color: #5c6370;
+        }
+
+        .variable {
+            color: #e06c75;
+            font-weight: bold;
+        }
+
+        .value {
+            color: #98c379;
+        }
+
+        .config-guide {
+            margin-top: 2rem;
+        }
+
+        .config-info-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1.5rem;
+            height: 100%;
+        }
+
+        .config-info-card h6 {
+            color: #fff;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .config-info-card ul li {
+            margin-bottom: 0.5rem;
+            color: #ccc;
+        }
+
+        .config-info-card code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #00ff88;
+        }
+
+        .config-info-card a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .config-info-card a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .nano-editor {
+                font-size: 12px;
+            }
             
-            <div class="row">
-                <div class="col-lg-8 mx-auto">
-                    <div class="permission-card mb-4">
-                        <div class="permission-icon">
-                            <i class="fas fa-crown"></i>
-                        </div>
-                        <div class="permission-content">
-                            <h4>Admin Override</h4>
-                            <p>Users with Administrator permissions always have full access to all bot commands</p>
-                        </div>
-                    </div>
-                    
-                    <div class="permission-card mb-4">
-                        <div class="permission-icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <div class="permission-content">
-                            <h4>Role-Based Access</h4>
-                            <p>Configure specific roles that can use the bot by adding role IDs to your <code>.env</code> file</p>
-                            <div class="code-snippet mt-3">
-                                <code>ALLOWED_ROLES=123456789012345678,234567890123456789</code>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="permission-card">
-                        <div class="permission-icon">
-                            <i class="fas fa-globe"></i>
-                        </div>
-                        <div class="permission-content">
-                            <h4>Default Behavior</h4>
-                            <p>If no roles are specified, everyone can use the bot</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+            .nano-content {
+                min-height: 400px;
+            }
+        }
+    </style>
+
 
     <!-- Footer -->
     <footer class="footer-section py-4">
@@ -527,29 +1104,82 @@ docker compose up -d</code></pre>
             <div class="row">
                 <div class="col-md-6">
                     <div class="footer-brand">
-                        <h5 class="gaming-font mb-3">BeatDock</h5>
-                        <p class="mb-0">A modern Discord music bot built with love</p>
+                        <h5 class="gaming-font mb-3">
+                            <i class="fas fa-music me-2"></i>BeatDock
+                            <span class="badge bg-primary ms-2">v2.0</span>
+                        </h5>
                     </div>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <div class="footer-links">
+                    <div class="footer-links mb-3">
                         <a href="https://github.com/lazaroagomez/BeatDock" target="_blank" rel="noopener" class="me-3">
                             <i class="fab fa-github"></i> GitHub
                         </a>
-                        <a href="https://github.com/lazaroagomez/BeatDock/issues" target="_blank" rel="noopener">
+                        <a href="https://github.com/lazaroagomez/BeatDock/issues" target="_blank" rel="noopener" class="me-3">
                             <i class="fas fa-bug"></i> Report Issue
                         </a>
+                        <a href="mailto:lazaro98@duck.com">
+                            <i class="fas fa-envelope"></i> Contact
+                        </a>
                     </div>
-                    <p class="mt-3 mb-0">© 2024 Lázaro Gómez. Apache-2.0 License</p>
+                    <p class="mb-2">© 2025 Lázaro Gómez</p>
+                    <p class="mb-0">
+                        <a href="https://github.com/lazaroagomez/BeatDock/blob/main/LICENSE" target="_blank" rel="noopener" class="text-muted">
+                            Apache-2.0 License
+                        </a>
+                    </p>
+                </div>
+            </div>
+            <hr class="my-4 border-secondary">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p class="mb-0 text-muted">
+                        <i class="fas fa-heart text-danger me-1"></i>
+                        Built with love for the Discord community
+                        <i class="fas fa-heart text-danger ms-1"></i>
+                    </p>
                 </div>
             </div>
         </div>
     </footer>
 
     <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLlGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
     
     <!-- Custom JS -->
     <script src="script.js"></script>
+
+    <script>
+
+        // Copy to clipboard functionality
+        function copyToClipboard(button) {
+            const code = button.getAttribute('data-code');
+            navigator.clipboard.writeText(code).then(() => {
+                const icon = button.querySelector('i');
+                const originalClass = icon.className;
+                icon.className = 'fas fa-check text-success';
+                
+                setTimeout(() => {
+                    icon.className = originalClass;
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
