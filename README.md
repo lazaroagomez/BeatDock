@@ -9,7 +9,7 @@
 ![Docker](https://img.shields.io/badge/docker-ready-success?style=flat-square)
 ![Node.js](https://img.shields.io/badge/node-%3E%3D22.16.0-green?style=flat-square)
 
-[🌐 **Live Documentation**](https://lazaroagomez.github.io/BeatDock) • [📥 **Quick Start**](#quick-start) • [📋 **Commands**](#commands) • [🐛 **Issues**](https://github.com/lazaroagomez/BeatDock/issues)
+[🌐 **Live Documentation**](https://lazaroagomez.github.io/BeatDock) • [📥 **Quick Start**](#-quick-start) • [📋 **Commands**](#-commands) • [🐛 **Issues**](https://github.com/lazaroagomez/BeatDock/issues)
 
 </div>
 
@@ -388,7 +388,7 @@ We welcome contributions! Please feel free to submit issues, feature requests, o
 ### Development Setup
 
 1. Fork the repository
-2. Follow the [Local Development Setup](#🛠️-local-development-setup)
+2. Follow the [Local Development Setup](#️-local-development-setup)
 3. Make your changes
 4. Test thoroughly
 5. Submit a pull request
@@ -409,6 +409,7 @@ This project is licensed under the [Apache-2.0 License](LICENSE).
 - **Lavalink Team** - For the excellent audio server
 - **Discord.js Contributors** - For the fantastic Discord library
 - **@driftywinds** - For providing ARM64 community image support
+- **[@salvarecuero](https://github.com/salvarecuero)** - For contributions and support
 - **Community Contributors** - For bug reports, suggestions, and improvements
 
 ---
