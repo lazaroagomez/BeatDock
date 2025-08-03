@@ -164,7 +164,7 @@ BeatDock offers 12 comprehensive slash commands organized by category:
 ### 🎛️ Advanced Features
 
 - **Interactive Search**: Use `/search` to browse results with navigation buttons, select multiple tracks, and add them to the queue
-- **Visual Player Controller**: Automatic player interface with buttons for all playback controls
+- **Visual Player Controller**: Automatic player interface with buttons for all playbook controls
 - **Loop Modes**: 
   - `off` - No looping
   - `track` - Loop current track
@@ -319,7 +319,7 @@ If you prefer to build the Docker image yourself:
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `DEFAULT_LANGUAGE` | `en` | Default language (en/es/tr) |
-| `DEFAULT_VOLUME` | `80` | Default playback volume (0-100) |
+| `DEFAULT_VOLUME` | `80` | Default playbook volume (0-100) |
 | `QUEUE_EMPTY_DESTROY_MS` | `30000` | MS to wait before leaving when queue is empty |
 | `EMPTY_CHANNEL_DESTROY_MS` | `60000` | MS to wait before leaving empty voice channel |
 
