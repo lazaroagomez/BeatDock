@@ -1,5 +1,5 @@
 # Build stage
-FROM node:22.17-alpine AS builder
+FROM node:22.18-alpine AS builder
 
 # Add build dependencies for native modules
 RUN apk add --no-cache python3 make g++
@@ -13,7 +13,7 @@ COPY package*.json ./
 RUN npm ci --only=production
 
 # Production stage
-FROM node:22.17-alpine
+FROM node:22.18-alpine
 
 # Add runtime dependencies
 RUN apk add --no-cache tini
