@@ -10,8 +10,7 @@ module.exports = {
         await client.lavalink.init({ ...client.user });
         console.log('Lavalink initialized');
         
-        // Set default presence using translation
-        const defaultPresence = client.t('LISTENING_TO_MUSIC');
-        client.user.setActivity(defaultPresence, { type: ActivityType.Listening });
+        // No initial presence - will be set when music starts playing
+        client.user.setActivity(null);
     },
 }; 

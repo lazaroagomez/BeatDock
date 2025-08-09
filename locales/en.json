@@ -39,6 +39,8 @@
     "LEFT_EMPTY": "Leaving voice channel because it is empty.",
     "QUEUE_ENDED": "Leaving voice channel because the queue finished.",
     "LISTENING_TO_MUSIC": "music 🎵",
+    "PLAYING_MUSIC_IN_SERVERS": "🎵 music in {0} server(s)",
+    "PLAYING_MUSIC_GENERIC": "🎵 music",
     "LOOP_TRACK_ENABLED": "🔂 Track loop enabled",
     "LOOP_QUEUE_ENABLED": "🔁 Queue loop enabled",
     "LOOP_DISABLED": "➡️ Loop disabled",

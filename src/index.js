@@ -35,17 +35,16 @@ client.updatePresence = function() {
     const activePlayers = Array.from(this.activePlayers.values());
     
     if (activePlayers.length === 0) {
-        // No music playing, set default presence
-        const defaultPresence = this.t('LISTENING_TO_MUSIC');
-        this.user.setActivity(defaultPresence, { type: ActivityType.Listening });
+        // No music playing, clear presence
+        this.user.setActivity(null);
+    } else if (activePlayers.length === 1) {
+        // Only one server playing music, show generic message
+        const genericPresence = this.t('PLAYING_MUSIC_GENERIC');
+        this.user.setActivity(genericPresence, { type: ActivityType.Listening });
     } else {
-        // Show the most recently started track
-        const mostRecent = activePlayers[activePlayers.length - 1];
-        const songTitle = mostRecent.title || this.t('UNKNOWN_TITLE');
-        
-        // Truncate if too long (Discord has a 128 character limit)
-        const truncatedTitle = songTitle.length > 125 ? songTitle.substring(0, 122) + '...' : songTitle;
-        this.user.setActivity(truncatedTitle, { type: ActivityType.Listening });
+        // Multiple servers playing music, show server count
+        const serverCountPresence = this.t('PLAYING_MUSIC_IN_SERVERS', activePlayers.length);
+        this.user.setActivity(serverCountPresence, { type: ActivityType.Listening });
     }
 };
 

@@ -39,6 +39,8 @@
     "LEFT_EMPTY": "Abandonando el canal de voz porque está vacío.",
     "QUEUE_ENDED": "Saliendo del canal de voz porque la lista de reproducción terminó.",
     "LISTENING_TO_MUSIC": "música 🎵",
+    "PLAYING_MUSIC_IN_SERVERS": "🎵 música en {0} servidor(es)",
+    "PLAYING_MUSIC_GENERIC": "🎵 música",
     "LOOP_TRACK_ENABLED": "🔂 Bucle de pista activado",
     "LOOP_QUEUE_ENABLED": "🔁 Bucle de cola activado",
     "LOOP_DISABLED": "➡️ Bucle desactivado",
