@@ -37,23 +37,32 @@ module.exports = {
         await interaction.deferReply();
 
         try {
-            const player = client.lavalink.createPlayer({
-                guildId: guild.id,
-                voiceChannelId: voiceChannel.id,
-                textChannelId: interaction.channel.id,
-                selfDeaf: true,
-                selfMute: false,
-                volume: getValidVolume(process.env.DEFAULT_VOLUME, 80),
-            });
+            let player = client.lavalink.getPlayer(guild.id);
 
-            if(player.voiceChannelId !== voiceChannel.id) {
-                return interaction.editReply({ 
-                    content: client.languageManager.get(client.defaultLanguage, 'ERROR_SAME_VOICE_CHANNEL'), 
-                    ephemeral: true 
+            if (!player) {
+                // Create a new player if one doesn't exist
+                player = client.lavalink.createPlayer({
+                    guildId: guild.id,
+                    voiceChannelId: voiceChannel.id,
+                    textChannelId: interaction.channel.id,
+                    selfDeaf: true,
+                    selfMute: false,
+                    volume: getValidVolume(process.env.DEFAULT_VOLUME, 80),
+                });
+            }
+
+            // Check if the bot is in a different voice channel
+            if (player.voiceChannelId && player.voiceChannelId !== voiceChannel.id) {
+                return interaction.editReply({
+                    content: client.languageManager.get(lang, 'ERROR_SAME_VOICE_CHANNEL'),
+                    ephemeral: true,
                 });
             }
             
-            player.connect();
+            // Connect if not connected
+            if (!player.connected) {
+                player.connect();
+            }
             
             const res = await player.search({
                 query: query,
