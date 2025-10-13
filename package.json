@@ -38,7 +38,7 @@
     "npm": ">=11.4.2"
   },
   "dependencies": {
-    "discord.js": "^14.22.1",
+    "discord.js": "^14.23.2",
     "dotenv": "^17.2.0",
     "lavalink-client": "^2.6.0"
   }
