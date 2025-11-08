@@ -9,38 +9,55 @@
 const { PermissionsBitField } = require('discord.js');
 
 /**
- * Check if user has permission to use the bot
- * @param {import('discord.js').GuildMember} member - The guild member to check
- * @returns {boolean} Whether the user has permission
+ * Checks if a member has Administrator permissions.
+ * @param {PermissionsBitField} memberPermissions - The member's permissions.
+ * @returns {boolean}
  */
-function hasPermission(member) {
-    // Admins always have permission
-    if (member.permissions.has(PermissionsBitField.Flags.Administrator)) {
-        return true;
-    }
+function isAdmin(memberPermissions) {
+    return memberPermissions.has(PermissionsBitField.Flags.Administrator);
+}
 
-    // Get allowed roles from environment
+/**
+ * Parses and returns the list of allowed role IDs from environment variables.
+ * @returns {string[]}
+ */
+function getAllowedRoles() {
     const allowedRolesString = process.env.ALLOWED_ROLES || '';
-    
-    // If no roles are specified, everyone can use the bot
-    if (!allowedRolesString.trim()) {
-        return true;
-    }
-
-    // Parse allowed roles
-    const allowedRoles = allowedRolesString
+    return allowedRolesString
         .split(',')
         .map(role => role.trim())
         .filter(role => role);
+}
+
+/**
+ * Check if user has permission to use the bot.
+ * @param {import('discord.js').GuildMember} member - The guild member to check.
+ * @returns {boolean} Whether the user has permission.
+ */
+function hasPermission(member) {
+    // Create a PermissionsBitField object from the raw permissions data to prevent crashes
+    const memberPermissions = new PermissionsBitField(member.permissions);
+
+    // Admins always have permission
+    if (isAdmin(memberPermissions)) {
+        return true;
+    }
+
+    const allowedRoles = getAllowedRoles();
+    
+    // If no roles are specified, everyone can use the bot
+    if (!allowedRoles.length) {
+        return true;
+    }
 
     // Check if member has any of the allowed roles
     return member.roles.cache.some(role => allowedRoles.includes(role.id));
 }
 
 /**
- * Middleware to check permissions for an interaction
- * @param {import('discord.js').Interaction} interaction - The interaction to check
- * @returns {Promise<boolean>} Whether the interaction should continue
+ * Middleware to check permissions for an interaction.
+ * @param {import('discord.js').Interaction} interaction - The interaction to check.
+ * @returns {Promise<boolean>} Whether the interaction should continue.
  */
 async function checkInteractionPermission(interaction) {
     const { client, member } = interaction;
@@ -61,4 +78,5 @@ async function checkInteractionPermission(interaction) {
 module.exports = {
     hasPermission,
     checkInteractionPermission
-}; 
+};
+ 
