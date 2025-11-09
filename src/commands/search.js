@@ -12,9 +12,10 @@ async function createPlayer(client, guildId, voiceChannelId, textChannelId) {
     return player;
 }
 
-const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { SlashCommandBuilder } = require('discord.js');
 const searchSessions = require('../utils/searchSessions');
 const { isLavalinkAvailable, handleLavalinkError } = require('../utils/interactionHelpers');
+const { createSearchEmbed, createSearchButtons } = require('../utils/embeds');
 
 // Validate and clamp volume to valid range (0-100)
 function getValidVolume(envValue, defaultValue = 80) {
@@ -23,151 +24,7 @@ function getValidVolume(envValue, defaultValue = 80) {
     return Math.max(0, Math.min(100, parsed)); // Clamp between 0-100
 }
 
-/**
- * Creates the search results embed with pagination
- *
- * Generates a Discord embed containing the current page of search results,
- * including track information, selection status, and pagination metadata.
- * The embed displays the search query, current page/total pages, total results,
- * and number of selected tracks.
- *
- * @param {Object} client - Discord client instance
- * @param {Object} pageData - Page data from search session containing tracks and pagination info
- * @param {string} query - Original search query
- * @returns {EmbedBuilder} Configured embed builder for search results
- */
-function createSearchEmbed(client, pageData, query) {
-    const lang = client.defaultLanguage;
-    const { tracks, currentPage, totalPages, totalTracks, selectedCount } = pageData;
 
-    const embed = new EmbedBuilder()
-        .setColor(0x0099FF)
-        .setTitle(client.languageManager.get(lang, 'SEARCH_RESULTS_TITLE'))
-        .setDescription(client.languageManager.get(lang, 'SEARCH_QUERY', query))
-        .setFooter({ 
-            text: client.languageManager.get(lang, 'SEARCH_PAGINATION_FOOTER', currentPage, totalPages, totalTracks, selectedCount)
-        })
-        .setTimestamp();
-
-    // Add track fields
-    tracks.forEach((track, index) => {
-        const globalIndex = pageData.startIndex + index;
-        const isSelected = pageData.selectedTracks.includes(globalIndex);
-        const selectionIcon = isSelected ? '✅' : '⬜';
-        const duration = formatDuration(track.info?.duration || 0);
-        
-        embed.addFields({
-            name: `${selectionIcon} ${globalIndex + 1}. ${track.info?.title || 'Unknown Title'}`,
-            value: `**${client.languageManager.get(lang, 'SEARCH_ARTIST')}:** ${track.info?.author || 'Unknown'}\n**${client.languageManager.get(lang, 'SEARCH_DURATION')}:** ${duration}`,
-            inline: false
-        });
-    });
-
-    return embed;
-}
-
-/**
- * Creates action buttons for search navigation and selection
- *
- * Generates interactive button components for the search interface, including:
- * - Navigation buttons (previous/next page)
- * - Cancel button
- * - Track selection buttons for the current page
- *
- * Ensures compliance with Discord's 5-button per ActionRow limit and properly
- * disables navigation buttons when at page boundaries.
- *
- * @param {Object} client - Discord client instance
- * @param {Object} pageData - Page data from search session containing tracks and selection info
- * @param {string} sessionId - Unique search session identifier
- * @returns {Array} Array of ActionRowBuilder components for the search interface
- */
-function createSearchButtons(client, pageData, sessionId) {
-    const lang = client.defaultLanguage;
-    const { currentPage, hasNext, hasPrevious, selectedCount, tracks } = pageData;
-
-    // Navigation row - ensure maximum of 5 buttons per ActionRow
-    const navRow = new ActionRowBuilder();
-    
-    // Add navigation buttons with proper validation
-    if (hasPrevious) {
-        navRow.addComponents(
-            new ButtonBuilder()
-                .setCustomId(`search_prev_${sessionId}`)
-                .setEmoji('⬅️')
-                .setStyle(ButtonStyle.Secondary)
-        );
-    }
-    
-    if (hasNext) {
-        navRow.addComponents(
-            new ButtonBuilder()
-                .setCustomId(`search_next_${sessionId}`)
-                .setEmoji('➡️')
-                .setStyle(ButtonStyle.Secondary)
-        );
-    }
-    
-    // Always include cancel button
-    navRow.addComponents(
-        new ButtonBuilder()
-            .setCustomId(`search_cancel_${sessionId}`)
-            .setLabel(client.languageManager.get(lang, 'SEARCH_CANCEL'))
-            .setEmoji('❌')
-            .setStyle(ButtonStyle.Danger)
-    );
-
-    // Selection row - individual track buttons (max 5 per page)
-    const selectionRow = new ActionRowBuilder();
-    const MAX_BUTTONS_PER_ROW = 5;
-    
-    // Create a Set for O(1) lookup instead of using Array.includes()
-    const selectedTrackSet = new Set(pageData.selectedTracks);
-    
-    tracks.forEach((track, index) => {
-        const globalIndex = pageData.startIndex + index;
-        const isSelected = selectedTrackSet.has(globalIndex);
-        
-        selectionRow.addComponents(
-            new ButtonBuilder()
-                .setCustomId(`search_toggle_${sessionId}_${globalIndex}`)
-                .setLabel(`${globalIndex + 1}`)
-                .setEmoji(isSelected ? '✅' : '⬜')
-                .setStyle(isSelected ? ButtonStyle.Success : ButtonStyle.Secondary)
-        );
-        
-        // Enforce Discord's limit of 5 buttons per ActionRow
-        if (selectionRow.components.length >= MAX_BUTTONS_PER_ROW) {
-            return;
-        }
-    });
-
-    return [navRow, selectionRow];
-}
-
-/**
- * Formats duration from milliseconds to readable format
- *
- * Converts a duration in milliseconds to a human-readable string format.
- * Returns "MM:SS" for durations under an hour, and "HH:MM:SS" for longer durations.
- *
- * @param {number} ms - Duration in milliseconds
- * @returns {string} Formatted duration string (e.g., "3:45" or "1:23:45")
- * @example
- * formatDuration(225000) // returns "3:45"
- * formatDuration(5025000) // returns "1:23:45"
- */
-function formatDuration(ms) {
-    const seconds = Math.floor((ms / 1000) % 60);
-    const minutes = Math.floor((ms / (1000 * 60)) % 60);
-    const hours = Math.floor(ms / (1000 * 60 * 60));
-
-    if (hours > 0) {
-        return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    } else {
-        return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-    }
-}
 
 module.exports = {
     /**

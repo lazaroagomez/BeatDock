@@ -72,5 +72,7 @@
     "SEARCH_TRACK_REMOVED": "Eliminado **{0}** de la cola.",
     "SEARCH_PLAYER_STOPPED": "El reproductor de música se ha detenido. Únete a un canal de voz y comienza a reproducir música para usar las funciones de búsqueda.",
     "LAVALINK_UNAVAILABLE": "❌ El servicio de música no está disponible en este momento. Por favor, inténtalo de nuevo en unos momentos.",
-    "GENERIC_ERROR": "❌ Ocurrió un error al intentar reproducir música. Por favor, inténtalo de nuevo."
+    "GENERIC_ERROR": "❌ Ocurrió un error al intentar reproducir música. Por favor, inténtalo de nuevo.",
+    "ABOUT_TITLE": "Acerca de BeatDock",
+    "ABOUT_DESCRIPTION": "BeatDock es un bot de música para Discord moderno y de código abierto, diseñado para audio de alta calidad y fácil auto-alojamiento."
 }

@@ -42,19 +42,19 @@ class PlayerController {
         const row1 = new ActionRowBuilder()
             .addComponents(
                 new ButtonBuilder()
-                    .setCustomId('player_back')
+                    .setCustomId('player:back')
                     .setEmoji('⏮️')
                     .setStyle(ButtonStyle.Secondary),
                 new ButtonBuilder()
-                    .setCustomId('player_playpause')
+                    .setCustomId('player:playpause')
                     .setEmoji(isPaused ? '▶️' : '⏸️')
                     .setStyle(ButtonStyle.Primary),
                 new ButtonBuilder()
-                    .setCustomId('player_skip')
+                    .setCustomId('player:skip')
                     .setEmoji('⏭️')
                     .setStyle(ButtonStyle.Secondary),
                 new ButtonBuilder()
-                    .setCustomId('player_stop')
+                    .setCustomId('player:stop')
                     .setEmoji('⏹️')
                     .setStyle(ButtonStyle.Danger)
             );
@@ -62,19 +62,19 @@ class PlayerController {
         const row2 = new ActionRowBuilder()
             .addComponents(
                 new ButtonBuilder()
-                    .setCustomId('player_shuffle')
+                    .setCustomId('player:shuffle')
                     .setEmoji('🔀')
                     .setStyle(ButtonStyle.Secondary),
                 new ButtonBuilder()
-                    .setCustomId('player_loop')
+                    .setCustomId('player:loop')
                     .setEmoji(loopIcon)
                     .setStyle(player.repeatMode !== 'off' ? ButtonStyle.Success : ButtonStyle.Secondary),
                 new ButtonBuilder()
-                    .setCustomId('player_queue')
+                    .setCustomId('player:queue')
                     .setEmoji('📜')
                     .setStyle(ButtonStyle.Secondary),
                 new ButtonBuilder()
-                    .setCustomId('player_clear')
+                    .setCustomId('player:clear')
                     .setEmoji('🗑️')
                     .setStyle(ButtonStyle.Secondary)
             );

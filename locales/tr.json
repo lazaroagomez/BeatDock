@@ -72,5 +72,7 @@
     "SEARCH_TRACK_REMOVED": "**{0}** kuyruktan kaldırıldı.",
     "SEARCH_PLAYER_STOPPED": "Müzik çalar durduruldu. Arama özelliklerini kullanmak için bir ses kanalına katılın ve müzik çalmaya başlayın.",
     "LAVALINK_UNAVAILABLE": "❌ Müzik servisi şu anda kullanılamıyor. Lütfen birkaç dakika sonra tekrar deneyin.",
-    "GENERIC_ERROR": "❌ Müzik çalmaya çalışırken bir hata oluştu. Lütfen tekrar deneyin."
+    "GENERIC_ERROR": "❌ Müzik çalmaya çalışırken bir hata oluştu. Lütfen tekrar deneyin.",
+    "ABOUT_TITLE": "BeatDock Hakkında",
+    "ABOUT_DESCRIPTION": "BeatDock, yüksek kaliteli ses çalma ve kolay kendi kendine barındırma için tasarlanmış modern, açık kaynaklı bir Discord müzik botudur."
 }
