@@ -106,12 +106,12 @@ function createPaginatedQueueResponse(client, player, page = 1) {
         const row = new ActionRowBuilder()
             .addComponents(
                 new ButtonBuilder()
-                    .setCustomId(`queue_prev_${page - 1}`)
+                    .setCustomId(`queue:prev:${page - 1}`)
                     .setEmoji('⬅️')
                     .setStyle(ButtonStyle.Secondary)
                     .setDisabled(!queueData.hasPrevious),
                 new ButtonBuilder()
-                    .setCustomId(`queue_next_${page + 1}`)
+                    .setCustomId(`queue:next:${page + 1}`)
                     .setEmoji('➡️')
                     .setStyle(ButtonStyle.Secondary)
                     .setDisabled(!queueData.hasNext)
