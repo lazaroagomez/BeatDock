@@ -1,12 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { isLavalinkAvailable, handleLavalinkError } = require('../utils/interactionHelpers');
-
-// Validate and clamp volume to valid range (0-100)
-function getValidVolume(envValue, defaultValue = 80) {
-    const parsed = parseInt(envValue, 10);
-    if (isNaN(parsed)) return defaultValue;
-    return Math.max(0, Math.min(100, parsed)); // Clamp between 0-100
-}
+const { getValidVolume } = require('../utils/volumeValidator');
 
 module.exports = {
     data: new SlashCommandBuilder()

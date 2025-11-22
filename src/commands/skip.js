@@ -7,6 +7,7 @@ module.exports = {
         .setDescription('Skips the current song.'),
     async execute(interaction) {
         const { client } = interaction;
+        const lang = client.defaultLanguage;
 
         const player = await requirePlayer(interaction);
         if (!player) return;
@@ -16,9 +17,9 @@ module.exports = {
         }
 
         await player.skip();
-        return interaction.reply({ 
-            content: client.languageManager.get(client.defaultLanguage, 'SONG_SKIPPED'), 
-            ephemeral: true 
+        return interaction.reply({
+            content: client.languageManager.get(lang, 'SONG_SKIPPED'),
+            ephemeral: true
         });
     },
 }; 
