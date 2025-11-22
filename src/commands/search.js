@@ -1,4 +1,9 @@
-// Helper function to create a player
+const { SlashCommandBuilder } = require('discord.js');
+const searchSessions = require('../utils/searchSessions');
+const { isLavalinkAvailable, handleLavalinkError } = require('../utils/interactionHelpers');
+const { createSearchEmbed, createSearchButtons } = require('../utils/embeds');
+const { getValidVolume } = require('../utils/volumeValidator');
+
 async function createPlayer(client, guildId, voiceChannelId, textChannelId) {
     const player = client.lavalink.createPlayer({
         guildId,
@@ -10,18 +15,6 @@ async function createPlayer(client, guildId, voiceChannelId, textChannelId) {
     });
     await player.connect();
     return player;
-}
-
-const { SlashCommandBuilder } = require('discord.js');
-const searchSessions = require('../utils/searchSessions');
-const { isLavalinkAvailable, handleLavalinkError } = require('../utils/interactionHelpers');
-const { createSearchEmbed, createSearchButtons } = require('../utils/embeds');
-
-// Validate and clamp volume to valid range (0-100)
-function getValidVolume(envValue, defaultValue = 80) {
-    const parsed = parseInt(envValue, 10);
-    if (isNaN(parsed)) return defaultValue;
-    return Math.max(0, Math.min(100, parsed)); // Clamp between 0-100
 }
 
 
