@@ -43,6 +43,39 @@ function clearQueue(player) {
     player.queue.tracks.splice(0, len);
 }
 
+/**
+ * Jumps to a specific track in the queue by index
+ * Removes all tracks before the target track and starts playing it
+ *
+ * @param {Object} player - Lavalink player instance
+ * @param {number} trackIndex - Zero-based index of track to jump to
+ * @returns {Object|null} The track that will be played, or null if invalid
+ */
+async function jumpToTrack(player, trackIndex) {
+    if (!player || !player.queue.tracks.length) {
+        return null;
+    }
+
+    // Validate index
+    if (trackIndex < 0 || trackIndex >= player.queue.tracks.length) {
+        return null;
+    }
+
+    // Get the target track
+    const targetTrack = player.queue.tracks[trackIndex];
+    if (!targetTrack) {
+        return null;
+    }
+
+    // Remove all tracks before the target track (optimization: single splice)
+    player.queue.tracks.splice(0, trackIndex);
+
+    // Skip to the new first track (which is our target)
+    await player.skip();
+
+    return targetTrack;
+}
+
 function paginatedQueue(player, page = 1, itemsPerPage = 10) {
     if (!player.queue.tracks.length) {
         return {
@@ -82,28 +115,29 @@ function paginatedQueue(player, page = 1, itemsPerPage = 10) {
 function createPaginatedQueueResponse(client, player, page = 1) {
     const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
     const lang = client.defaultLanguage;
-    
+
     const queueData = paginatedQueue(player, page);
-    
+
     if (!queueData.content) {
         return {
             content: client.languageManager.get(lang, 'QUEUE_EMPTY'),
             ephemeral: true
         };
     }
-    
+
     const embed = new EmbedBuilder()
         .setColor(0x0099FF)
         .setTitle(client.languageManager.get(lang, 'QUEUE_TITLE'))
         .setDescription(queueData.content)
-        .setFooter({ 
+        .setFooter({
             text: `Page ${queueData.currentPage}/${queueData.totalPages} • ${queueData.totalTracks} tracks • Showing ${queueData.startIndex}-${queueData.endIndex}`
         });
-    
+
     const components = [];
-    
+
+    // Navigation row (always first if pagination exists)
     if (queueData.totalPages > 1) {
-        const row = new ActionRowBuilder()
+        const navRow = new ActionRowBuilder()
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId(`queue:prev:${page - 1}`)
@@ -116,9 +150,36 @@ function createPaginatedQueueResponse(client, player, page = 1) {
                     .setStyle(ButtonStyle.Secondary)
                     .setDisabled(!queueData.hasNext)
             );
-        components.push(row);
+        components.push(navRow);
     }
-    
+
+    // Selection buttons - Create rows of 5 buttons each
+    const tracksOnPage = queueData.endIndex - queueData.startIndex;
+
+    // We can add up to 4 more rows (total 5 rows max in Discord)
+    // Each row can have 5 buttons, so max 20 selection buttons
+    const maxSelectionButtons = Math.min(tracksOnPage, 20);
+
+    for (let i = 0; i < maxSelectionButtons; i += 5) {
+        const selectionRow = new ActionRowBuilder();
+        const endOfRow = Math.min(i + 5, maxSelectionButtons);
+
+        for (let j = i; j < endOfRow; j++) {
+            const trackIndex = queueData.startIndex - 1 + j; // Convert to zero-based index
+            const displayNumber = trackIndex + 1; // Display as 1-based
+
+            selectionRow.addComponents(
+                new ButtonBuilder()
+                    .setCustomId(`queue:jump:${trackIndex}:${page}`)
+                    .setLabel(`${displayNumber}`)
+                    .setEmoji('▶️')
+                    .setStyle(ButtonStyle.Primary)
+            );
+        }
+
+        components.push(selectionRow);
+    }
+
     return {
         embeds: [embed],
         components,
@@ -140,6 +201,7 @@ module.exports = {
     playPrevious,
     shuffleQueue,
     clearQueue,
+    jumpToTrack,
     formattedQueue,
     paginatedQueue,
     createPaginatedQueueResponse,

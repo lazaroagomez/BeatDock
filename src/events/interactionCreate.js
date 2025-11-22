@@ -1,7 +1,7 @@
 const { checkInteractionPermission } = require('../utils/permissionChecker');
 const { handleSearchNavigation } = require('../interactions/searchNavigation');
 const { requirePlayer, requireSameVoice } = require('../utils/interactionHelpers');
-const { playPrevious, shuffleQueue, clearQueue, createPaginatedQueueResponse } = require('../utils/PlayerActions');
+const { playPrevious, shuffleQueue, clearQueue, jumpToTrack, createPaginatedQueueResponse } = require('../utils/PlayerActions');
 
 async function handlePlayerInteraction(interaction, action) {
     const { client } = interaction;
@@ -89,15 +89,61 @@ async function handleQueueInteraction(interaction, action, args) {
     if (!player) return;
 
     const lang = client.defaultLanguage;
-    const targetPage = parseInt(args[0]);
-    if (isNaN(targetPage)) return;
 
-    if (!player.queue.tracks.length) {
-        return interaction.update({ content: client.languageManager.get(lang, 'QUEUE_EMPTY'), embeds: [], components: [] });
+    // Check same voice channel for jump action
+    if (action === 'jump') {
+        const sameVoice = await requireSameVoice(interaction, player);
+        if (!sameVoice) return;
     }
-    
-    const queueResponse = createPaginatedQueueResponse(client, player, targetPage);
-    await interaction.update(queueResponse);
+
+    switch (action) {
+        case 'prev':
+        case 'next':
+            const targetPage = parseInt(args[0]);
+            if (isNaN(targetPage)) return;
+
+            if (!player.queue.tracks.length) {
+                return interaction.update({ content: client.languageManager.get(lang, 'QUEUE_EMPTY'), embeds: [], components: [] });
+            }
+
+            const queueResponse = createPaginatedQueueResponse(client, player, targetPage);
+            await interaction.update(queueResponse);
+            break;
+
+        case 'jump':
+            const trackIndex = parseInt(args[0]);
+            const currentPage = parseInt(args[1]);
+
+            if (isNaN(trackIndex) || isNaN(currentPage)) return;
+
+            if (!player.queue.tracks.length) {
+                return interaction.update({ content: client.languageManager.get(lang, 'QUEUE_EMPTY'), embeds: [], components: [] });
+            }
+
+            // Attempt to jump to the track
+            const jumpedTrack = await jumpToTrack(player, trackIndex);
+
+            if (!jumpedTrack) {
+                return interaction.reply({
+                    content: client.languageManager.get(lang, 'QUEUE_JUMP_INVALID'),
+                    ephemeral: true
+                });
+            }
+
+            // Update the queue display
+            const updatedQueueResponse = createPaginatedQueueResponse(client, player, 1);
+            await interaction.update(updatedQueueResponse);
+
+            // Send confirmation
+            await interaction.followUp({
+                content: client.languageManager.get(lang, 'QUEUE_JUMPED', jumpedTrack.info?.title || 'Unknown'),
+                ephemeral: true
+            });
+
+            // Update player controller
+            setTimeout(() => client.playerController.updatePlayer(interaction.guild.id).catch(() => {}), 500);
+            break;
+    }
 }
 
 async function handleButtonInteraction(interaction) {
