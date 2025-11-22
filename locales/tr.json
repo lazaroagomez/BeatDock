@@ -74,5 +74,7 @@
     "LAVALINK_UNAVAILABLE": "❌ Müzik servisi şu anda kullanılamıyor. Lütfen birkaç dakika sonra tekrar deneyin.",
     "GENERIC_ERROR": "❌ Müzik çalmaya çalışırken bir hata oluştu. Lütfen tekrar deneyin.",
     "ABOUT_TITLE": "BeatDock Hakkında",
-    "ABOUT_DESCRIPTION": "BeatDock, yüksek kaliteli ses çalma ve kolay kendi kendine barındırma için tasarlanmış modern, açık kaynaklı bir Discord müzik botudur."
+    "ABOUT_DESCRIPTION": "BeatDock, yüksek kaliteli ses çalma ve kolay kendi kendine barındırma için tasarlanmış modern, açık kaynaklı bir Discord müzik botudur.",
+    "QUEUE_JUMPED": "▶️ **{0}** şarkısına atlandı ve önceki tüm şarkılar kuyruktan kaldırıldı.",
+    "QUEUE_JUMP_INVALID": "❌ Geçersiz şarkı seçimi. Şarkı artık kuyrukta olmayabilir."
 }

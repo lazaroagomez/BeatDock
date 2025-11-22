@@ -74,5 +74,7 @@
     "LAVALINK_UNAVAILABLE": "❌ El servicio de música no está disponible en este momento. Por favor, inténtalo de nuevo en unos momentos.",
     "GENERIC_ERROR": "❌ Ocurrió un error al intentar reproducir música. Por favor, inténtalo de nuevo.",
     "ABOUT_TITLE": "Acerca de BeatDock",
-    "ABOUT_DESCRIPTION": "BeatDock es un bot de música para Discord moderno y de código abierto, diseñado para audio de alta calidad y fácil auto-alojamiento."
+    "ABOUT_DESCRIPTION": "BeatDock es un bot de música para Discord moderno y de código abierto, diseñado para audio de alta calidad y fácil auto-alojamiento.",
+    "QUEUE_JUMPED": "▶️ Saltado a **{0}** y eliminadas todas las pistas anteriores de la cola.",
+    "QUEUE_JUMP_INVALID": "❌ Selección de pista inválida. La pista puede que ya no exista en la cola."
 }
