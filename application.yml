@@ -1,6 +1,10 @@
 server:
   port: 2333
   address: 0.0.0.0
+  undertow:
+    threads:
+      io: 4
+      worker: 8
 
 plugins:
   youtube:
@@ -10,9 +14,8 @@ plugins:
     allowDirectPlaylistIds: true
     clients:
       - MUSIC
-      - ANDROID_VR
       - WEB
-      - WEBEMBEDDED
+      - ANDROID_VR
   lavasrc:
     providers:
       - "ytsearch:\"%ISRC%\""
@@ -27,8 +30,8 @@ plugins:
       clientId: "${SPOTIFY_CLIENT_ID:}"
       clientSecret: "${SPOTIFY_CLIENT_SECRET:}"
       countryCode: "US"
-      playlistLoadLimit: 6
-      albumLoadLimit: 6
+      playlistLoadLimit: 3
+      albumLoadLimit: 3
 
 lavalink:
   plugins:
@@ -47,6 +50,19 @@ lavalink:
       vimeo: true
       http: true
       local: false
+    bufferDurationMs: 200
+    frameBufferDurationMs: 1000
+    youtubePlaylistLoadLimit: 3
+    playerUpdateInterval: 2
+    trackStuckThresholdMs: 5000
+    useSeekGhosting: true
+    youtubeSearchEnabled: true
+    ratelimit:
+      ipBlocks: []
+      excludedIps: []
+      strategy: "RotateOnBan"
+      searchTriggersFail: true
+      retryLimit: -1
     filters:
       volume: true
       equalizer: true
@@ -61,3 +77,7 @@ logging:
   level:
     root: INFO
     lavalink: INFO
+  logback:
+    rollingpolicy:
+      max-history: 3
+      max-file-size: 10MB

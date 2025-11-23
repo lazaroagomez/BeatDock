@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-2.0.2-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-2.2.0-blue?style=flat-square)
 ![License](https://img.shields.io/github/license/lazaroagomez/BeatDock?style=flat-square)
 ![Discord.js](https://img.shields.io/badge/discord.js-v14.24.0-blue?style=flat-square)
 ![Lavalink](https://img.shields.io/badge/Lavalink-v4.1.1-orange?style=flat-square)
