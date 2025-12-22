@@ -40,6 +40,6 @@
   "dependencies": {
     "discord.js": "^14.25.1",
     "dotenv": "^17.2.3",
-    "lavalink-client": "^2.7.0"
+    "lavalink-client": "^2.7.7"
   }
 }
