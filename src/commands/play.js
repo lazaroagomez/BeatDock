@@ -9,10 +9,15 @@ module.exports = {
         .addStringOption(option =>
             option.setName('query')
                 .setDescription('The song to play (URL or search query).')
-                .setRequired(true)),
+                .setRequired(true))
+        .addBooleanOption(option =>
+            option.setName('next')
+                .setDescription('Add the song to play next in the queue.')
+                .setRequired(false)),
     async execute(interaction) {
         const { client, guild, member, options } = interaction;
         const query = options.getString('query');
+        const playNext = options.getBoolean('next') || false;
         const voiceChannel = member.voice.channel;
         const lang = client.defaultLanguage;
 
@@ -66,7 +71,10 @@ module.exports = {
                 return interaction.editReply({ content: client.languageManager.get(lang, 'NO_RESULTS') });
             }
 
-            player.queue.add(res.loadType === "playlist" ? res.tracks : res.tracks[0]);
+            player.queue.add(
+                res.loadType === "playlist" ? res.tracks : res.tracks[0],
+                playNext ? 0 : undefined
+            );
 
             if (!player.playing) {
                 player.play();
