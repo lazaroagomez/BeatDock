@@ -127,7 +127,7 @@ docker compose ps
 
 ## 🎵 Commands
 
-BeatDock offers 12 comprehensive slash commands organized by category:
+BeatDock offers 13 comprehensive slash commands organized by category:
 
 ### 🎮 Playback Control
 
@@ -160,6 +160,7 @@ BeatDock offers 12 comprehensive slash commands organized by category:
 | Command | Parameters | Description | Example |
 |---------|------------|-------------|---------|
 | `/nowplaying` | None | Show detailed info about the current track | `/nowplaying` |
+| `/about` | None | Display bot info, version, stats, uptime, and system details | `/about` |
 
 ### 🎛️ Advanced Features
 
