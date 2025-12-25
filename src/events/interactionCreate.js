@@ -97,12 +97,14 @@ async function handleQueueInteraction(interaction, action, args) {
     }
 
     switch (action) {
+        case 'first':
+        case 'last':
         case 'prev':
         case 'next':
             const targetPage = parseInt(args[0]);
             if (isNaN(targetPage)) return;
 
-            if (!player.queue.tracks.length) {
+            if (!player.queue.tracks.length && !player.queue.current) {
                 return interaction.update({ content: client.languageManager.get(lang, 'QUEUE_EMPTY'), embeds: [], components: [] });
             }
 
@@ -148,7 +150,7 @@ async function handleQueueInteraction(interaction, action, args) {
 
 async function handleButtonInteraction(interaction) {
     const { client, customId } = interaction;
-    
+
     try {
         const hasPermission = await checkInteractionPermission(interaction);
         if (!hasPermission) return;
@@ -168,6 +170,33 @@ async function handleButtonInteraction(interaction) {
         }
     } catch (error) {
         console.error('Error handling button interaction:', error);
+        const lang = client.defaultLanguage;
+        const reply = { content: client.languageManager.get(lang, 'BUTTON_ERROR'), ephemeral: true };
+        if (interaction.deferred || interaction.replied) {
+            await interaction.followUp(reply).catch(() => {});
+        } else {
+            await interaction.reply(reply).catch(() => {});
+        }
+    }
+}
+
+async function handleSelectMenuInteraction(interaction) {
+    const { client, customId } = interaction;
+
+    try {
+        const hasPermission = await checkInteractionPermission(interaction);
+        if (!hasPermission) return;
+
+        const [component, action] = customId.split(':');
+
+        if (component === 'queue' && action === 'select') {
+            // Parse selected value: "trackIndex:pageNumber"
+            const selectedValue = interaction.values[0];
+            const [trackIndexStr, pageStr] = selectedValue.split(':');
+            await handleQueueInteraction(interaction, 'jump', [trackIndexStr, pageStr]);
+        }
+    } catch (error) {
+        console.error('Error handling select menu interaction:', error);
         const lang = client.defaultLanguage;
         const reply = { content: client.languageManager.get(lang, 'BUTTON_ERROR'), ephemeral: true };
         if (interaction.deferred || interaction.replied) {
@@ -202,6 +231,8 @@ module.exports = {
             }
         } else if (interaction.isButton()) {
             await handleButtonInteraction(interaction);
+        } else if (interaction.isStringSelectMenu()) {
+            await handleSelectMenuInteraction(interaction);
         }
     },
 }; 
