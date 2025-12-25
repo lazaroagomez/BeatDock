@@ -37,15 +37,17 @@ class SearchSessionManager {
      * @param {string} guildId - Discord guild ID
      * @param {Array} tracks - Array of track objects from Lavalink
      * @param {string} query - Original search query
+     * @param {string} voiceChannelId - Voice channel ID for deferred player creation
+     * @param {string} textChannelId - Text channel ID for player messages
      * @returns {string} Unique session identifier
      * @throws {Error} If required parameters are missing or invalid
      */
-    createSession(userId, guildId, tracks, query) {
+    createSession(userId, guildId, tracks, query, voiceChannelId, textChannelId) {
         // Use a more robust session ID generation to prevent duplicates
         const timestamp = Date.now();
         const randomSuffix = Math.random().toString(36).substr(2, 9);
         const sessionId = `${userId}-${timestamp}-${randomSuffix}`;
-        
+
         const sessionData = {
             sessionId,
             userId,
@@ -56,7 +58,9 @@ class SearchSessionManager {
             queuedTracks: new Set(), // Track indices that are actually in the queue
             currentPage: 1,
             tracksPerPage: 5,
-            createdAt: Date.now()
+            createdAt: Date.now(),
+            voiceChannelId, // Voice channel for deferred player creation
+            textChannelId,  // Text channel for player messages
         };
 
         this.sessions.set(sessionId, sessionData);

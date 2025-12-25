@@ -58,6 +58,7 @@
     "SEARCH_ADD_SELECTED": "Add Selected ({0})",
     "SEARCH_CLEAR_SELECTION": "Clear Selection",
     "SEARCH_CANCEL": "Cancel",
+    "SEARCH_SELECT_PLACEHOLDER": "Select a track to play...",
     "SEARCH_EMPTY_QUERY": "Please provide a search query.",
     "SEARCH_QUERY_TOO_LONG": "Search query is too long. Maximum 200 characters allowed.",
     "SEARCH_SESSION_ERROR": "Failed to create search session. Please try again.",

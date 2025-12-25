@@ -189,7 +189,10 @@ async function handleSelectMenuInteraction(interaction) {
 
         const [component, action] = customId.split(':');
 
-        if (component === 'queue' && action === 'select') {
+        if (component === 'search' && action === 'select') {
+            // Route search dropdown to search navigation handler
+            await handleSearchNavigation(interaction);
+        } else if (component === 'queue' && action === 'select') {
             // Parse selected value: "trackIndex:pageNumber"
             const selectedValue = interaction.values[0];
             const [trackIndexStr, pageStr] = selectedValue.split(':');

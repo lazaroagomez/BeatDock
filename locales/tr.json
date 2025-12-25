@@ -58,6 +58,7 @@
     "SEARCH_ADD_SELECTED": "Seçilenleri Ekle ({0})",
     "SEARCH_CLEAR_SELECTION": "Seçimi Temizle",
     "SEARCH_CANCEL": "İptal",
+    "SEARCH_SELECT_PLACEHOLDER": "Çalmak için bir şarkı seçin...",
     "SEARCH_EMPTY_QUERY": "Lütfen bir arama sorgusu girin.",
     "SEARCH_QUERY_TOO_LONG": "Arama sorgusu çok uzun. Maksimum 200 karakter izin verilir.",
     "SEARCH_SESSION_ERROR": "Arama oturumu oluşturulamadı. Lütfen tekrar deneyin.",

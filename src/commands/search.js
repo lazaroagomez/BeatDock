@@ -1,21 +1,8 @@
 const { SlashCommandBuilder } = require('discord.js');
 const searchSessions = require('../utils/searchSessions');
 const { isLavalinkAvailable, handleLavalinkError } = require('../utils/interactionHelpers');
-const { createSearchEmbed, createSearchButtons } = require('../utils/embeds');
+const { createSearchEmbed, createSearchComponents } = require('../utils/embeds');
 const { getValidVolume } = require('../utils/volumeValidator');
-
-async function createPlayer(client, guildId, voiceChannelId, textChannelId) {
-    const player = client.lavalink.createPlayer({
-        guildId,
-        voiceChannelId,
-        textChannelId,
-        selfDeaf: true,
-        selfMute: false,
-        volume: getValidVolume(process.env.DEFAULT_VOLUME, 80),
-    });
-    await player.connect();
-    return player;
-}
 
 
 
@@ -87,53 +74,71 @@ module.exports = {
             });
         }
 
-        await interaction.deferReply();
+        await interaction.deferReply({ ephemeral: true });
 
         try {
-            // Create or get player
+            // Get or create player (without connecting - connection deferred to track selection)
             let player = client.lavalink.getPlayer(guild.id);
+            let createdNewPlayer = false;
+
             if (!player) {
-                player = await createPlayer(client, guild.id, voiceChannel.id, interaction.channel.id);
-            } else if (player.voiceChannelId !== voiceChannel.id) {
+                // Create a new player for searching (NOT connected yet)
+                player = client.lavalink.createPlayer({
+                    guildId: guild.id,
+                    voiceChannelId: voiceChannel.id,
+                    textChannelId: interaction.channel.id,
+                    selfDeaf: true,
+                    selfMute: false,
+                    volume: getValidVolume(process.env.DEFAULT_VOLUME, 80),
+                });
+                createdNewPlayer = true;
+            } else if (player.voiceChannelId && player.voiceChannelId !== voiceChannel.id) {
+                // Existing player is in a different voice channel
                 return interaction.editReply({
                     content: client.languageManager.get(lang, 'ERROR_SAME_VOICE_CHANNEL')
                 });
             }
 
-            // Search for tracks
+            // Search for tracks using the player
             const searchResult = await player.search({
                 query: query.trim(),
             }, interaction.user);
 
             if (!searchResult || !searchResult.tracks.length) {
-                return interaction.editReply({ 
-                    content: client.languageManager.get(lang, 'NO_RESULTS') 
+                // If we created a new player just for search and got no results, clean up
+                if (createdNewPlayer && !player.connected) {
+                    player.destroy();
+                }
+                return interaction.editReply({
+                    content: client.languageManager.get(lang, 'NO_RESULTS')
                 });
             }
 
-            // Create search session
+            // Create search session with voice channel info for deferred connection
             const sessionId = searchSessions.createSession(
                 interaction.user.id,
                 guild.id,
                 searchResult.tracks,
-                query.trim()
+                query.trim(),
+                voiceChannel.id,
+                interaction.channel.id
             );
 
             // Get initial page data
             const pageData = searchSessions.getCurrentPageData(sessionId);
             if (!pageData) {
-                return interaction.editReply({ 
-                    content: client.languageManager.get(lang, 'SEARCH_SESSION_ERROR') 
+                return interaction.editReply({
+                    content: client.languageManager.get(lang, 'SEARCH_SESSION_ERROR')
                 });
             }
 
-            // Create and send search results
+            // Create and send search results with dropdown
             const embed = createSearchEmbed(client, pageData, query.trim());
-            const components = createSearchButtons(client, pageData, sessionId);
+            const components = createSearchComponents(client, pageData, sessionId);
 
-            await interaction.editReply({ 
-                embeds: [embed], 
-                components 
+            await interaction.editReply({
+                embeds: [embed],
+                components
             });
 
         } catch (error) {

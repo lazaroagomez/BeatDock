@@ -58,6 +58,7 @@
     "SEARCH_ADD_SELECTED": "Añadir Seleccionados ({0})",
     "SEARCH_CLEAR_SELECTION": "Limpiar Selección",
     "SEARCH_CANCEL": "Cancelar",
+    "SEARCH_SELECT_PLACEHOLDER": "Selecciona una pista para reproducir...",
     "SEARCH_EMPTY_QUERY": "Por favor proporciona una consulta de búsqueda.",
     "SEARCH_QUERY_TOO_LONG": "La consulta de búsqueda es demasiado larga. Máximo 200 caracteres permitidos.",
     "SEARCH_SESSION_ERROR": "Error al crear la sesión de búsqueda. Por favor inténtalo de nuevo.",

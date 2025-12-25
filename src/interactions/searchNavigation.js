@@ -1,6 +1,7 @@
 const searchSessions = require('../utils/searchSessions');
 const { isLavalinkAvailable } = require('../utils/interactionHelpers');
-const { createSearchEmbed, createSearchButtons } = require('../utils/embeds');
+const { createSearchEmbed, createSearchComponents } = require('../utils/embeds');
+const { getValidVolume } = require('../utils/volumeValidator');
 
 async function handleSearchNavigation(interaction) {
     const { client, customId, user, guild } = interaction;
@@ -39,17 +40,6 @@ async function handleSearchNavigation(interaction) {
             });
         }
 
-        // Get player
-        const player = client.lavalink.getPlayer(guild.id);
-        if (!player) {
-            searchSessions.deleteSession(sessionId);
-            return interaction.update({
-                content: client.languageManager.get(lang, 'SEARCH_PLAYER_STOPPED'),
-                embeds: [],
-                components: []
-            });
-        }
-
         let shouldUpdate = false;
         let responseMessage = null;
 
@@ -68,31 +58,82 @@ async function handleSearchNavigation(interaction) {
                 }
                 break;
 
-            case 'toggle':
-                const trackIndex = parseInt(args[0]);
+            case 'select':
+                // Handle dropdown selection - connect player on demand
+                const trackIndex = parseInt(interaction.values[0]);
                 if (!isNaN(trackIndex)) {
                     const track = session.tracks[trackIndex];
                     if (track) {
-                        const wasSelected = session.selectedTracks.has(trackIndex);
-                        searchSessions.toggleTrackSelection(sessionId, trackIndex);
-                        shouldUpdate = true;
-                        
-                        if (!wasSelected) {
-                            responseMessage = client.languageManager.get(lang, 'SEARCH_TRACK_ADDED', track.info?.title || 'Unknown');
-                            player.queue.add(track);
-                            if (!player.playing) player.play();
-                        } else {
-                            responseMessage = client.languageManager.get(lang, 'SEARCH_TRACK_REMOVED', track.info?.title || 'Unknown');
-                            const queueIndex = player.queue.tracks.findIndex(t => t.info?.uri === track.info?.uri);
-                            if (queueIndex !== -1) player.queue.tracks.splice(queueIndex, 1);
+                        // Validate user still in voice channel
+                        const member = await guild.members.fetch(user.id);
+                        const voiceChannel = member.voice.channel;
+
+                        if (!voiceChannel) {
+                            return interaction.followUp({
+                                content: client.languageManager.get(lang, 'NOT_IN_VOICE'),
+                                ephemeral: true
+                            });
                         }
-                        // Update player controller async
-                        setTimeout(() => client.playerController.updatePlayer(guild.id).catch(() => {}), 100);
+
+                        // Get or create player
+                        let player = client.lavalink.getPlayer(guild.id);
+
+                        if (!player) {
+                            // Create player if it doesn't exist
+                            player = client.lavalink.createPlayer({
+                                guildId: guild.id,
+                                voiceChannelId: session.voiceChannelId,
+                                textChannelId: session.textChannelId,
+                                selfDeaf: true,
+                                selfMute: false,
+                                volume: getValidVolume(process.env.DEFAULT_VOLUME, 80),
+                            });
+                        }
+
+                        // Connect if not already connected (player may exist from search but not be connected)
+                        if (!player.connected) {
+                            await player.connect();
+                        }
+
+                        // Add track and play
+                        player.queue.add(track);
+                        if (!player.playing) player.play();
+
+                        const trackTitle = track.info?.title || 'Unknown';
+
+                        // Send or update the player controller
+                        const existingMessageId = client.playerController.playerMessages.get(guild.id);
+                        if (existingMessageId) {
+                            setTimeout(() => client.playerController.updatePlayer(guild.id).catch(() => {}), 100);
+                        } else {
+                            // Get the text channel to send the player UI
+                            const textChannel = await client.channels.fetch(session.textChannelId).catch(() => null);
+                            if (textChannel) {
+                                setTimeout(() => client.playerController.sendPlayer(textChannel, player).catch(() => {}), 100);
+                            }
+                        }
+
+                        // Clean up search session after selection
+                        searchSessions.deleteSession(sessionId);
+
+                        // Clear the search UI and show confirmation
+                        await interaction.editReply({
+                            content: client.languageManager.get(lang, 'SEARCH_TRACK_ADDED', trackTitle),
+                            embeds: [],
+                            components: []
+                        });
+                        return; // Exit early
                     }
                 }
                 break;
 
             case 'cancel':
+                // Clean up player if it was created for search but never connected
+                const existingPlayer = client.lavalink.getPlayer(guild.id);
+                if (existingPlayer && !existingPlayer.connected && !existingPlayer.playing) {
+                    existingPlayer.destroy();
+                }
+
                 searchSessions.deleteSession(sessionId);
                 await interaction.editReply({
                     content: client.languageManager.get(lang, 'SEARCH_CANCELLED'),
@@ -106,7 +147,7 @@ async function handleSearchNavigation(interaction) {
             const pageData = searchSessions.getCurrentPageData(sessionId);
             if (pageData) {
                 const embed = createSearchEmbed(client, pageData, session.query);
-                const components = createSearchButtons(client, pageData, sessionId);
+                const components = createSearchComponents(client, pageData, sessionId);
                 await interaction.editReply({ embeds: [embed], components });
             }
         }
