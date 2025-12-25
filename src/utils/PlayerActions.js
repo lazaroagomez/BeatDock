@@ -2,6 +2,18 @@
 // slash-commands and component interactions to share the same core logic.
 
 /**
+ * Truncates text to specified length with ellipsis
+ * @param {string} text - Text to truncate
+ * @param {number} maxLength - Maximum length
+ * @returns {string} Truncated text
+ */
+function truncateText(text, maxLength = 30) {
+    if (!text) return 'Unknown';
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength - 1) + '…';
+}
+
+/**
  * Plays the previous track from the queue history.
  * Returns the track that started playing, or null if none.
  */
@@ -76,109 +88,128 @@ async function jumpToTrack(player, trackIndex) {
     return targetTrack;
 }
 
-function paginatedQueue(player, page = 1, itemsPerPage = 10) {
-    if (!player.queue.tracks.length) {
+function paginatedQueue(player, page = 1, itemsPerPage = 9) {
+    const tracks = player.queue.tracks;
+
+    if (!tracks.length) {
         return {
-            content: '',
+            tracks: [],
             currentPage: 1,
             totalPages: 1,
             totalTracks: 0,
             hasNext: false,
-            hasPrevious: false
+            hasPrevious: false,
+            startIndex: 0,
+            endIndex: 0
         };
     }
 
-    const totalTracks = player.queue.tracks.length;
+    const totalTracks = tracks.length;
     const totalPages = Math.ceil(totalTracks / itemsPerPage);
     const currentPage = Math.max(1, Math.min(page, totalPages));
-    
+
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = Math.min(startIndex + itemsPerPage, totalTracks);
-    
-    const tracks = player.queue.tracks.slice(startIndex, endIndex);
-    const list = tracks
-        .map((track, i) => `${startIndex + i + 1}. ${track.info?.title || 'Unknown'}`)
-        .join('\n');
-    
+
+    // Get tracks for current page
+    const pageTracks = tracks.slice(startIndex, endIndex);
+
     return {
-        content: list,
+        tracks: pageTracks,
         currentPage,
         totalPages,
         totalTracks,
         hasNext: currentPage < totalPages,
         hasPrevious: currentPage > 1,
-        startIndex: startIndex + 1,
+        startIndex,
         endIndex
     };
 }
 
 function createPaginatedQueueResponse(client, player, page = 1) {
-    const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+    const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder } = require('discord.js');
     const lang = client.defaultLanguage;
+    const t = (key, ...args) => client.languageManager.get(lang, key, ...args);
 
-    const queueData = paginatedQueue(player, page);
+    const pageData = paginatedQueue(player, page, 9);
 
-    if (!queueData.content) {
+    // Handle empty queue
+    if (!pageData.tracks.length) {
         return {
-            content: client.languageManager.get(lang, 'QUEUE_EMPTY'),
+            content: t('QUEUE_EMPTY'),
             ephemeral: true
         };
     }
 
+    // Build track list
+    const trackLines = pageData.tracks.map((track, index) => {
+        const displayIndex = pageData.startIndex + index + 1;
+        const title = truncateText(track.info?.title || 'Unknown', 45);
+        const artist = truncateText(track.info?.author || 'Unknown', 20);
+        return `${displayIndex}. ${title} — ${artist}`;
+    });
+
+    const description = trackLines.join('\n');
+
+    // Create embed
     const embed = new EmbedBuilder()
         .setColor(0x0099FF)
-        .setTitle(client.languageManager.get(lang, 'QUEUE_TITLE'))
-        .setDescription(queueData.content)
+        .setTitle(t('QUEUE_HEADER', pageData.totalTracks))
+        .setDescription(description.length > 4000 ? description.substring(0, 4000) + '\n...' : description)
         .setFooter({
-            text: `Page ${queueData.currentPage}/${queueData.totalPages} • ${queueData.totalTracks} tracks • Showing ${queueData.startIndex}-${queueData.endIndex}`
+            text: t('QUEUE_PAGE_FOOTER', pageData.currentPage, pageData.totalPages)
         });
 
     const components = [];
 
-    // Navigation row (always first if pagination exists)
-    if (queueData.totalPages > 1) {
-        const navRow = new ActionRowBuilder()
-            .addComponents(
-                new ButtonBuilder()
-                    .setCustomId(`queue:prev:${page - 1}`)
-                    .setEmoji('⬅️')
-                    .setStyle(ButtonStyle.Secondary)
-                    .setDisabled(!queueData.hasPrevious),
-                new ButtonBuilder()
-                    .setCustomId(`queue:next:${page + 1}`)
-                    .setEmoji('➡️')
-                    .setStyle(ButtonStyle.Secondary)
-                    .setDisabled(!queueData.hasNext)
-            );
+    // Navigation row (if multiple pages)
+    if (pageData.totalPages > 1) {
+        const navRow = new ActionRowBuilder().addComponents(
+            new ButtonBuilder()
+                .setCustomId('queue:first:1')
+                .setEmoji('⏮️')
+                .setStyle(ButtonStyle.Secondary)
+                .setDisabled(pageData.currentPage === 1),
+            new ButtonBuilder()
+                .setCustomId(`queue:prev:${page - 1}`)
+                .setEmoji('◀️')
+                .setStyle(ButtonStyle.Secondary)
+                .setDisabled(!pageData.hasPrevious),
+            new ButtonBuilder()
+                .setCustomId(`queue:next:${page + 1}`)
+                .setEmoji('▶️')
+                .setStyle(ButtonStyle.Secondary)
+                .setDisabled(!pageData.hasNext),
+            new ButtonBuilder()
+                .setCustomId(`queue:last:${pageData.totalPages}`)
+                .setEmoji('⏭️')
+                .setStyle(ButtonStyle.Secondary)
+                .setDisabled(pageData.currentPage === pageData.totalPages)
+        );
         components.push(navRow);
     }
 
-    // Selection buttons - Create rows of 5 buttons each
-    const tracksOnPage = queueData.endIndex - queueData.startIndex;
+    // Select menu for track jumping
+    const selectOptions = pageData.tracks.slice(0, 25).map((track, index) => {
+        const globalIndex = pageData.startIndex + index;
+        const displayNum = globalIndex + 1;
+        const title = truncateText(track.info?.title || 'Unknown', 50);
+        const artist = truncateText(track.info?.author || 'Unknown', 50);
 
-    // We can add up to 4 more rows (total 5 rows max in Discord)
-    // Each row can have 5 buttons, so max 20 selection buttons
-    const maxSelectionButtons = Math.min(tracksOnPage, 20);
+        return {
+            label: `${displayNum}. ${title}`,
+            description: artist.substring(0, 100),
+            value: `${globalIndex}:${page}`,
+            emoji: '▶️'
+        };
+    });
 
-    for (let i = 0; i < maxSelectionButtons; i += 5) {
-        const selectionRow = new ActionRowBuilder();
-        const endOfRow = Math.min(i + 5, maxSelectionButtons);
+    const selectMenu = new StringSelectMenuBuilder()
+        .setCustomId('queue:select')
+        .setPlaceholder(t('QUEUE_SELECT_PLACEHOLDER'))
+        .addOptions(selectOptions);
 
-        for (let j = i; j < endOfRow; j++) {
-            const trackIndex = queueData.startIndex - 1 + j; // Convert to zero-based index
-            const displayNumber = trackIndex + 1; // Display as 1-based
-
-            selectionRow.addComponents(
-                new ButtonBuilder()
-                    .setCustomId(`queue:jump:${trackIndex}:${page}`)
-                    .setLabel(`${displayNumber}`)
-                    .setEmoji('▶️')
-                    .setStyle(ButtonStyle.Primary)
-            );
-        }
-
-        components.push(selectionRow);
-    }
+    components.push(new ActionRowBuilder().addComponents(selectMenu));
 
     return {
         embeds: [embed],
