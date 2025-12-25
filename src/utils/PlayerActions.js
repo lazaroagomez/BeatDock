@@ -1,17 +1,7 @@
 // Utility functions that encapsulate common queue manipulations, allowing both
 // slash-commands and component interactions to share the same core logic.
 
-/**
- * Truncates text to specified length with ellipsis
- * @param {string} text - Text to truncate
- * @param {number} maxLength - Maximum length
- * @returns {string} Truncated text
- */
-function truncateText(text, maxLength = 30) {
-    if (!text) return 'Unknown';
-    if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength - 1) + '…';
-}
+const { createTrackSelectMenu, truncateText } = require('./trackSelectMenu');
 
 /**
  * Plays the previous track from the queue history.
@@ -127,7 +117,7 @@ function paginatedQueue(player, page = 1, itemsPerPage = 9) {
 }
 
 function createPaginatedQueueResponse(client, player, page = 1) {
-    const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder } = require('discord.js');
+    const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
     const lang = client.defaultLanguage;
     const t = (key, ...args) => client.languageManager.get(lang, key, ...args);
 
@@ -189,25 +179,13 @@ function createPaginatedQueueResponse(client, player, page = 1) {
         components.push(navRow);
     }
 
-    // Select menu for track jumping
-    const selectOptions = pageData.tracks.slice(0, 25).map((track, index) => {
-        const globalIndex = pageData.startIndex + index;
-        const displayNum = globalIndex + 1;
-        const title = truncateText(track.info?.title || 'Unknown', 50);
-        const artist = truncateText(track.info?.author || 'Unknown', 50);
-
-        return {
-            label: `${displayNum}. ${title}`,
-            description: artist.substring(0, 100),
-            value: `${globalIndex}:${page}`,
-            emoji: '▶️'
-        };
+    // Select menu for track jumping (uses shared utility with custom value formatter)
+    const selectMenu = createTrackSelectMenu(pageData.tracks, {
+        customId: 'queue:select',
+        placeholder: t('QUEUE_SELECT_PLACEHOLDER'),
+        startIndex: pageData.startIndex,
+        valueFormatter: (globalIndex) => `${globalIndex}:${page}`,
     });
-
-    const selectMenu = new StringSelectMenuBuilder()
-        .setCustomId('queue:select')
-        .setPlaceholder(t('QUEUE_SELECT_PLACEHOLDER'))
-        .addOptions(selectOptions);
 
     components.push(new ActionRowBuilder().addComponents(selectMenu));
 

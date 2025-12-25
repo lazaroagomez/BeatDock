@@ -1,4 +1,5 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { createTrackSelectMenu } = require('./trackSelectMenu');
 
 /**
  * Formats duration from milliseconds to readable format
@@ -41,12 +42,10 @@ function createSearchEmbed(client, pageData, query) {
 
     tracks.forEach((track, index) => {
         const globalIndex = pageData.startIndex + index;
-        const isSelected = pageData.selectedTracks.includes(globalIndex);
-        const selectionIcon = isSelected ? '✅' : '⬜';
         const duration = formatDuration(track.info?.duration || 0);
-        
+
         embed.addFields({
-            name: `${selectionIcon} ${globalIndex + 1}. ${track.info?.title || 'Unknown Title'}`,
+            name: `${globalIndex + 1}. ${track.info?.title || 'Unknown Title'}`,
             value: `**${client.languageManager.get(lang, 'SEARCH_ARTIST')}:** ${track.info?.author || 'Unknown'}\n**${client.languageManager.get(lang, 'SEARCH_DURATION')}:** ${duration}`,
             inline: false
         });
@@ -56,19 +55,30 @@ function createSearchEmbed(client, pageData, query) {
 }
 
 /**
- * Creates action buttons for search navigation and selection
+ * Creates components for search results with dropdown and navigation
  *
  * @param {Object} client - Discord client instance
  * @param {Object} pageData - Page data from search session
  * @param {string} sessionId - Unique search session identifier
  * @returns {Array} Array of ActionRowBuilder components
  */
-function createSearchButtons(client, pageData, sessionId) {
+function createSearchComponents(client, pageData, sessionId) {
     const lang = client.defaultLanguage;
-    const { hasNext, hasPrevious, tracks } = pageData;
+    const { hasNext, hasPrevious, tracks, startIndex } = pageData;
 
+    const components = [];
+
+    // Row 1: Track selection dropdown
+    const selectMenu = createTrackSelectMenu(tracks, {
+        customId: `search:select:${sessionId}`,
+        placeholder: client.languageManager.get(lang, 'SEARCH_SELECT_PLACEHOLDER'),
+        startIndex: startIndex,
+    });
+    components.push(new ActionRowBuilder().addComponents(selectMenu));
+
+    // Row 2: Navigation + Cancel
     const navRow = new ActionRowBuilder();
-    
+
     if (hasPrevious) {
         navRow.addComponents(
             new ButtonBuilder()
@@ -77,7 +87,7 @@ function createSearchButtons(client, pageData, sessionId) {
                 .setStyle(ButtonStyle.Secondary)
         );
     }
-    
+
     if (hasNext) {
         navRow.addComponents(
             new ButtonBuilder()
@@ -86,7 +96,7 @@ function createSearchButtons(client, pageData, sessionId) {
                 .setStyle(ButtonStyle.Secondary)
         );
     }
-    
+
     navRow.addComponents(
         new ButtonBuilder()
             .setCustomId(`search:cancel:${sessionId}`)
@@ -95,27 +105,13 @@ function createSearchButtons(client, pageData, sessionId) {
             .setStyle(ButtonStyle.Danger)
     );
 
-    const selectionRow = new ActionRowBuilder();
-    const selectedTrackSet = new Set(pageData.selectedTracks);
-    
-    tracks.forEach((track, index) => {
-        const globalIndex = pageData.startIndex + index;
-        const isSelected = selectedTrackSet.has(globalIndex);
-        
-        selectionRow.addComponents(
-            new ButtonBuilder()
-                .setCustomId(`search:toggle:${sessionId}:${globalIndex}`)
-                .setLabel(`${globalIndex + 1}`)
-                .setEmoji(isSelected ? '✅' : '⬜')
-                .setStyle(isSelected ? ButtonStyle.Success : ButtonStyle.Secondary)
-        );
-    });
+    components.push(navRow);
 
-    return [navRow, selectionRow];
+    return components;
 }
 
 module.exports = {
     formatDuration,
     createSearchEmbed,
-    createSearchButtons,
+    createSearchComponents,
 };

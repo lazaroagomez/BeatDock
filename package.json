@@ -1,6 +1,6 @@
 {
   "name": "beatdock",
-  "version": "2.3.1",
+  "version": "2.4.0",
   "description": "A modern and efficient Discord music bot with slash commands, multi-language support, and Docker deployment.",
   "main": "src/index.js",
   "scripts": {
