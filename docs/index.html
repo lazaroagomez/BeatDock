@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -21,7 +22,7 @@
     <nav class="nav">
         <div class="nav-container">
             <a href="#" class="nav-logo">
-                <span class="logo-icon">&#9835;</span>
+                <span class="logo-icon"><i class="bi bi-music-note-beamed"></i></span>
                 <span class="logo-text">BEATDOCK</span>
                 <span class="version-badge" id="version">v2.3.0</span>
             </a>
@@ -31,9 +32,7 @@
                 <a href="#setup" class="nav-link">Setup</a>
                 <a href="#config" class="nav-link">Config</a>
                 <a href="https://github.com/lazaroagomez/BeatDock" target="_blank" rel="noopener" class="nav-link nav-github">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-                    </svg>
+                    <i class="bi bi-github"></i>
                     GitHub
                 </a>
             </div>
@@ -86,7 +85,7 @@
             </div>
             <div class="hero-actions">
                 <a href="#setup" class="btn btn-primary">
-                    <span class="btn-icon">&#9654;</span>
+                    <span class="btn-icon"><i class="bi bi-play-fill"></i></span>
                     Quick Start
                 </a>
                 <a href="https://github.com/lazaroagomez/BeatDock" target="_blank" rel="noopener" class="btn btn-secondary">
@@ -118,11 +117,7 @@
             <div class="features-grid">
                 <div class="feature-card" data-delay="0">
                     <div class="feature-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M9 18V5l12-2v13"/>
-                            <circle cx="6" cy="18" r="3"/>
-                            <circle cx="18" cy="16" r="3"/>
-                        </svg>
+                        <i class="bi bi-soundwave"></i>
                     </div>
                     <h3 class="feature-title">High-Quality Audio</h3>
                     <p class="feature-desc">Crystal-clear playback powered by Lavalink with minimal latency and robust connection management.</p>
@@ -131,10 +126,7 @@
 
                 <div class="feature-card" data-delay="1">
                     <div class="feature-icon icon-search">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="11" cy="11" r="8"/>
-                            <path d="m21 21-4.35-4.35"/>
-                        </svg>
+                        <i class="bi bi-search"></i>
                     </div>
                     <h3 class="feature-title">Interactive Search</h3>
                     <p class="feature-desc">Browse results with navigation buttons, select multiple tracks, and build your perfect queue.</p>
@@ -143,10 +135,7 @@
 
                 <div class="feature-card" data-delay="2">
                     <div class="feature-icon icon-terminal">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="4 17 10 11 4 5"/>
-                            <line x1="12" y1="19" x2="20" y2="19"/>
-                        </svg>
+                        <i class="bi bi-terminal"></i>
                     </div>
                     <h3 class="feature-title">Slash Commands</h3>
                     <p class="feature-desc">Modern Discord.js v14 slash commands with auto-completion and parameter validation.</p>
@@ -155,11 +144,7 @@
 
                 <div class="feature-card" data-delay="3">
                     <div class="feature-icon icon-globe">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"/>
-                            <line x1="2" y1="12" x2="22" y2="12"/>
-                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-                        </svg>
+                        <i class="bi bi-globe"></i>
                     </div>
                     <h3 class="feature-title">Multi-Language</h3>
                     <p class="feature-desc">Built-in support for English, Spanish, and Turkish with easy extensibility.</p>
@@ -168,13 +153,7 @@
 
                 <div class="feature-card" data-delay="4">
                     <div class="feature-icon icon-controller">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="2" y="6" width="20" height="12" rx="2"/>
-                            <line x1="6" y1="12" x2="10" y2="12"/>
-                            <line x1="8" y1="10" x2="8" y2="14"/>
-                            <circle cx="17" cy="10" r="1"/>
-                            <circle cx="15" cy="13" r="1"/>
-                        </svg>
+                        <i class="bi bi-controller"></i>
                     </div>
                     <h3 class="feature-title">Visual Controller</h3>
                     <p class="feature-desc">Rich embeds with interactive buttons for complete playback control.</p>
@@ -183,12 +162,7 @@
 
                 <div class="feature-card" data-delay="5">
                     <div class="feature-icon icon-docker">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M22 12.5c-.5-1.5-2-2-3.5-2h-1V9h-2v1.5h-2V9h-2v1.5H9V9H7v1.5H5.5c-2 0-3.5 1-4 3 0 0-.5 2 1 4s4 2 4 2h12s3 0 4-2 1-3.5-.5-5z"/>
-                            <rect x="5" y="5" width="2" height="3"/>
-                            <rect x="9" y="5" width="2" height="3"/>
-                            <rect x="9" y="1" width="2" height="3"/>
-                        </svg>
+                        <i class="bi bi-box-seam"></i>
                     </div>
                     <h3 class="feature-title">Docker Ready</h3>
                     <p class="feature-desc">Deploy instantly with Docker Compose using official pre-built images.</p>
@@ -197,10 +171,7 @@
 
                 <div class="feature-card" data-delay="6">
                     <div class="feature-icon icon-shield">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                            <polyline points="9 12 11 14 15 10"/>
-                        </svg>
+                        <i class="bi bi-shield-check"></i>
                     </div>
                     <h3 class="feature-title">Role Permissions</h3>
                     <p class="feature-desc">Flexible permission system with admin override and role-based access control.</p>
@@ -209,12 +180,7 @@
 
                 <div class="feature-card" data-delay="7">
                     <div class="feature-icon icon-spotify">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"/>
-                            <path d="M8 15c3-1 6-1 9 1"/>
-                            <path d="M7 12c4-1.5 8-1.5 12 1"/>
-                            <path d="M6 9c5-2 10-2 15 1"/>
-                        </svg>
+                        <i class="bi bi-spotify"></i>
                     </div>
                     <h3 class="feature-title">Spotify Integration</h3>
                     <p class="feature-desc">Smart track resolution with ISRC matching for accurate Spotify playback.</p>
@@ -223,9 +189,7 @@
 
                 <div class="feature-card" data-delay="8">
                     <div class="feature-icon icon-cloud">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
-                        </svg>
+                        <i class="bi bi-cloud"></i>
                     </div>
                     <h3 class="feature-title">Stateless Design</h3>
                     <p class="feature-desc">No database required - perfect for containerized deployments.</p>
@@ -248,7 +212,7 @@
                 <!-- Playback Controls -->
                 <div class="command-group">
                     <h3 class="group-title">
-                        <span class="group-icon">&#9654;</span>
+                        <span class="group-icon"><i class="bi bi-play-circle"></i></span>
                         Playback Control
                     </h3>
                     <div class="commands-grid">
@@ -313,7 +277,7 @@
                 <!-- Search & Discovery -->
                 <div class="command-group">
                     <h3 class="group-title">
-                        <span class="group-icon">&#128269;</span>
+                        <span class="group-icon"><i class="bi bi-search"></i></span>
                         Search & Discovery
                     </h3>
                     <div class="commands-grid">
@@ -328,9 +292,9 @@
                                 <code>/search ambient music</code>
                             </div>
                             <div class="command-features">
-                                <span>&#10003; Pagination</span>
-                                <span>&#10003; Multi-select</span>
-                                <span>&#10003; Quick add</span>
+                                <span><i class="bi bi-check"></i> Pagination</span>
+                                <span><i class="bi bi-check"></i> Multi-select</span>
+                                <span><i class="bi bi-check"></i> Quick add</span>
                             </div>
                         </div>
                     </div>
@@ -339,7 +303,7 @@
                 <!-- Queue Management -->
                 <div class="command-group">
                     <h3 class="group-title">
-                        <span class="group-icon">&#128203;</span>
+                        <span class="group-icon"><i class="bi bi-list-ol"></i></span>
                         Queue Management
                     </h3>
                     <div class="commands-grid">
@@ -388,7 +352,7 @@
                 <!-- Information -->
                 <div class="command-group">
                     <h3 class="group-title">
-                        <span class="group-icon">&#8505;</span>
+                        <span class="group-icon"><i class="bi bi-info-circle"></i></span>
                         Information
                     </h3>
                     <div class="commands-grid">
@@ -399,9 +363,9 @@
                             </div>
                             <p class="command-desc">Display bot info, stats, version, and system details</p>
                             <div class="command-features">
-                                <span>&#10003; Version</span>
-                                <span>&#10003; Uptime</span>
-                                <span>&#10003; Latency</span>
+                                <span><i class="bi bi-check"></i> Version</span>
+                                <span><i class="bi bi-check"></i> Uptime</span>
+                                <span><i class="bi bi-check"></i> Latency</span>
                             </div>
                         </div>
                     </div>
@@ -421,14 +385,14 @@
 
             <!-- Prerequisites Warning -->
             <div class="warning-box">
-                <div class="warning-icon">&#9888;</div>
+                <div class="warning-icon"><i class="bi bi-exclamation-triangle"></i></div>
                 <div class="warning-content">
                     <h4>Required: Discord Gateway Intents</h4>
                     <p>Enable these in <a href="https://discord.com/developers/applications" target="_blank" rel="noopener">Discord Developer Portal</a> &rarr; Bot &rarr; Privileged Gateway Intents:</p>
                     <div class="intents-list">
-                        <span class="intent">&#10003; Presence Intent</span>
-                        <span class="intent">&#10003; Server Members Intent</span>
-                        <span class="intent">&#10003; Message Content Intent</span>
+                        <span class="intent"><i class="bi bi-check-lg"></i> Presence Intent</span>
+                        <span class="intent"><i class="bi bi-check-lg"></i> Server Members Intent</span>
+                        <span class="intent"><i class="bi bi-check-lg"></i> Message Content Intent</span>
                     </div>
                 </div>
             </div>
@@ -456,7 +420,7 @@
                                 </div>
                             </div>
                             <button class="copy-btn" data-copy="git clone https://github.com/lazaroagomez/BeatDock.git && cd BeatDock">
-                                <span class="copy-icon">&#128203;</span>
+                                <span class="copy-icon"><i class="bi bi-clipboard"></i></span>
                                 <span class="copy-text">Copy</span>
                             </button>
                         </div>
@@ -498,7 +462,7 @@
                                 </div>
                             </div>
                             <button class="copy-btn" data-copy="cp .env.example .env">
-                                <span class="copy-icon">&#128203;</span>
+                                <span class="copy-icon"><i class="bi bi-clipboard"></i></span>
                                 <span class="copy-text">Copy</span>
                             </button>
                         </div>
@@ -521,10 +485,10 @@
                                     <span class="prompt">$</span>
                                     <span class="command">docker compose run --rm bot npm run deploy</span>
                                 </div>
-                                <div class="terminal-output">&#10003; Successfully registered 12 commands</div>
+                                <div class="terminal-output"><i class="bi bi-check-lg"></i> Successfully registered 12 commands</div>
                             </div>
                             <button class="copy-btn" data-copy="docker compose run --rm bot npm run deploy">
-                                <span class="copy-icon">&#128203;</span>
+                                <span class="copy-icon"><i class="bi bi-clipboard"></i></span>
                                 <span class="copy-text">Copy</span>
                             </button>
                         </div>
@@ -547,10 +511,10 @@
                                     <span class="prompt">$</span>
                                     <span class="command">docker compose up -d</span>
                                 </div>
-                                <div class="terminal-output success">&#9889; BeatDock is now running!</div>
+                                <div class="terminal-output success"><i class="bi bi-lightning-fill"></i> BeatDock is now running!</div>
                             </div>
                             <button class="copy-btn" data-copy="docker compose up -d">
-                                <span class="copy-icon">&#128203;</span>
+                                <span class="copy-icon"><i class="bi bi-clipboard"></i></span>
                                 <span class="copy-text">Copy</span>
                             </button>
                         </div>
@@ -563,22 +527,22 @@
                 <h3 class="docker-title">Docker Quick Reference</h3>
                 <div class="docker-grid">
                     <div class="docker-card">
-                        <span class="docker-icon">&#9632;</span>
+                        <span class="docker-icon"><i class="bi bi-stop-fill"></i></span>
                         <span class="docker-label">Stop</span>
                         <code>docker compose down</code>
                     </div>
                     <div class="docker-card">
-                        <span class="docker-icon">&#8634;</span>
+                        <span class="docker-icon"><i class="bi bi-arrow-clockwise"></i></span>
                         <span class="docker-label">Restart</span>
                         <code>docker compose restart</code>
                     </div>
                     <div class="docker-card">
-                        <span class="docker-icon">&#128196;</span>
+                        <span class="docker-icon"><i class="bi bi-file-text"></i></span>
                         <span class="docker-label">Logs</span>
                         <code>docker compose logs -f</code>
                     </div>
                     <div class="docker-card">
-                        <span class="docker-icon">&#8593;</span>
+                        <span class="docker-icon"><i class="bi bi-arrow-up-circle"></i></span>
                         <span class="docker-label">Update</span>
                         <code>docker compose pull && docker compose up -d</code>
                     </div>
@@ -599,7 +563,7 @@
             <div class="config-container">
                 <div class="config-group">
                     <h3 class="config-group-title">
-                        <span class="config-icon required">&#9733;</span>
+                        <span class="config-icon required"><i class="bi bi-star-fill"></i></span>
                         Required
                     </h3>
                     <div class="config-table">
@@ -616,7 +580,7 @@
 
                 <div class="config-group">
                     <h3 class="config-group-title">
-                        <span class="config-icon">&#9881;</span>
+                        <span class="config-icon"><i class="bi bi-gear"></i></span>
                         Lavalink
                     </h3>
                     <div class="config-table">
@@ -640,7 +604,7 @@
 
                 <div class="config-group">
                     <h3 class="config-group-title">
-                        <span class="config-icon spotify">&#9836;</span>
+                        <span class="config-icon spotify"><i class="bi bi-spotify"></i></span>
                         Spotify (Optional)
                     </h3>
                     <div class="config-table">
@@ -662,7 +626,7 @@
 
                 <div class="config-group">
                     <h3 class="config-group-title">
-                        <span class="config-icon">&#9874;</span>
+                        <span class="config-icon"><i class="bi bi-sliders"></i></span>
                         Bot Behavior
                     </h3>
                     <div class="config-table">
@@ -696,7 +660,7 @@
             </div>
 
             <div class="permission-note">
-                <div class="note-icon">&#128274;</div>
+                <div class="note-icon"><i class="bi bi-lock"></i></div>
                 <div class="note-content">
                     <strong>Permission System:</strong>
                     Empty ALLOWED_ROLES = everyone can use the bot.
@@ -711,7 +675,7 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-brand">
-                    <span class="footer-logo">&#9835; BEATDOCK</span>
+                    <span class="footer-logo"><i class="bi bi-music-note-beamed"></i> BEATDOCK</span>
                     <p class="footer-tagline">Drop the beat. Control the vibe.</p>
                 </div>
                 <div class="footer-links">
