@@ -1,7 +1,7 @@
 services:
   bot:
     container_name: beatdock
-    image: beatdock:latest
+    image: ghcr.io/lazaroagomez/beatdock:latest
     build:
       context: .
       dockerfile: Dockerfile
