@@ -38,7 +38,7 @@ Done. Invite the bot to your server and use `/play`.
 
 | Command | Description |
 |---------|-------------|
-| `/play <query>` | Play a song |
+| `/play <query> [next]` | Play a song (optionally add to front of queue) |
 | `/search <query>` | Search and select tracks |
 | `/pause` | Pause/resume |
 | `/skip` | Skip track |

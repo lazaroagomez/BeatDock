@@ -9,10 +9,15 @@ module.exports = {
         .addStringOption(option =>
             option.setName('query')
                 .setDescription('The song to play (URL or search query).')
-                .setRequired(true)),
+                .setRequired(true))
+        .addBooleanOption(option =>
+            option.setName('next')
+                .setDescription('Add the song to play next in the queue.')
+                .setRequired(false)),
     async execute(interaction) {
         const { client, guild, member, options } = interaction;
         const query = options.getString('query');
+        const playNext = options.getBoolean('next') || false;
         const voiceChannel = member.voice.channel;
         const lang = client.defaultLanguage;
 
@@ -66,7 +71,10 @@ module.exports = {
                 return interaction.editReply({ content: client.languageManager.get(lang, 'NO_RESULTS') });
             }
 
-            player.queue.add(res.loadType === "playlist" ? res.tracks : res.tracks[0]);
+            player.queue.add(
+                res.loadType === "playlist" ? res.tracks : res.tracks[0],
+                playNext ? 0 : undefined
+            );
 
             if (!player.playing) {
                 player.play();
@@ -74,10 +82,12 @@ module.exports = {
 
             let replyContent;
             if (res.loadType === "playlist") {
-                replyContent = client.languageManager.get(lang, 'PLAYLIST_ADDED', res.playlist?.title);
+                const key = playNext ? 'PLAYLIST_ADDED_NEXT' : 'PLAYLIST_ADDED';
+                replyContent = client.languageManager.get(lang, key, res.playlist?.title);
             } else {
                 const trackTitle = res.tracks[0].info?.title || client.languageManager.get(lang, 'UNKNOWN_TITLE');
-                replyContent = client.languageManager.get(lang, 'SONG_ADDED', trackTitle);
+                const key = playNext ? 'SONG_ADDED_NEXT' : 'SONG_ADDED';
+                replyContent = client.languageManager.get(lang, key, trackTitle);
             }
 
             await interaction.editReply({ content: replyContent });
