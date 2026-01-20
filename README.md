@@ -65,7 +65,7 @@ SPOTIFY_CLIENT_SECRET=your_secret
 # Restrict to specific roles (comma-separated IDs)
 ALLOWED_ROLES=123456789,987654321
 
-# Language: en, es, tr
+# Language: en, es, tr, it
 DEFAULT_LANGUAGE=en
 ```
 
