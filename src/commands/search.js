@@ -44,39 +44,38 @@ module.exports = {
         const voiceChannel = member.voice.channel;
         const lang = client.defaultLanguage;
 
-        // Input validation
-        if (!query || query.trim().length === 0) {
-            return interaction.reply({ 
-                content: client.languageManager.get(lang, 'SEARCH_EMPTY_QUERY'), 
-                ephemeral: true 
-            });
-        }
-
-        if (query.length > 200) {
-            return interaction.reply({ 
-                content: client.languageManager.get(lang, 'SEARCH_QUERY_TOO_LONG'), 
-                ephemeral: true 
-            });
-        }
-
-        if (!voiceChannel) {
-            return interaction.reply({ 
-                content: client.languageManager.get(lang, 'NOT_IN_VOICE'), 
-                ephemeral: true 
-            });
-        }
-
-        // Check if Lavalink is available
-        if (!isLavalinkAvailable(client)) {
-            return interaction.reply({ 
-                content: client.languageManager.get(lang, 'LAVALINK_UNAVAILABLE'), 
-                ephemeral: true 
-            });
-        }
-
-        await interaction.deferReply({ ephemeral: true });
-
         try {
+            // Input validation
+            if (!query || query.trim().length === 0) {
+                return await interaction.reply({
+                    content: client.languageManager.get(lang, 'SEARCH_EMPTY_QUERY'),
+                    ephemeral: true
+                });
+            }
+
+            if (query.length > 200) {
+                return await interaction.reply({
+                    content: client.languageManager.get(lang, 'SEARCH_QUERY_TOO_LONG'),
+                    ephemeral: true
+                });
+            }
+
+            if (!voiceChannel) {
+                return await interaction.reply({
+                    content: client.languageManager.get(lang, 'NOT_IN_VOICE'),
+                    ephemeral: true
+                });
+            }
+
+            // Check if Lavalink is available
+            if (!isLavalinkAvailable(client)) {
+                return await interaction.reply({
+                    content: client.languageManager.get(lang, 'LAVALINK_UNAVAILABLE'),
+                    ephemeral: true
+                });
+            }
+
+            await interaction.deferReply({ ephemeral: true });
             // Get or create player (without connecting - connection deferred to track selection)
             let player = client.lavalink.getPlayer(guild.id);
             let createdNewPlayer = false;
@@ -142,6 +141,10 @@ module.exports = {
             });
 
         } catch (error) {
+            if (error.code === 10062) {
+                console.warn('Interaction expired for /search command');
+                return;
+            }
             console.error('Error in search command:', error);
             await handleLavalinkError(interaction, error, client);
         }

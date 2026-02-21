@@ -169,6 +169,10 @@ async function handleButtonInteraction(interaction) {
                 break;
         }
     } catch (error) {
+        if (error.code === 10062) {
+            console.warn('Interaction expired for button interaction');
+            return;
+        }
         console.error('Error handling button interaction:', error);
         const lang = client.defaultLanguage;
         const reply = { content: client.languageManager.get(lang, 'BUTTON_ERROR'), ephemeral: true };
@@ -199,6 +203,10 @@ async function handleSelectMenuInteraction(interaction) {
             await handleQueueInteraction(interaction, 'jump', [trackIndexStr, pageStr]);
         }
     } catch (error) {
+        if (error.code === 10062) {
+            console.warn('Interaction expired for select menu interaction');
+            return;
+        }
         console.error('Error handling select menu interaction:', error);
         const lang = client.defaultLanguage;
         const reply = { content: client.languageManager.get(lang, 'BUTTON_ERROR'), ephemeral: true };
@@ -223,6 +231,10 @@ module.exports = {
             try {
                 await command.execute(interaction);
             } catch (error) {
+                if (error.code === 10062) {
+                    console.warn(`Interaction expired for /${interaction.commandName}`);
+                    return;
+                }
                 console.error(`Error executing command ${interaction.commandName}:`, error);
                 const lang = interaction.client.defaultLanguage;
                 const reply = { content: interaction.client.languageManager.get(lang, 'ERROR_COMMAND_EXECUTION'), ephemeral: true };

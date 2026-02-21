@@ -61,17 +61,23 @@ function hasPermission(member) {
  */
 async function checkInteractionPermission(interaction) {
     const { client, member } = interaction;
-    
+
     // Check if user has permission
     if (!hasPermission(member)) {
         const lang = client.defaultLanguage;
-        await interaction.reply({ 
-            content: client.languageManager.get(lang, 'NO_PERMISSION'), 
-            ephemeral: true 
-        });
+        try {
+            await interaction.reply({
+                content: client.languageManager.get(lang, 'NO_PERMISSION'),
+                ephemeral: true
+            });
+        } catch (error) {
+            if (error.code === 10062) {
+                console.warn('Interaction expired while checking permissions');
+            }
+        }
         return false;
     }
-    
+
     return true;
 }
 

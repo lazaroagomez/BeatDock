@@ -21,21 +21,20 @@ module.exports = {
         const voiceChannel = member.voice.channel;
         const lang = client.defaultLanguage;
 
-        if (!voiceChannel) {
-            return interaction.reply({ content: client.languageManager.get(lang, 'NOT_IN_VOICE'), ephemeral: true });
-        }
-
-        // Check if Lavalink is available
-        if (!isLavalinkAvailable(client)) {
-            return interaction.reply({ 
-                content: client.languageManager.get(lang, 'LAVALINK_UNAVAILABLE'), 
-                ephemeral: true 
-            });
-        }
-
-        await interaction.deferReply();
-
         try {
+            if (!voiceChannel) {
+                return await interaction.reply({ content: client.languageManager.get(lang, 'NOT_IN_VOICE'), ephemeral: true });
+            }
+
+            // Check if Lavalink is available
+            if (!isLavalinkAvailable(client)) {
+                return await interaction.reply({
+                    content: client.languageManager.get(lang, 'LAVALINK_UNAVAILABLE'),
+                    ephemeral: true
+                });
+            }
+
+            await interaction.deferReply();
             let player = client.lavalink.getPlayer(guild.id);
 
             if (!player) {
@@ -101,6 +100,10 @@ module.exports = {
             }
             
         } catch (error) {
+            if (error.code === 10062) {
+                console.warn('Interaction expired for /play command');
+                return;
+            }
             console.error('Error in play command:', error);
             await handleLavalinkError(interaction, error, client);
         }

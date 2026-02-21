@@ -6,17 +6,22 @@ const isLavalinkAvailable = (client) => {
 // Handle Lavalink connection errors consistently
 const handleLavalinkError = async (interaction, error, client) => {
     const lang = client.defaultLanguage;
-    
-    if (/No available Node|Unable to connect/.test(error.message)) {
-        await interaction.editReply({ 
-            content: client.languageManager.get(lang, 'LAVALINK_UNAVAILABLE'), 
-            ephemeral: true 
-        });
-    } else {
-        await interaction.editReply({ 
-            content: client.languageManager.get(lang, 'GENERIC_ERROR'), 
-            ephemeral: true 
-        });
+    const content = /No available Node|Unable to connect/.test(error.message)
+        ? client.languageManager.get(lang, 'LAVALINK_UNAVAILABLE')
+        : client.languageManager.get(lang, 'GENERIC_ERROR');
+
+    try {
+        if (interaction.deferred || interaction.replied) {
+            await interaction.editReply({ content, ephemeral: true });
+        } else {
+            await interaction.reply({ content, ephemeral: true });
+        }
+    } catch (replyError) {
+        if (replyError.code === 10062) {
+            console.warn('Interaction expired while handling Lavalink error');
+            return;
+        }
+        console.error('Failed to send error response:', replyError);
     }
 };
 
