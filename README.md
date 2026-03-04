@@ -54,7 +54,7 @@ services:
 
   lavalink:
     container_name: beatdock-lavalink
-    image: ghcr.io/lavalink-devs/lavalink:4-alpine
+    image: ghcr.io/lavalink-devs/lavalink:4
     ports:
       - "2333:2333"
     networks:
@@ -67,7 +67,7 @@ services:
       - SPOTIFY_CLIENT_ID=${SPOTIFY_CLIENT_ID:-}
       - SPOTIFY_CLIENT_SECRET=${SPOTIFY_CLIENT_SECRET:-}
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "--header=Authorization: ${LAVALINK_PASSWORD:-youshallnotpass}", "http://localhost:2333/version"]
+      test: ["CMD-SHELL", "bash -c 'echo > /dev/tcp/localhost/2333'"]
       interval: 10s
       timeout: 5s
       retries: 5
