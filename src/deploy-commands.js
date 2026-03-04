@@ -4,12 +4,21 @@ const fs = require('fs');
 const path = require('path');
 
 const commands = [];
+const seenNames = new Set();
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {
     const command = require(`./commands/${file}`);
-    commands.push(command.data.toJSON());
+    const commandData = command.data.toJSON();
+
+    if (seenNames.has(commandData.name)) {
+        console.log(`[WARNING] Duplicate command name "${commandData.name}" found in ${file}, skipping.`);
+        continue;
+    }
+
+    seenNames.add(commandData.name);
+    commands.push(commandData);
 }
 
 const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
