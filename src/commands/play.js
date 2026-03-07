@@ -59,7 +59,7 @@ module.exports = {
             
             // Connect if not connected
             if (!player.connected) {
-                player.connect();
+                await player.connect();
             }
             
             const res = await player.search({
@@ -76,7 +76,7 @@ module.exports = {
             );
 
             if (!player.playing) {
-                player.play();
+                await player.play();
             }
 
             let replyContent;
