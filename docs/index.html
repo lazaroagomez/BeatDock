@@ -9,154 +9,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    <style>
-        /* v2.5.0 Announcement Banner */
-        .announcement {
-            position: relative;
-            padding: 48px 24px;
-            background:
-                radial-gradient(ellipse at 50% 0%, rgba(88, 101, 242, 0.08) 0%, transparent 60%),
-                var(--bg-primary);
-        }
-
-        .announcement-card {
-            position: relative;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 32px;
-            background: var(--bg-card);
-            border: 1px solid transparent;
-            border-radius: 16px;
-            overflow: hidden;
-        }
-
-        .announcement-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 16px;
-            padding: 1px;
-            background: linear-gradient(135deg, rgba(88, 101, 242, 0.6), rgba(0, 212, 255, 0.3), rgba(0, 255, 136, 0.4));
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none;
-            animation: announcement-border-glow 4s ease-in-out infinite;
-        }
-
-        @keyframes announcement-border-glow {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
-        }
-
-        .announcement-card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--discord-blurple), var(--neon-cyan), transparent);
-            animation: announcement-shimmer 3s ease-in-out infinite;
-        }
-
-        @keyframes announcement-shimmer {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-
-        .announcement-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-family: var(--font-mono);
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: var(--neon-cyan);
-            padding: 5px 12px;
-            background: rgba(0, 212, 255, 0.1);
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            border-radius: 50px;
-            margin-bottom: 16px;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-        }
-
-        .announcement-tag i {
-            font-size: 0.6rem;
-        }
-
-        .announcement-title {
-            font-family: var(--font-display);
-            font-size: 1.35rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 10px;
-        }
-
-        .announcement-desc {
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .announcement-desc strong {
-            color: var(--neon-green);
-        }
-
-        .announcement-terminal {
-            position: relative;
-            background: #0c0c0e;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .announcement-terminal .terminal-header {
-            padding: 8px 14px;
-        }
-
-        .announcement-terminal .terminal-dot {
-            width: 8px;
-            height: 8px;
-        }
-
-        .announcement-terminal .terminal-body {
-            padding: 14px 18px;
-            font-size: 0.8rem;
-            line-height: 1.7;
-        }
-
-        .announcement-terminal .config-dimmed {
-            color: var(--text-muted);
-            opacity: 0.5;
-        }
-
-        @media (max-width: 768px) {
-            .announcement {
-                padding: 32px 16px;
-            }
-
-            .announcement-card {
-                padding: 24px 20px;
-            }
-
-            .announcement-title {
-                font-size: 1.15rem;
-            }
-
-            .announcement-desc {
-                font-size: 0.9rem;
-            }
-
-            .announcement-terminal .terminal-body {
-                font-size: 0.72rem;
-                padding: 12px 14px;
-                overflow-x: auto;
-            }
-        }
-    </style>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -253,50 +105,6 @@
         </div>
     </section>
 
-    <!-- What's New Announcement -->
-    <section class="announcement">
-        <div class="announcement-card">
-            <span class="announcement-tag"><i class="bi bi-lightning-fill"></i> New in v2.5.0</span>
-            <h2 class="announcement-title">No Self-Hosted Lavalink Required</h2>
-            <p class="announcement-desc">
-                BeatDock can now run <strong>without a self-hosted Lavalink server</strong>.
-                If Lavalink env vars are not set, it automatically connects to free public Lavalink v4 servers with automatic failover.
-            </p>
-            <div class="announcement-terminal">
-                <div class="terminal-header">
-                    <span class="terminal-dot"></span>
-                    <span class="terminal-dot"></span>
-                    <span class="terminal-dot"></span>
-                    <span class="terminal-title">.env</span>
-                </div>
-                <div class="terminal-body config">
-                    <div class="config-line">
-                        <span class="config-comment"># Required</span>
-                    </div>
-                    <div class="config-line">
-                        <span class="config-key">TOKEN</span>=<span class="config-value">your_discord_bot_token</span>
-                    </div>
-                    <div class="config-line">
-                        <span class="config-key">CLIENT_ID</span>=<span class="config-value">your_client_id</span>
-                    </div>
-                    <div class="config-line">&nbsp;</div>
-                    <div class="config-line">
-                        <span class="config-dimmed"># Lavalink &mdash; leave empty to use free public servers</span>
-                    </div>
-                    <div class="config-line">
-                        <span class="config-dimmed"># LAVALINK_HOST=lavalink</span>
-                    </div>
-                    <div class="config-line">
-                        <span class="config-dimmed"># LAVALINK_PORT=2333</span>
-                    </div>
-                    <div class="config-line">
-                        <span class="config-dimmed"># LAVALINK_PASSWORD=youshallnotpass</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Features Section -->
     <section class="section features" id="features">
         <div class="container">
@@ -385,6 +193,15 @@
                     </div>
                     <h3 class="feature-title">Stateless Design</h3>
                     <p class="feature-desc">No database required - perfect for containerized deployments.</p>
+                    <div class="feature-glow"></div>
+                </div>
+
+                <div class="feature-card" data-delay="9">
+                    <div class="feature-icon icon-search">
+                        <i class="bi bi-hdd-network"></i>
+                    </div>
+                    <h3 class="feature-title">Zero Config Lavalink</h3>
+                    <p class="feature-desc">No self-hosted Lavalink needed. Automatically connects to free public servers with automatic failover.</p>
                     <div class="feature-glow"></div>
                 </div>
             </div>
@@ -640,17 +457,18 @@
                                 <div class="config-line">
                                     <span class="config-key">CLIENT_ID</span>=<span class="config-value">your_client_id</span>
                                 </div>
+                                <div class="config-line">&nbsp;</div>
                                 <div class="config-line">
-                                    <span class="config-comment"># Lavalink</span>
+                                    <span class="config-comment"># Lavalink &mdash; optional, leave empty for free public servers</span>
                                 </div>
                                 <div class="config-line">
-                                    <span class="config-key">LAVALINK_HOST</span>=<span class="config-value">lavalink</span>
+                                    <span style="color: var(--text-muted); opacity: 0.5;"># LAVALINK_HOST=lavalink</span>
                                 </div>
                                 <div class="config-line">
-                                    <span class="config-key">LAVALINK_PORT</span>=<span class="config-value">2333</span>
+                                    <span style="color: var(--text-muted); opacity: 0.5;"># LAVALINK_PORT=2333</span>
                                 </div>
                                 <div class="config-line">
-                                    <span class="config-key">LAVALINK_PASSWORD</span>=<span class="config-value">youshallnotpass</span>
+                                    <span style="color: var(--text-muted); opacity: 0.5;"># LAVALINK_PASSWORD=youshallnotpass</span>
                                 </div>
                             </div>
                             <button class="copy-btn" data-copy="cp .env.example .env">
