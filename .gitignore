@@ -140,6 +140,9 @@ desktop.ini
 *.swo
 *~
 
+# Local scripts
+start.bat
+
 # Docker volumes
 docker-volumes/
 
