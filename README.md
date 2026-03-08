@@ -4,7 +4,7 @@ A Discord music bot powered by Lavalink. Simple to deploy, easy to use.
 
 ## What's New in v2.5.0
 
-### Public Lavalink Fallback
+### No Self-Hosted Lavalink Required
 BeatDock can now run **without a self-hosted Lavalink server**. If the `LAVALINK_HOST`, `LAVALINK_PORT`, and `LAVALINK_PASSWORD` environment variables are not set, the bot automatically fetches free public Lavalink v4 servers and connects to one. If a public server goes down, it rotates to the next available node automatically.
 
 To use public servers, simply comment out or remove the Lavalink variables from your `.env`:
@@ -13,12 +13,6 @@ To use public servers, simply comment out or remove the Lavalink variables from 
 # LAVALINK_PORT=2333
 # LAVALINK_PASSWORD=youshallnotpass
 ```
-
-### "Added by" in Player
-The player embed now shows who requested the currently playing track, displayed as a Discord mention.
-
-### Server Status Translations
-New translation keys provide user-facing messages when the music server is reconnecting or switching nodes.
 
 ---
 
