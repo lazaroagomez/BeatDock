@@ -11,6 +11,7 @@ class LavalinkConnectionManager {
             periodicResetInterval: null,
             lastPing: Date.now(),
             isReconnecting: false,
+            cooldownUntil: 0,
             isInitialized: false,
             hasHadSuccessfulConnection: false
         };
@@ -89,10 +90,44 @@ class LavalinkConnectionManager {
         }, 60 * 60 * 1000); // Check every hour
     }
 
+    // Get node config based on mode (local or public)
+    async getNodeConfig() {
+        if (this.client.lavalinkMode === 'public') {
+            const provider = this.client.publicNodeProvider;
+            let nodeConfig = provider.getNextNode();
+
+            if (!nodeConfig) {
+                console.log('No cached public nodes, refreshing list...');
+                await provider.fetchNodes();
+                nodeConfig = provider.getNextNode();
+            }
+
+            if (!nodeConfig) {
+                throw new Error('No public Lavalink nodes available');
+            }
+
+            console.log(`Rotating to public node: ${nodeConfig.secure ? 'wss' : 'ws'}://${nodeConfig.host}:${nodeConfig.port}`);
+            return nodeConfig;
+        }
+
+        return {
+            host: process.env.LAVALINK_HOST,
+            port: parseInt(process.env.LAVALINK_PORT, 10),
+            authorization: process.env.LAVALINK_PASSWORD,
+            id: 'main-node',
+            reconnectTimeout: 10000,
+            reconnectTries: 3,
+        };
+    }
+
     // Reconnection logic
     async attemptReconnection() {
         if (this.state.isReconnecting) {
             console.log('Reconnection already in progress, skipping...');
+            return;
+        }
+
+        if (this.state.cooldownUntil > Date.now()) {
             return;
         }
 
@@ -123,21 +158,17 @@ class LavalinkConnectionManager {
                     console.log('Error destroying existing node:', error.message);
                 }
             }
-            
+
+            // Get node config based on mode
+            const nodeConfig = await this.getNodeConfig();
+
             // Create new node
             console.log(`Attempting to reconnect Lavalink (attempt ${this.state.reconnectAttempts + 1}/${this.state.maxReconnectAttempts})...`);
-            console.log('Attempting to connect to Lavalink server...');
-            
+            console.log(`Attempting to connect to Lavalink server at ${nodeConfig.host}:${nodeConfig.port}...`);
+
             let newNode;
             try {
-                newNode = this.client.lavalink.nodeManager.createNode({
-                    host: process.env.LAVALINK_HOST,
-                    port: parseInt(process.env.LAVALINK_PORT),
-                    authorization: process.env.LAVALINK_PASSWORD,
-                    id: "main-node",
-                    reconnectTimeout: 10000, // 10 second timeout
-                    reconnectTries: 3, // Try 3 times per attempt
-                });
+                newNode = this.client.lavalink.nodeManager.createNode(nodeConfig);
             } catch (error) {
                 throw new Error(`Failed to create node: ${error.message}`);
             }
@@ -211,7 +242,9 @@ class LavalinkConnectionManager {
                 // Reset attempts after configured period and try again
                 const resetMinutes = parseInt(process.env.LAVALINK_RESET_ATTEMPTS_AFTER_MINUTES || "5", 10);
                 const resetDelay = resetMinutes * 60 * 1000;
-                
+
+                this.state.cooldownUntil = Date.now() + resetDelay;
+                if (this.state.reconnectTimer) clearTimeout(this.state.reconnectTimer);
                 this.state.reconnectTimer = setTimeout(() => {
                     console.log('🔄 Resetting reconnection attempts and trying again...');
                     this.state.reconnectAttempts = 0;
@@ -225,7 +258,8 @@ class LavalinkConnectionManager {
             // Schedule next attempt with exponential backoff
             const delay = this.getReconnectDelay(this.state.reconnectAttempts);
             console.log(`⏰ Scheduling next reconnection attempt in ${Math.round(delay / 1000)} seconds...`);
-            
+
+            if (this.state.reconnectTimer) clearTimeout(this.state.reconnectTimer);
             this.state.reconnectTimer = setTimeout(() => {
                 this.state.isReconnecting = false;
                 this.attemptReconnection();

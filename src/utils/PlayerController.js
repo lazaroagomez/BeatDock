@@ -16,7 +16,8 @@ class PlayerController {
             .addFields(
                 { name: this.client.languageManager.get(lang, 'PLAYER_ARTIST'), value: track.info?.author || 'Unknown', inline: true },
                 { name: this.client.languageManager.get(lang, 'PLAYER_DURATION'), value: this.formatDuration(track.info?.duration || 0), inline: true },
-                { name: this.client.languageManager.get(lang, 'PLAYER_QUEUE_COUNT'), value: this.client.languageManager.get(lang, 'PLAYER_SONGS_COUNT', player.queue.tracks.length), inline: true }
+                { name: this.client.languageManager.get(lang, 'PLAYER_QUEUE_COUNT'), value: this.client.languageManager.get(lang, 'PLAYER_SONGS_COUNT', player.queue.tracks.length), inline: true },
+                ...(track.userData?.requester ? [{ name: this.client.languageManager.get(lang, 'PLAYER_REQUESTED_BY'), value: `<@${track.userData.requester.id}>`, inline: true }] : [])
             )
             .setFooter({ text: this.client.languageManager.get(lang, 'PLAYER_VOLUME', player.volume) })
             .setTimestamp();

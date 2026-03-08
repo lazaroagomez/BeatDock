@@ -78,9 +78,12 @@
   "SEARCH_TRACK_REMOVED": "Rimosso **{0}** dalla coda.",
   "SEARCH_PLAYER_STOPPED": "Il lettore musicale è stato fermato. Entra in un canale vocale e avvia la musica per usare le funzioni di ricerca.",
   "LAVALINK_UNAVAILABLE": "❌ Il servizio musicale non è disponibile al momento. Riprova tra qualche istante.",
+  "LAVALINK_RECONNECTING": "⚠️ Connessione al server musicale persa. Riconnessione in corso, attendere...",
+  "LAVALINK_PUBLIC_NODE_SWITCH": "🔄 Passaggio a un server musicale diverso...",
   "GENERIC_ERROR": "❌ Si è verificato un errore durante il tentativo di riprodurre musica. Riprova.",
   "ABOUT_TITLE": "Informazioni su BeatDock",
   "ABOUT_DESCRIPTION": "BeatDock è un bot musicale moderno e open-source per Discord, progettato per una riproduzione audio di alta qualità e un self-hosting semplice.",
+  "PLAYER_REQUESTED_BY": "👤 Aggiunto da",
   "QUEUE_JUMPED": "▶️ Passato a **{0}** e rimosse tutte le tracce precedenti dalla coda.",
   "QUEUE_JUMP_INVALID": "❌ Selezione della traccia non valida. La traccia potrebbe non esistere più nella coda."
 }

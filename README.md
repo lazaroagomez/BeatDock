@@ -2,6 +2,20 @@
 
 A Discord music bot powered by Lavalink. Simple to deploy, easy to use.
 
+## What's New in v2.5.0
+
+### No Self-Hosted Lavalink Required
+BeatDock can now run **without a self-hosted Lavalink server**. If the `LAVALINK_HOST`, `LAVALINK_PORT`, and `LAVALINK_PASSWORD` environment variables are not set, the bot automatically fetches free public Lavalink v4 servers and connects to one. If a public server goes down, it rotates to the next available node automatically.
+
+To use public servers, simply comment out or remove the Lavalink variables from your `.env`:
+```env
+# LAVALINK_HOST=lavalink
+# LAVALINK_PORT=2333
+# LAVALINK_PASSWORD=youshallnotpass
+```
+
+---
+
 ## Features
 
 - Play music from YouTube, SoundCloud, Bandcamp, Twitch, and Vimeo
@@ -194,6 +208,18 @@ docker compose restart                              # Restart
 docker compose down                                 # Stop
 docker compose pull && docker compose up -d          # Update
 ```
+
+## Troubleshooting
+
+### Audio not working on Raspberry Pi
+
+Raspberry Pi 5 (Debian 13) may use a 16KB memory page size, which is incompatible with Lavalink's DAVE encryption library. Check with:
+
+```bash
+getconf PAGE_SIZE
+```
+
+If the result is not `4096`, add `kernel=kernel8.img` under the `[all]` section in `/boot/firmware/config.txt`, then reboot and restart the containers. See [#109](https://github.com/lazaroagomez/BeatDock/issues/109) for details.
 
 ## Links
 

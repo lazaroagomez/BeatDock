@@ -24,13 +24,14 @@
             <a href="#" class="nav-logo">
                 <span class="logo-icon"><i class="bi bi-music-note-beamed"></i></span>
                 <span class="logo-text">BEATDOCK</span>
-                <span class="version-badge" id="version">v2.3.0</span>
+                <span class="version-badge" id="version">v2.5.0</span>
             </a>
             <div class="nav-links">
                 <a href="#features" class="nav-link">Features</a>
                 <a href="#commands" class="nav-link">Commands</a>
                 <a href="#setup" class="nav-link">Setup</a>
                 <a href="#config" class="nav-link">Config</a>
+                <a href="#troubleshooting" class="nav-link">Help</a>
                 <a href="https://github.com/lazaroagomez/BeatDock" target="_blank" rel="noopener" class="nav-link nav-github">
                     <i class="bi bi-github"></i>
                     GitHub
@@ -50,6 +51,7 @@
         <a href="#commands" class="mobile-link">Commands</a>
         <a href="#setup" class="mobile-link">Setup</a>
         <a href="#config" class="mobile-link">Config</a>
+        <a href="#troubleshooting" class="mobile-link">Help</a>
         <a href="https://github.com/lazaroagomez/BeatDock" target="_blank" rel="noopener" class="mobile-link">GitHub</a>
     </div>
 
@@ -74,7 +76,7 @@
                 </div>
                 <div class="stat-divider"></div>
                 <div class="stat">
-                    <span class="stat-value">3</span>
+                    <span class="stat-value">4</span>
                     <span class="stat-label">Languages</span>
                 </div>
                 <div class="stat-divider"></div>
@@ -147,7 +149,7 @@
                         <i class="bi bi-globe"></i>
                     </div>
                     <h3 class="feature-title">Multi-Language</h3>
-                    <p class="feature-desc">Built-in support for English, Spanish, and Turkish with easy extensibility.</p>
+                    <p class="feature-desc">Built-in support for English, Spanish, Turkish, and Italian with easy extensibility.</p>
                     <div class="feature-glow"></div>
                 </div>
 
@@ -193,6 +195,15 @@
                     </div>
                     <h3 class="feature-title">Stateless Design</h3>
                     <p class="feature-desc">No database required - perfect for containerized deployments.</p>
+                    <div class="feature-glow"></div>
+                </div>
+
+                <div class="feature-card" data-delay="9">
+                    <div class="feature-icon icon-search">
+                        <i class="bi bi-hdd-network"></i>
+                    </div>
+                    <h3 class="feature-title">Zero Config Lavalink</h3>
+                    <p class="feature-desc">No self-hosted Lavalink needed. Automatically connects to free public servers with automatic failover.</p>
                     <div class="feature-glow"></div>
                 </div>
             </div>
@@ -448,17 +459,18 @@
                                 <div class="config-line">
                                     <span class="config-key">CLIENT_ID</span>=<span class="config-value">your_client_id</span>
                                 </div>
+                                <div class="config-line">&nbsp;</div>
                                 <div class="config-line">
-                                    <span class="config-comment"># Lavalink</span>
+                                    <span class="config-comment"># Lavalink &mdash; optional, leave empty for free public servers</span>
                                 </div>
                                 <div class="config-line">
-                                    <span class="config-key">LAVALINK_HOST</span>=<span class="config-value">lavalink</span>
+                                    <span style="color: var(--text-muted); opacity: 0.5;"># LAVALINK_HOST=lavalink</span>
                                 </div>
                                 <div class="config-line">
-                                    <span class="config-key">LAVALINK_PORT</span>=<span class="config-value">2333</span>
+                                    <span style="color: var(--text-muted); opacity: 0.5;"># LAVALINK_PORT=2333</span>
                                 </div>
                                 <div class="config-line">
-                                    <span class="config-key">LAVALINK_PASSWORD</span>=<span class="config-value">youshallnotpass</span>
+                                    <span style="color: var(--text-muted); opacity: 0.5;"># LAVALINK_PASSWORD=youshallnotpass</span>
                                 </div>
                             </div>
                             <button class="copy-btn" data-copy="cp .env.example .env">
@@ -551,6 +563,95 @@
         </div>
     </section>
 
+    <!-- Troubleshooting Section -->
+    <section class="section" id="troubleshooting">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">// TROUBLESHOOTING</span>
+                <h2 class="section-title">Common Issues</h2>
+                <p class="section-desc">Solutions for known platform-specific problems</p>
+            </div>
+
+            <div class="commands-container">
+                <div class="command-group">
+                    <h3 class="group-title">
+                        <span class="group-icon"><i class="bi bi-cpu"></i></span>
+                        Audio not working on Raspberry Pi
+                    </h3>
+                    <div style="padding: 0 24px 24px;">
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">
+                            Raspberry Pi 5 (Debian 13) may use a <strong style="color: var(--text-primary);">16KB memory page size</strong>, which is incompatible with Lavalink's DAVE encryption library (<code style="color: var(--neon-cyan); font-size: 0.85em;">libdave.jvm.so</code>), compiled for 4KB pages.
+                        </p>
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">
+                            <strong style="color: var(--text-primary);">1. Check your page size:</strong>
+                        </p>
+                        <div class="terminal" style="margin-bottom: 16px;">
+                            <div class="terminal-header">
+                                <span class="terminal-dot"></span>
+                                <span class="terminal-dot"></span>
+                                <span class="terminal-dot"></span>
+                                <span class="terminal-title">Terminal</span>
+                            </div>
+                            <div class="terminal-body">
+                                <div class="terminal-line">
+                                    <span class="prompt">$</span>
+                                    <span class="command">getconf PAGE_SIZE</span>
+                                </div>
+                            </div>
+                            <button class="copy-btn" data-copy="getconf PAGE_SIZE">
+                                <span class="copy-icon"><i class="bi bi-clipboard"></i></span>
+                                <span class="copy-text">Copy</span>
+                            </button>
+                        </div>
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">
+                            If the result is not <code style="color: var(--neon-green); font-size: 0.85em;">4096</code>:
+                        </p>
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">
+                            <strong style="color: var(--text-primary);">2. Fix by switching to a 4KB kernel:</strong>
+                        </p>
+                        <div class="terminal" style="margin-bottom: 16px;">
+                            <div class="terminal-header">
+                                <span class="terminal-dot"></span>
+                                <span class="terminal-dot"></span>
+                                <span class="terminal-dot"></span>
+                                <span class="terminal-title">Terminal</span>
+                            </div>
+                            <div class="terminal-body">
+                                <div class="terminal-line">
+                                    <span class="prompt">#</span>
+                                    <span class="command" style="color: var(--text-muted);">Add kernel=kernel8.img under [all] in boot config</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="prompt">$</span>
+                                    <span class="command">sudo nano /boot/firmware/config.txt</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="prompt">$</span>
+                                    <span class="command">sudo reboot</span>
+                                </div>
+                                <div class="terminal-line">&nbsp;</div>
+                                <div class="terminal-line">
+                                    <span class="prompt">#</span>
+                                    <span class="command" style="color: var(--text-muted);">Then restart BeatDock</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="prompt">$</span>
+                                    <span class="command">docker compose down && docker compose up -d</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="permission-note">
+                            <div class="note-icon"><i class="bi bi-info-circle"></i></div>
+                            <div class="note-content">
+                                See <a href="https://github.com/lazaroagomez/BeatDock/issues/109" target="_blank" rel="noopener" style="color: var(--neon-cyan);">issue #109</a> for the full discussion and details. Thanks to <a href="https://github.com/Kru3mel" target="_blank" rel="noopener" style="color: var(--neon-cyan);">@Kru3mel</a> for reporting this fix.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Configuration Section -->
     <section class="section config" id="config">
         <div class="container">
@@ -582,6 +683,7 @@
                     <h3 class="config-group-title">
                         <span class="config-icon"><i class="bi bi-gear"></i></span>
                         Lavalink
+                        <span style="font-family: var(--font-mono); font-size: 0.65rem; font-weight: 400; color: var(--text-muted); margin-left: auto; letter-spacing: 0.03em;">Optional &mdash; leave empty to use free public servers</span>
                     </h3>
                     <div class="config-table">
                         <div class="config-row">
@@ -633,7 +735,7 @@
                         <div class="config-row">
                             <code class="config-var">DEFAULT_LANGUAGE</code>
                             <span class="config-default">en</span>
-                            <span class="config-desc">Default language (en/es/tr)</span>
+                            <span class="config-desc">Default language (en/es/tr/it)</span>
                         </div>
                         <div class="config-row">
                             <code class="config-var">DEFAULT_VOLUME</code>
