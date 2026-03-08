@@ -76,6 +76,37 @@ async function handlePlayerInteraction(interaction, action) {
             player.setRepeatMode(newMode);
             await interaction.reply({ content: modeMessage, ephemeral: true });
             break;
+        case 'volup':
+            const newVolUp = Math.min(100, player.volume + 10);
+            await player.setVolume(newVolUp);
+            await interaction.reply({ content: client.languageManager.get(lang, 'VOLUME_SET', newVolUp), ephemeral: true });
+            break;
+        case 'voldown':
+            const newVolDown = Math.max(0, player.volume - 10);
+            await player.setVolume(newVolDown);
+            await interaction.reply({ content: client.languageManager.get(lang, 'VOLUME_SET', newVolDown), ephemeral: true });
+            break;
+        case 'rewind':
+            if (player.queue.current) {
+                const currentPos = player.position || 0;
+                const newPos = Math.max(0, currentPos - 10000); // 10 seconds in ms
+                await player.seek(newPos);
+                await interaction.reply({ content: client.languageManager.get(lang, 'REWOUND_10S'), ephemeral: true });
+            } else {
+                await interaction.reply({ content: client.languageManager.get(lang, 'NOTHING_PLAYING'), ephemeral: true });
+            }
+            break;
+        case 'forward':
+            if (player.queue.current) {
+                const currentPos = player.position || 0;
+                const duration = player.queue.current.info?.duration || 0;
+                const newPos = Math.min(duration - 1000, currentPos + 10000); // 10 seconds in ms, stop 1s before end
+                await player.seek(newPos);
+                await interaction.reply({ content: client.languageManager.get(lang, 'FORWARDED_10S'), ephemeral: true });
+            } else {
+                await interaction.reply({ content: client.languageManager.get(lang, 'NOTHING_PLAYING'), ephemeral: true });
+            }
+            break;
     }
 
     if (action !== 'stop') {
@@ -175,7 +206,24 @@ async function handleButtonInteraction(interaction) {
         }
         console.error('Error handling button interaction:', error);
         const lang = client.defaultLanguage;
-        const reply = { content: client.languageManager.get(lang, 'BUTTON_ERROR'), ephemeral: true };
+        
+        // Check for timeout errors - trigger node switch
+        const errorMessage = error?.message || '';
+        const isTimeout = error?.name === 'TimeoutError' || 
+                         errorMessage.includes('timeout') || 
+                         errorMessage.includes('aborted due to timeout');
+        
+        if (isTimeout && client.lavalinkConnectionManager) {
+            console.warn(`[${new Date().toISOString()}] Button interaction timeout, triggering node switch...`);
+            client.lavalinkConnectionManager.state.lastAuthError = true;
+            client.lavalinkConnectionManager.attemptReconnection();
+        }
+        
+        const content = isTimeout 
+            ? (client.languageManager.get(lang, 'LAVALINK_TIMEOUT') || '⏱️ The music server is not responding. Switching to another server...')
+            : client.languageManager.get(lang, 'BUTTON_ERROR');
+        
+        const reply = { content, ephemeral: true };
         if (interaction.deferred || interaction.replied) {
             await interaction.followUp(reply).catch(() => {});
         } else {

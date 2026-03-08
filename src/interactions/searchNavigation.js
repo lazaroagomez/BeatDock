@@ -3,6 +3,9 @@ const { isLavalinkAvailable } = require('../utils/interactionHelpers');
 const { createSearchEmbed, createSearchComponents } = require('../utils/embeds');
 const { getValidVolume } = require('../utils/volumeValidator');
 
+// Helper function for ISO 8601 timestamps
+const timestamp = () => new Date().toISOString();
+
 async function handleSearchNavigation(interaction) {
     const { client, customId, user, guild } = interaction;
     const lang = client.defaultLanguage;
@@ -157,7 +160,7 @@ async function handleSearchNavigation(interaction) {
         }
 
     } catch (error) {
-        console.error('Error handling search navigation:', error);
+        console.error(`[${timestamp()}] Error handling search navigation:`, error);
         try {
             if (!interaction.replied && !interaction.deferred) {
                 await interaction.deferUpdate();
@@ -167,7 +170,7 @@ async function handleSearchNavigation(interaction) {
                 ephemeral: true
             });
         } catch (responseError) {
-            console.error('Failed to send error response for search navigation:', responseError);
+            console.error(`[${timestamp()}] Failed to send error response for search navigation:`, responseError);
         }
     }
 }

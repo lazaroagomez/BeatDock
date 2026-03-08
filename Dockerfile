@@ -33,8 +33,14 @@ COPY --from=builder --chown=nodejs:nodejs /app/node_modules ./node_modules
 # Copy application files
 COPY --chown=nodejs:nodejs . .
 
+# Create data directory for Lavalink node cache (after COPY to avoid being overwritten)
+RUN mkdir -p /app/data && chown nodejs:nodejs /app/data
+
 # Switch to non-root user
 USER nodejs
+
+# Set production environment
+ENV NODE_ENV=production
 
 # Expose port (if needed)
 EXPOSE 3000

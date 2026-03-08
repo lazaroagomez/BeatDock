@@ -7,6 +7,9 @@ jspm_packages/
 .env.*
 !.env.example
 
+# Lavalink node cache
+data/
+
 # Logs
 logs/
 *.log
