@@ -22,7 +22,10 @@ class PublicNodeProvider {
             }
 
             const data = await response.json();
-            const v4Nodes = data.filter(node => node.version === 'v4');
+            if (!Array.isArray(data)) throw new Error('Unexpected API response format');
+            const v4Nodes = data.filter(node =>
+                node.version === 'v4' && node.host && node.port && node.password
+            );
 
             if (v4Nodes.length === 0) {
                 console.warn('Public Lavalink API returned no v4 nodes');

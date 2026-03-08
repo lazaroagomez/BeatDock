@@ -23,7 +23,7 @@ async function getInitialNodes() {
             mode: 'local',
             nodes: [{
                 host: process.env.LAVALINK_HOST,
-                port: parseInt(process.env.LAVALINK_PORT),
+                port: parseInt(process.env.LAVALINK_PORT, 10),
                 authorization: process.env.LAVALINK_PASSWORD,
                 id: 'main-node',
                 reconnectTimeout: 10000,
@@ -43,6 +43,7 @@ async function getInitialNodes() {
 
     provider.startAutoRefresh();
     const firstNode = provider.getNextNode();
+    console.warn('WARNING: Using public Lavalink servers. Search queries and track requests are sent to third-party servers.');
     console.log(`Selected public node: ${firstNode.secure ? 'wss' : 'ws'}://${firstNode.host}:${firstNode.port}`);
 
     return {

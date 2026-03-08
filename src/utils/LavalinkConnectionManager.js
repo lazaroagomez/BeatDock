@@ -11,6 +11,7 @@ class LavalinkConnectionManager {
             periodicResetInterval: null,
             lastPing: Date.now(),
             isReconnecting: false,
+            cooldownUntil: 0,
             isInitialized: false,
             hasHadSuccessfulConnection: false
         };
@@ -111,7 +112,7 @@ class LavalinkConnectionManager {
 
         return {
             host: process.env.LAVALINK_HOST,
-            port: parseInt(process.env.LAVALINK_PORT),
+            port: parseInt(process.env.LAVALINK_PORT, 10),
             authorization: process.env.LAVALINK_PASSWORD,
             id: 'main-node',
             reconnectTimeout: 10000,
@@ -123,6 +124,10 @@ class LavalinkConnectionManager {
     async attemptReconnection() {
         if (this.state.isReconnecting) {
             console.log('Reconnection already in progress, skipping...');
+            return;
+        }
+
+        if (this.state.cooldownUntil > Date.now()) {
             return;
         }
 
@@ -237,7 +242,9 @@ class LavalinkConnectionManager {
                 // Reset attempts after configured period and try again
                 const resetMinutes = parseInt(process.env.LAVALINK_RESET_ATTEMPTS_AFTER_MINUTES || "5", 10);
                 const resetDelay = resetMinutes * 60 * 1000;
-                
+
+                this.state.cooldownUntil = Date.now() + resetDelay;
+                if (this.state.reconnectTimer) clearTimeout(this.state.reconnectTimer);
                 this.state.reconnectTimer = setTimeout(() => {
                     console.log('🔄 Resetting reconnection attempts and trying again...');
                     this.state.reconnectAttempts = 0;
@@ -251,7 +258,8 @@ class LavalinkConnectionManager {
             // Schedule next attempt with exponential backoff
             const delay = this.getReconnectDelay(this.state.reconnectAttempts);
             console.log(`⏰ Scheduling next reconnection attempt in ${Math.round(delay / 1000)} seconds...`);
-            
+
+            if (this.state.reconnectTimer) clearTimeout(this.state.reconnectTimer);
             this.state.reconnectTimer = setTimeout(() => {
                 this.state.isReconnecting = false;
                 this.attemptReconnection();
