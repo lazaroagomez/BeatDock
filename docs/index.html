@@ -31,6 +31,7 @@
                 <a href="#commands" class="nav-link">Commands</a>
                 <a href="#setup" class="nav-link">Setup</a>
                 <a href="#config" class="nav-link">Config</a>
+                <a href="#troubleshooting" class="nav-link">Help</a>
                 <a href="https://github.com/lazaroagomez/BeatDock" target="_blank" rel="noopener" class="nav-link nav-github">
                     <i class="bi bi-github"></i>
                     GitHub
@@ -50,6 +51,7 @@
         <a href="#commands" class="mobile-link">Commands</a>
         <a href="#setup" class="mobile-link">Setup</a>
         <a href="#config" class="mobile-link">Config</a>
+        <a href="#troubleshooting" class="mobile-link">Help</a>
         <a href="https://github.com/lazaroagomez/BeatDock" target="_blank" rel="noopener" class="mobile-link">GitHub</a>
     </div>
 
@@ -555,6 +557,95 @@
                         <span class="docker-icon"><i class="bi bi-arrow-up-circle"></i></span>
                         <span class="docker-label">Update</span>
                         <code>docker compose pull && docker compose up -d</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Troubleshooting Section -->
+    <section class="section" id="troubleshooting">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">// TROUBLESHOOTING</span>
+                <h2 class="section-title">Common Issues</h2>
+                <p class="section-desc">Solutions for known platform-specific problems</p>
+            </div>
+
+            <div class="commands-container">
+                <div class="command-group">
+                    <h3 class="group-title">
+                        <span class="group-icon"><i class="bi bi-cpu"></i></span>
+                        Audio not working on Raspberry Pi
+                    </h3>
+                    <div style="padding: 0 24px 24px;">
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">
+                            Raspberry Pi 5 (Debian 13) may use a <strong style="color: var(--text-primary);">16KB memory page size</strong>, which is incompatible with Lavalink's DAVE encryption library (<code style="color: var(--neon-cyan); font-size: 0.85em;">libdave.jvm.so</code>), compiled for 4KB pages.
+                        </p>
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">
+                            <strong style="color: var(--text-primary);">1. Check your page size:</strong>
+                        </p>
+                        <div class="terminal" style="margin-bottom: 16px;">
+                            <div class="terminal-header">
+                                <span class="terminal-dot"></span>
+                                <span class="terminal-dot"></span>
+                                <span class="terminal-dot"></span>
+                                <span class="terminal-title">Terminal</span>
+                            </div>
+                            <div class="terminal-body">
+                                <div class="terminal-line">
+                                    <span class="prompt">$</span>
+                                    <span class="command">getconf PAGE_SIZE</span>
+                                </div>
+                            </div>
+                            <button class="copy-btn" data-copy="getconf PAGE_SIZE">
+                                <span class="copy-icon"><i class="bi bi-clipboard"></i></span>
+                                <span class="copy-text">Copy</span>
+                            </button>
+                        </div>
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">
+                            If the result is not <code style="color: var(--neon-green); font-size: 0.85em;">4096</code>:
+                        </p>
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">
+                            <strong style="color: var(--text-primary);">2. Fix by switching to a 4KB kernel:</strong>
+                        </p>
+                        <div class="terminal" style="margin-bottom: 16px;">
+                            <div class="terminal-header">
+                                <span class="terminal-dot"></span>
+                                <span class="terminal-dot"></span>
+                                <span class="terminal-dot"></span>
+                                <span class="terminal-title">Terminal</span>
+                            </div>
+                            <div class="terminal-body">
+                                <div class="terminal-line">
+                                    <span class="prompt">#</span>
+                                    <span class="command" style="color: var(--text-muted);">Add kernel=kernel8.img under [all] in boot config</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="prompt">$</span>
+                                    <span class="command">sudo nano /boot/firmware/config.txt</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="prompt">$</span>
+                                    <span class="command">sudo reboot</span>
+                                </div>
+                                <div class="terminal-line">&nbsp;</div>
+                                <div class="terminal-line">
+                                    <span class="prompt">#</span>
+                                    <span class="command" style="color: var(--text-muted);">Then restart BeatDock</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="prompt">$</span>
+                                    <span class="command">docker compose down && docker compose up -d</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="permission-note">
+                            <div class="note-icon"><i class="bi bi-info-circle"></i></div>
+                            <div class="note-content">
+                                See <a href="https://github.com/lazaroagomez/BeatDock/issues/109" target="_blank" rel="noopener" style="color: var(--neon-cyan);">issue #109</a> for the full discussion and details. Thanks to <a href="https://github.com/Kru3mel" target="_blank" rel="noopener" style="color: var(--neon-cyan);">@Kru3mel</a> for reporting this fix.
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -209,6 +209,18 @@ docker compose down                                 # Stop
 docker compose pull && docker compose up -d          # Update
 ```
 
+## Troubleshooting
+
+### Audio not working on Raspberry Pi
+
+Raspberry Pi 5 (Debian 13) may use a 16KB memory page size, which is incompatible with Lavalink's DAVE encryption library. Check with:
+
+```bash
+getconf PAGE_SIZE
+```
+
+If the result is not `4096`, add `kernel=kernel8.img` under the `[all]` section in `/boot/firmware/config.txt`, then reboot and restart the containers. See [#109](https://github.com/lazaroagomez/BeatDock/issues/109) for details.
+
 ## Links
 
 - [Website](https://lazaroagomez.github.io/BeatDock)
