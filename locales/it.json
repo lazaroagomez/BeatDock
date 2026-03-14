@@ -90,5 +90,10 @@
   "AUTOPLAY_DISABLED": "📻 Riproduzione automatica disattivata",
   "AUTOPLAY_STATUS": "Riproduzione automatica",
   "AUTOPLAY_REQUESTER": "📻 Riproduzione automatica",
-  "AUTOPLAY_BLOCKS_ACTION": "❌ Disattiva la riproduzione automatica prima di usare questa azione."
+  "AUTOPLAY_BLOCKS_ACTION": "❌ Disattiva la riproduzione automatica prima di usare questa azione.",
+  "INVITE_TITLE": "Invita BeatDock",
+  "INVITE_DESCRIPTION": "Clicca il pulsante qui sotto per aggiungere BeatDock al tuo server.",
+  "INVITE_BUTTON": "Aggiungi al server",
+  "WELCOME_TITLE": "Grazie per aver aggiunto BeatDock!",
+  "WELCOME_DESCRIPTION": "BeatDock è pronto per riprodurre musica! Usa `/play` per iniziare, o `/about` per saperne di più."
 }

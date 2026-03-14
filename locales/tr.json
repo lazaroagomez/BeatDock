@@ -90,6 +90,11 @@
     "AUTOPLAY_DISABLED": "📻 Otomatik çalma devre dışı bırakıldı",
     "AUTOPLAY_STATUS": "Otomatik çalma",
     "AUTOPLAY_REQUESTER": "📻 Otomatik çalma",
-    "AUTOPLAY_BLOCKS_ACTION": "❌ Bu işlemi kullanmak için önce otomatik çalmayı devre dışı bırakın."
+    "AUTOPLAY_BLOCKS_ACTION": "❌ Bu işlemi kullanmak için önce otomatik çalmayı devre dışı bırakın.",
+    "INVITE_TITLE": "BeatDock'u Davet Et",
+    "INVITE_DESCRIPTION": "BeatDock'u sunucunuza eklemek için aşağıdaki butona tıklayın.",
+    "INVITE_BUTTON": "Sunucuya ekle",
+    "WELCOME_TITLE": "BeatDock'u eklediğiniz için teşekkürler!",
+    "WELCOME_DESCRIPTION": "BeatDock müzik çalmaya hazır! Başlamak için `/play` kullanın veya daha fazla bilgi için `/about` yazın."
 }
 

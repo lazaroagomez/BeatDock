@@ -2,18 +2,18 @@
 
 A Discord music bot powered by Lavalink. Simple to deploy, easy to use.
 
-## What's New in v2.6.0
+## What's New in v2.7.0
+
+### Invite System
+- **`/invite` command** — generates a bot invite link with only the required permissions
+- **Startup invite URL** — the invite link is now logged in container logs on every boot
+- **Welcome message** — the bot sends a welcome embed when joining a new server
 
 ### Autoplay Mode
-BeatDock now supports **autoplay** — when enabled, the bot automatically searches for and plays related tracks when the queue empties, creating a continuous listening experience. Toggle it with `/autoplay` or enable it by default via the `AUTOPLAY_DEFAULT` environment variable.
-
-- Searches for similar tracks based on the last played song's artist and title
-- Blocks loop and shuffle while active (autoplay takes priority)
-- Shows autoplay status in the player embed footer
-- Can be enabled by default with `AUTOPLAY_DEFAULT=true` in `.env`
+BeatDock supports **autoplay** — when enabled, the bot automatically searches for and plays related tracks when the queue empties. Toggle it with `/autoplay` or enable it by default via the `AUTOPLAY_DEFAULT` environment variable.
 
 ### No Self-Hosted Lavalink Required
-BeatDock can now run **without a self-hosted Lavalink server**. If the `LAVALINK_HOST`, `LAVALINK_PORT`, and `LAVALINK_PASSWORD` environment variables are not set, the bot automatically fetches free public Lavalink v4 servers and connects to one. If a public server goes down, it rotates to the next available node automatically.
+BeatDock can run **without a self-hosted Lavalink server**. If the `LAVALINK_HOST`, `LAVALINK_PORT`, and `LAVALINK_PASSWORD` environment variables are not set, the bot automatically fetches free public Lavalink v4 servers and connects to one. If a public server goes down, it rotates to the next available node automatically.
 
 To use public servers, simply comment out or remove the Lavalink variables from your `.env`:
 ```env
@@ -190,6 +190,7 @@ docker compose up -d
 | `/clear` | Clear queue |
 | `/volume <1-100>` | Set volume |
 | `/nowplaying` | Current track info |
+| `/invite` | Get bot invite link |
 | `/about` | Bot info |
 
 ## Configuration

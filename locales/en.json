@@ -90,5 +90,10 @@
     "AUTOPLAY_DISABLED": "📻 Autoplay disabled",
     "AUTOPLAY_STATUS": "Autoplay",
     "AUTOPLAY_REQUESTER": "📻 Autoplay",
-    "AUTOPLAY_BLOCKS_ACTION": "❌ Disable autoplay first to use this action."
+    "AUTOPLAY_BLOCKS_ACTION": "❌ Disable autoplay first to use this action.",
+    "INVITE_TITLE": "Invite BeatDock",
+    "INVITE_DESCRIPTION": "Click the button below to add BeatDock to your server.",
+    "INVITE_BUTTON": "Add to Server",
+    "WELCOME_TITLE": "Thanks for adding BeatDock!",
+    "WELCOME_DESCRIPTION": "BeatDock is ready to play music! Use `/play` to get started, or `/about` to learn more."
 }
