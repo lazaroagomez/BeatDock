@@ -26,6 +26,7 @@ module.exports = {
                 
                 // Update presence
                 client.activePlayers.delete(guildId);
+                client.autoplayEnabled.delete(guildId);
                 client.updatePresence();
 
                 // Clear any pending empty-channel disconnect timers
@@ -84,6 +85,7 @@ module.exports = {
                     
                     // Update presence
                     client.activePlayers.delete(guildId);
+                    client.autoplayEnabled.delete(guildId);
                     client.updatePresence();
                 }, timeoutMs);
 

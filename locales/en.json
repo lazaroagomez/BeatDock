@@ -85,5 +85,10 @@
     "ABOUT_DESCRIPTION": "BeatDock is a modern, open-source Discord music bot designed for high-quality audio playback and easy self-hosting.",
     "PLAYER_REQUESTED_BY": "👤 Added by",
     "QUEUE_JUMPED": "▶️ Jumped to **{0}** and removed all previous tracks from the queue.",
-    "QUEUE_JUMP_INVALID": "❌ Invalid track selection. The track may no longer exist in the queue."
+    "QUEUE_JUMP_INVALID": "❌ Invalid track selection. The track may no longer exist in the queue.",
+    "AUTOPLAY_ENABLED": "📻 Autoplay enabled",
+    "AUTOPLAY_DISABLED": "📻 Autoplay disabled",
+    "AUTOPLAY_STATUS": "Autoplay",
+    "AUTOPLAY_REQUESTER": "📻 Autoplay",
+    "AUTOPLAY_BLOCKS_ACTION": "❌ Disable autoplay first to use this action."
 }

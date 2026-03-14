@@ -12,6 +12,13 @@ module.exports = {
         const player = await requirePlayer(interaction, { requireQueue: true });
         if (!player) return;
 
+        if (client.autoplayEnabled.get(interaction.guild.id)) {
+            return interaction.reply({
+                content: client.languageManager.get(client.defaultLanguage, 'AUTOPLAY_BLOCKS_ACTION'),
+                ephemeral: true,
+            });
+        }
+
         shuffleQueue(player);
 
         return interaction.reply({ 

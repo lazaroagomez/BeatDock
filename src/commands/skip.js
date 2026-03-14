@@ -12,11 +12,17 @@ module.exports = {
         const player = await requirePlayer(interaction);
         if (!player) return;
 
-        if (player.queue.tracks.length === 0) {
+        const autoplayOn = client.autoplayEnabled.get(interaction.guild.id) || false;
+        if (player.queue.tracks.length === 0 && !autoplayOn) {
             return interaction.reply({ content: client.languageManager.get(lang, 'QUEUE_EMPTY'), ephemeral: true });
         }
 
-        await player.skip();
+        if (player.queue.tracks.length === 0 && autoplayOn) {
+            await player.skip(0, false);
+        } else {
+            await player.skip();
+        }
+
         return interaction.reply({
             content: client.languageManager.get(lang, 'SONG_SKIPPED'),
             ephemeral: true

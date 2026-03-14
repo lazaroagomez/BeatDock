@@ -6,6 +6,7 @@ const PlayerController = require('./utils/PlayerController');
 const LavalinkConnectionManager = require('./utils/LavalinkConnectionManager');
 const PublicNodeProvider = require('./utils/PublicNodeProvider');
 const searchSessions = require('./utils/searchSessions');
+const { findAutoplayTracks } = require('./utils/autoplay');
 const loadCommands = require('./handlers/commandHandler');
 const registerEvents = require('./handlers/eventHandler');
 
@@ -75,6 +76,7 @@ async function bootstrap() {
 
     // Presence management
     client.activePlayers = new Map(); // Guild ID -> Track info
+    client.autoplayEnabled = new Map(); // Guild ID -> boolean
 
     client.updatePresence = function() {
         // Get all active players
@@ -111,6 +113,22 @@ async function bootstrap() {
             defaultSearchPlatform: "ytsearch",
             onEmptyQueue: {
                 destroyAfterMs: parseInt(process.env.QUEUE_EMPTY_DESTROY_MS || "30000", 10),
+                autoPlayFunction: async (player, lastPlayedTrack) => {
+                    if (!client.autoplayEnabled.get(player.guildId)) return;
+
+                    try {
+                        const tracks = await findAutoplayTracks(player, lastPlayedTrack);
+                        if (!client.autoplayEnabled.get(player.guildId)) return;
+                        if (!tracks.length) return;
+
+                        for (const track of tracks) {
+                            track.userData = { autoplay: true };
+                        }
+                        await player.queue.add(tracks);
+                    } catch (err) {
+                        console.error('Autoplay failed:', err);
+                    }
+                },
             }
         },
     });
@@ -134,8 +152,23 @@ async function bootstrap() {
         client.lavalinkConnectionManager.onDisconnect(node, reason);
     });
 
+    // Track pending queueEnd timeouts per guild (cancellable)
+    const queueEndTimeouts = new Map();
+
     // Lavalink events
     client.lavalink.on("trackStart", (player, track) => {
+        // Cancel any pending queueEnd cleanup (autoplay succeeded)
+        if (queueEndTimeouts.has(player.guildId)) {
+            clearTimeout(queueEndTimeouts.get(player.guildId));
+            queueEndTimeouts.delete(player.guildId);
+        }
+
+        // Apply default autoplay setting for new sessions
+        if (!client.autoplayEnabled.has(player.guildId)) {
+            const autoplayDefault = process.env.AUTOPLAY_DEFAULT === 'true';
+            client.autoplayEnabled.set(player.guildId, autoplayDefault);
+        }
+
         // Update player UI
         client.playerController.updatePlayer(player.guildId);
 
@@ -148,13 +181,14 @@ async function bootstrap() {
     });
 
     client.lavalink.on("trackEnd", (player, track, reason) => {
-        if (reason === "replaced") return; // Track was replaced, new one will start
+        if (reason === "replaced" || reason === "stopped") return;
 
         // Update player UI
         setTimeout(() => {
             if (player.queue.current) {
                 client.playerController.updatePlayer(player.guildId);
-            } else {
+            } else if (!client.autoplayEnabled.get(player.guildId)) {
+                // Only clean up if autoplay is off — autoplay may still be searching
                 client.playerController.deletePlayer(player.guildId);
 
                 // Remove from active players and update presence
@@ -166,6 +200,38 @@ async function bootstrap() {
 
     client.lavalink.on("queueEnd", (player) => {
         const guildId = player.guildId;
+
+        // Clear any previous pending timeout for this guild
+        if (queueEndTimeouts.has(guildId)) {
+            clearTimeout(queueEndTimeouts.get(guildId));
+            queueEndTimeouts.delete(guildId);
+        }
+
+        // If autoplay is on, wait for the autoplay search to complete before cleaning up
+        if (client.autoplayEnabled.get(guildId)) {
+            const timeout = setTimeout(() => {
+                queueEndTimeouts.delete(guildId);
+
+                // Re-check: if a track was added by autoplay in the meantime, don't clean up
+                const currentPlayer = client.lavalink.getPlayer(guildId);
+                if (currentPlayer?.queue.current || currentPlayer?.playing) return;
+
+                const playerMessage = client.playerController.playerMessages.get(guildId);
+                if (playerMessage) {
+                    const textChannel = client.channels.cache.get(playerMessage.channelId);
+                    if (textChannel) {
+                        textChannel.send(client.t('QUEUE_ENDED')).catch(() => {});
+                    }
+                }
+                client.playerController.deletePlayer(guildId);
+                client.activePlayers.delete(guildId);
+                client.autoplayEnabled.delete(guildId);
+                client.updatePresence();
+            }, 5000);
+            queueEndTimeouts.set(guildId, timeout);
+            return;
+        }
+
         const playerMessage = client.playerController.playerMessages.get(guildId);
         if (playerMessage) {
             const textChannel = client.channels.cache.get(playerMessage.channelId);
@@ -177,6 +243,7 @@ async function bootstrap() {
 
         // Remove from active players and update presence
         client.activePlayers.delete(guildId);
+        client.autoplayEnabled.delete(guildId);
         client.updatePresence();
     });
 

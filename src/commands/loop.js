@@ -11,6 +11,13 @@ module.exports = {
         const player = await requirePlayer(interaction);
         if (!player) return;
 
+        if (client.autoplayEnabled.get(interaction.guild.id)) {
+            return interaction.reply({
+                content: client.languageManager.get(client.defaultLanguage, 'AUTOPLAY_BLOCKS_ACTION'),
+                ephemeral: true,
+            });
+        }
+
         // Cycle through loop modes: off -> track -> queue -> off
         let newMode;
         let modeMessage;

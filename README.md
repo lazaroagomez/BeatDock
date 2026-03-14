@@ -2,7 +2,15 @@
 
 A Discord music bot powered by Lavalink. Simple to deploy, easy to use.
 
-## What's New in v2.5.0
+## What's New in v2.6.0
+
+### Autoplay Mode
+BeatDock now supports **autoplay** — when enabled, the bot automatically searches for and plays related tracks when the queue empties, creating a continuous listening experience. Toggle it with `/autoplay` or enable it by default via the `AUTOPLAY_DEFAULT` environment variable.
+
+- Searches for similar tracks based on the last played song's artist and title
+- Blocks loop and shuffle while active (autoplay takes priority)
+- Shows autoplay status in the player embed footer
+- Can be enabled by default with `AUTOPLAY_DEFAULT=true` in `.env`
 
 ### No Self-Hosted Lavalink Required
 BeatDock can now run **without a self-hosted Lavalink server**. If the `LAVALINK_HOST`, `LAVALINK_PORT`, and `LAVALINK_PASSWORD` environment variables are not set, the bot automatically fetches free public Lavalink v4 servers and connects to one. If a public server goes down, it rotates to the next available node automatically.
@@ -20,6 +28,7 @@ To use public servers, simply comment out or remove the Lavalink variables from 
 
 - Play music from YouTube, SoundCloud, Bandcamp, Twitch, and Vimeo
 - Optional Spotify support (search and resolve via YouTube)
+- Autoplay mode for continuous music playback
 - Queue management with shuffle, loop, and play-next
 - Interactive search with track selection
 - Multi-language support (English, Spanish, Turkish, Italian)
@@ -176,6 +185,7 @@ docker compose up -d
 | `/stop` | Stop and disconnect |
 | `/queue` | Show queue |
 | `/shuffle` | Shuffle queue |
+| `/autoplay` | Toggle autoplay mode |
 | `/loop` | Toggle loop mode |
 | `/clear` | Clear queue |
 | `/volume <1-100>` | Set volume |
@@ -195,6 +205,7 @@ All configuration is done through the `.env` file. Only `TOKEN` and `CLIENT_ID` 
 | `SPOTIFY_CLIENT_SECRET` | — | Spotify app client secret |
 | `DEFAULT_LANGUAGE` | `en` | Bot language (`en`, `es`, `tr`, `it`) |
 | `DEFAULT_VOLUME` | `80` | Default playback volume (0–100) |
+| `AUTOPLAY_DEFAULT` | `false` | Enable autoplay by default when music starts |
 | `ALLOWED_ROLES` | — | Comma-separated role IDs to restrict access |
 | `LAVALINK_PASSWORD` | `youshallnotpass` | Lavalink server password |
 | `QUEUE_EMPTY_DESTROY_MS` | `30000` | Disconnect after queue empties (ms) |

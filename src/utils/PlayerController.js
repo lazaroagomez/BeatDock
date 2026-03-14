@@ -17,7 +17,11 @@ class PlayerController {
                 { name: this.client.languageManager.get(lang, 'PLAYER_ARTIST'), value: track.info?.author || 'Unknown', inline: true },
                 { name: this.client.languageManager.get(lang, 'PLAYER_DURATION'), value: this.formatDuration(track.info?.duration || 0), inline: true },
                 { name: this.client.languageManager.get(lang, 'PLAYER_QUEUE_COUNT'), value: this.client.languageManager.get(lang, 'PLAYER_SONGS_COUNT', player.queue.tracks.length), inline: true },
-                ...(track.userData?.requester ? [{ name: this.client.languageManager.get(lang, 'PLAYER_REQUESTED_BY'), value: `<@${track.userData.requester.id}>`, inline: true }] : [])
+                ...(track.userData?.autoplay
+                    ? [{ name: this.client.languageManager.get(lang, 'PLAYER_REQUESTED_BY'), value: this.client.languageManager.get(lang, 'AUTOPLAY_REQUESTER'), inline: true }]
+                    : track.userData?.requester
+                        ? [{ name: this.client.languageManager.get(lang, 'PLAYER_REQUESTED_BY'), value: `<@${track.userData.requester.id}>`, inline: true }]
+                        : [])
             )
             .setFooter({ text: this.client.languageManager.get(lang, 'PLAYER_VOLUME', player.volume) })
             .setTimestamp();
@@ -25,12 +29,19 @@ class PlayerController {
         // Add loop status to the embed
         if (player.repeatMode && player.repeatMode !== 'off') {
             const loopIcon = player.repeatMode === 'track' ? '🔂' : '🔁';
-            const loopText = player.repeatMode === 'track' 
+            const loopText = player.repeatMode === 'track'
                 ? this.client.languageManager.get(lang, 'LOOP_STATUS_TRACK')
                 : this.client.languageManager.get(lang, 'LOOP_STATUS_QUEUE');
-            embed.setFooter({ 
-                text: `${this.client.languageManager.get(lang, 'PLAYER_VOLUME', player.volume)} | ${loopIcon} ${loopText}` 
+            embed.setFooter({
+                text: `${this.client.languageManager.get(lang, 'PLAYER_VOLUME', player.volume)} | ${loopIcon} ${loopText}`
             });
+        }
+
+        // Add autoplay status to the embed
+        if (this.client.autoplayEnabled.get(player.guildId)) {
+            const autoplayText = this.client.languageManager.get(lang, 'AUTOPLAY_STATUS');
+            const currentFooter = embed.data.footer?.text || this.client.languageManager.get(lang, 'PLAYER_VOLUME', player.volume);
+            embed.setFooter({ text: `${currentFooter} | 📻 ${autoplayText}` });
         }
 
         return embed;

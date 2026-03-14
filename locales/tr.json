@@ -85,5 +85,11 @@
     "ABOUT_DESCRIPTION": "BeatDock, yüksek kaliteli ses çalma ve kolay kendi kendine barındırma için tasarlanmış modern, açık kaynaklı bir Discord müzik botudur.",
     "PLAYER_REQUESTED_BY": "👤 Ekleyen",
     "QUEUE_JUMPED": "▶️ **{0}** şarkısına atlandı ve önceki tüm şarkılar kuyruktan kaldırıldı.",
-    "QUEUE_JUMP_INVALID": "❌ Geçersiz şarkı seçimi. Şarkı artık kuyrukta olmayabilir."
+    "QUEUE_JUMP_INVALID": "❌ Geçersiz şarkı seçimi. Şarkı artık kuyrukta olmayabilir.",
+    "AUTOPLAY_ENABLED": "📻 Otomatik çalma etkinleştirildi",
+    "AUTOPLAY_DISABLED": "📻 Otomatik çalma devre dışı bırakıldı",
+    "AUTOPLAY_STATUS": "Otomatik çalma",
+    "AUTOPLAY_REQUESTER": "📻 Otomatik çalma",
+    "AUTOPLAY_BLOCKS_ACTION": "❌ Bu işlemi kullanmak için önce otomatik çalmayı devre dışı bırakın."
 }
+

@@ -33,18 +33,27 @@ async function handlePlayerInteraction(interaction, action) {
             }
             break;
         case 'skip':
-            if (player.queue.tracks.length === 0 && player.repeatMode === 'off') {
+            const skipAutoplay = client.autoplayEnabled.get(interaction.guild.id) || false;
+            if (player.queue.tracks.length === 0 && player.repeatMode === 'off' && !skipAutoplay) {
                 await interaction.reply({ content: client.languageManager.get(lang, 'QUEUE_EMPTY'), ephemeral: true });
+            } else if (player.queue.tracks.length === 0 && skipAutoplay) {
+                await player.skip(0, false);
+                await interaction.reply({ content: client.languageManager.get(lang, 'SONG_SKIPPED'), ephemeral: true });
             } else {
                 await player.skip();
                 await interaction.reply({ content: client.languageManager.get(lang, 'SONG_SKIPPED'), ephemeral: true });
             }
             break;
         case 'stop':
+            client.autoplayEnabled.delete(interaction.guild.id);
             await player.destroy();
             await interaction.reply({ content: client.languageManager.get(lang, 'STOPPED_PLAYBACK'), ephemeral: true });
             break;
         case 'shuffle':
+            if (client.autoplayEnabled.get(interaction.guild.id)) {
+                await interaction.reply({ content: client.languageManager.get(lang, 'AUTOPLAY_BLOCKS_ACTION'), ephemeral: true });
+                return;
+            }
             if (player.queue.tracks.length > 0) {
                 shuffleQueue(player);
                 await interaction.reply({ content: client.languageManager.get(lang, 'QUEUE_SHUFFLED'), ephemeral: true });
@@ -57,6 +66,10 @@ async function handlePlayerInteraction(interaction, action) {
             await interaction.reply(queueResponse);
             break;
         case 'clear':
+            if (client.autoplayEnabled.get(interaction.guild.id)) {
+                await interaction.reply({ content: client.languageManager.get(lang, 'AUTOPLAY_BLOCKS_ACTION'), ephemeral: true });
+                return;
+            }
             if (player.queue.tracks.length > 0) {
                 clearQueue(player);
                 await interaction.reply({ content: client.languageManager.get(lang, 'QUEUE_CLEARED'), ephemeral: true });
@@ -65,6 +78,10 @@ async function handlePlayerInteraction(interaction, action) {
             }
             break;
         case 'loop':
+            if (client.autoplayEnabled.get(interaction.guild.id)) {
+                await interaction.reply({ content: client.languageManager.get(lang, 'AUTOPLAY_BLOCKS_ACTION'), ephemeral: true });
+                return;
+            }
             let newMode;
             let modeMessage;
             switch (player.repeatMode || 'off') {

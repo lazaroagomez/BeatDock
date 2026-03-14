@@ -131,6 +131,7 @@ async function handleSearchNavigation(interaction) {
                 // Clean up player if it was created for search but never connected
                 const existingPlayer = client.lavalink.getPlayer(guild.id);
                 if (existingPlayer && !existingPlayer.connected && !existingPlayer.playing) {
+                    client.autoplayEnabled.delete(guild.id);
                     existingPlayer.destroy();
                 }
 

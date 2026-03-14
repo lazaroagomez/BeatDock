@@ -24,7 +24,7 @@
             <a href="#" class="nav-logo">
                 <span class="logo-icon"><i class="bi bi-music-note-beamed"></i></span>
                 <span class="logo-text">BEATDOCK</span>
-                <span class="version-badge" id="version">v2.5.0</span>
+                <span class="version-badge" id="version">v2.6.0</span>
             </a>
             <div class="nav-links">
                 <a href="#features" class="nav-link">Features</a>
@@ -71,7 +71,7 @@
             </p>
             <div class="hero-stats">
                 <div class="stat">
-                    <span class="stat-value">13</span>
+                    <span class="stat-value">14</span>
                     <span class="stat-label">Commands</span>
                 </div>
                 <div class="stat-divider"></div>
@@ -206,6 +206,15 @@
                     <p class="feature-desc">No self-hosted Lavalink needed. Automatically connects to free public servers with automatic failover.</p>
                     <div class="feature-glow"></div>
                 </div>
+
+                <div class="feature-card" data-delay="10">
+                    <div class="feature-icon icon-controller">
+                        <i class="bi bi-broadcast"></i>
+                    </div>
+                    <h3 class="feature-title">Autoplay Mode</h3>
+                    <p class="feature-desc">Continuous music playback that automatically finds and plays related tracks when your queue ends.</p>
+                    <div class="feature-glow"></div>
+                </div>
             </div>
         </div>
     </section>
@@ -216,7 +225,7 @@
             <div class="section-header">
                 <span class="section-tag">// ARSENAL</span>
                 <h2 class="section-title">Commands</h2>
-                <p class="section-desc">13 powerful slash commands at your fingertips</p>
+                <p class="section-desc">14 powerful slash commands at your fingertips</p>
             </div>
 
             <div class="commands-container">
@@ -340,6 +349,14 @@
                                 <span class="command-badge success">Shuffle</span>
                             </div>
                             <p class="command-desc">Shuffle the current queue randomly</p>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-header">
+                                <code class="command-name">/autoplay</code>
+                                <span class="command-badge success">Toggle</span>
+                            </div>
+                            <p class="command-desc">Toggle autoplay for continuous related tracks</p>
                         </div>
 
                         <div class="command-card">
@@ -746,6 +763,11 @@
                             <code class="config-var">ALLOWED_ROLES</code>
                             <span class="config-default">empty</span>
                             <span class="config-desc">Comma-separated role IDs (empty = everyone)</span>
+                        </div>
+                        <div class="config-row">
+                            <code class="config-var">AUTOPLAY_DEFAULT</code>
+                            <span class="config-default">false</span>
+                            <span class="config-desc">Enable autoplay by default when music starts</span>
                         </div>
                         <div class="config-row">
                             <code class="config-var">QUEUE_EMPTY_DESTROY_MS</code>

@@ -11,6 +11,7 @@ module.exports = {
         const player = await requirePlayer(interaction);
         if (!player) return;
 
+        client.autoplayEnabled.delete(interaction.guild.id);
         await player.destroy();
         return interaction.reply({ 
             content: client.languageManager.get(client.defaultLanguage, 'STOPPED_PLAYBACK'), 
