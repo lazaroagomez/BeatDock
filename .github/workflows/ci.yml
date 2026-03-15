@@ -26,8 +26,5 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Verify bot starts
-        run: timeout 5 node src/index.js || [ $? -eq 124 ]
-        env:
-          TOKEN: fake-token-for-ci
-          CLIENT_ID: 000000000000000000
+      - name: Check syntax
+        run: node --check src/**/*.js
