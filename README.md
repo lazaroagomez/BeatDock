@@ -2,27 +2,30 @@
 
 A Discord music bot powered by Lavalink. Simple to deploy, easy to use.
 
-## What's New in v2.7.0
-
-### Invite System
-- **`/invite` command** — generates a bot invite link with only the required permissions
-- **Startup invite URL** — the invite link is now logged in container logs on every boot
-- **Welcome message** — the bot sends a welcome embed when joining a new server
-
-### Autoplay Mode
-BeatDock supports **autoplay** — when enabled, the bot automatically searches for and plays related tracks when the queue empties. Toggle it with `/autoplay` or enable it by default via the `AUTOPLAY_DEFAULT` environment variable.
-
-### No Self-Hosted Lavalink Required
-BeatDock can run **without a self-hosted Lavalink server**. If the `LAVALINK_HOST`, `LAVALINK_PORT`, and `LAVALINK_PASSWORD` environment variables are not set, the bot automatically fetches free public Lavalink v4 servers and connects to one. If a public server goes down, it rotates to the next available node automatically.
-
-To use public servers, simply comment out or remove the Lavalink variables from your `.env`:
-```env
-# LAVALINK_HOST=lavalink
-# LAVALINK_PORT=2333
-# LAVALINK_PASSWORD=youshallnotpass
-```
+[![License](https://img.shields.io/github/license/lazaroagomez/BeatDock)](LICENSE)
+[![Version](https://img.shields.io/github/v/release/lazaroagomez/BeatDock?label=version)](https://github.com/lazaroagomez/BeatDock/releases)
+[![Node](https://img.shields.io/badge/node-%3E%3D22-brightgreen)](https://nodejs.org/)
+[![Docker](https://img.shields.io/badge/docker-ready-blue)](https://github.com/lazaroagomez/BeatDock/pkgs/container/beatdock)
+[![Last Commit](https://img.shields.io/github/last-commit/lazaroagomez/BeatDock)](https://github.com/lazaroagomez/BeatDock/commits/main)
+[![Issues](https://img.shields.io/github/issues/lazaroagomez/BeatDock)](https://github.com/lazaroagomez/BeatDock/issues)
+[![CI](https://img.shields.io/github/actions/workflow/status/lazaroagomez/BeatDock/ci.yml?label=CI)](https://github.com/lazaroagomez/BeatDock/actions/workflows/ci.yml)
+[![Security](https://img.shields.io/github/actions/workflow/status/lazaroagomez/BeatDock/security.yml?label=security)](https://github.com/lazaroagomez/BeatDock/actions/workflows/security.yml)
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-support-ff5e5b?logo=ko-fi&logoColor=white)](https://ko-fi.com/lazaroagomez)
 
 ---
+
+## Table of Contents
+
+- [Features](#features)
+- [Quick Start](#quick-start)
+- [Commands](#commands)
+- [Configuration](#configuration)
+- [Managing the Bot](#managing-the-bot)
+- [Troubleshooting](#troubleshooting)
+- [Built With](#built-with)
+- [Contributing](#contributing)
+- [Links](#links)
+- [License](#license)
 
 ## Features
 
@@ -33,7 +36,8 @@ To use public servers, simply comment out or remove the Lavalink variables from 
 - Interactive search with track selection
 - Multi-language support (English, Spanish, Turkish, Italian)
 - Role-based access control
-- Runs entirely in Docker — no host dependencies
+- Runs entirely in Docker, no host dependencies
+- Works without a self-hosted Lavalink server (automatic public server fallback)
 
 ## Quick Start
 
@@ -46,7 +50,7 @@ When creating your bot, enable **all 3 Privileged Gateway Intents** (Presence, S
 
 ### Option A: Deploy with Docker (recommended)
 
-Uses the pre-built GHCR image — no cloning needed.
+Uses the pre-built GHCR image, no cloning needed.
 
 **1. Create a project directory:**
 
@@ -173,6 +177,18 @@ docker compose run --rm bot npm run deploy
 docker compose up -d
 ```
 
+### No Self-Hosted Lavalink Required
+
+BeatDock can run **without a self-hosted Lavalink server**. If `LAVALINK_HOST`, `LAVALINK_PORT`, and `LAVALINK_PASSWORD` are not set, the bot automatically fetches free public Lavalink v4 servers and connects to one. If a public server goes down, it rotates to the next available node.
+
+To use public servers, simply comment out the Lavalink variables in your `.env`:
+
+```env
+# LAVALINK_HOST=lavalink
+# LAVALINK_PORT=2333
+# LAVALINK_PASSWORD=youshallnotpass
+```
+
 ## Commands
 
 | Command | Description |
@@ -199,15 +215,15 @@ All configuration is done through the `.env` file. Only `TOKEN` and `CLIENT_ID` 
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `TOKEN` | — | Discord bot token (**required**) |
-| `CLIENT_ID` | — | Discord application client ID (**required**) |
+| `TOKEN` | - | Discord bot token (**required**) |
+| `CLIENT_ID` | - | Discord application client ID (**required**) |
 | `SPOTIFY_ENABLED` | `false` | Enable Spotify search support |
-| `SPOTIFY_CLIENT_ID` | — | Spotify app client ID |
-| `SPOTIFY_CLIENT_SECRET` | — | Spotify app client secret |
+| `SPOTIFY_CLIENT_ID` | - | Spotify app client ID |
+| `SPOTIFY_CLIENT_SECRET` | - | Spotify app client secret |
 | `DEFAULT_LANGUAGE` | `en` | Bot language (`en`, `es`, `tr`, `it`) |
-| `DEFAULT_VOLUME` | `80` | Default playback volume (0–100) |
+| `DEFAULT_VOLUME` | `80` | Default playback volume (0-100) |
 | `AUTOPLAY_DEFAULT` | `false` | Enable autoplay by default when music starts |
-| `ALLOWED_ROLES` | — | Comma-separated role IDs to restrict access |
+| `ALLOWED_ROLES` | - | Comma-separated role IDs to restrict access |
 | `LAVALINK_PASSWORD` | `youshallnotpass` | Lavalink server password |
 | `QUEUE_EMPTY_DESTROY_MS` | `30000` | Disconnect after queue empties (ms) |
 | `EMPTY_CHANNEL_DESTROY_MS` | `60000` | Disconnect from empty channel (ms) |
@@ -233,10 +249,25 @@ getconf PAGE_SIZE
 
 If the result is not `4096`, add `kernel=kernel8.img` under the `[all]` section in `/boot/firmware/config.txt`, then reboot and restart the containers. See [#109](https://github.com/lazaroagomez/BeatDock/issues/109) for details.
 
+## Built With
+
+- [discord.js](https://discord.js.org/) - Discord API client
+- [Lavalink](https://github.com/lavalink-devs/Lavalink) - Audio player server
+- [lavalink-client](https://github.com/Tomato6966/lavalink-client) - Lavalink client library
+- [Docker](https://www.docker.com/) - Containerized deployment
+- [Node.js](https://nodejs.org/) 22+ - Runtime
+
+## Contributing
+
+Contributions are welcome. Bug fixes, new features, translations, docs - all good. Check the guide below to get started.
+
+See [CONTRIBUTING.md](.github/CONTRIBUTING.md) for setup instructions and guidelines.
+
 ## Links
 
 - [Website](https://lazaroagomez.github.io/BeatDock)
 - [Issues](https://github.com/lazaroagomez/BeatDock/issues)
+- [Changelog](CHANGELOG.md)
 
 ## License
 

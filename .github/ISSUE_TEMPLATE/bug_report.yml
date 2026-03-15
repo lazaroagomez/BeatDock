@@ -1,0 +1,82 @@
+name: Bug Report
+description: Something isn't working right
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting this. Fill out the sections below so we can reproduce and fix it.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Describe the bug.
+      placeholder: "When I run /play with a YouTube URL, the bot joins the channel but no audio plays."
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Join a voice channel
+        2. Run /play <url>
+        3. ...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: deployment
+    attributes:
+      label: Deployment method
+      options:
+        - Docker Compose (recommended)
+        - Docker (manual)
+        - From source (npm start)
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: BeatDock version
+      description: "Run /about in Discord or check package.json"
+      placeholder: "2.7.1"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: lavalink
+    attributes:
+      label: Lavalink setup
+      options:
+        - Self-hosted (Docker Compose)
+        - Public servers (automatic fallback)
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      description: "Paste container logs if you have them (`docker compose logs bot`)."
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Anything else?
+      description: Screenshots, OS, architecture, etc.
+    validations:
+      required: false

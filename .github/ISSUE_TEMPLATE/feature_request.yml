@@ -1,0 +1,39 @@
+name: Feature Request
+description: Suggest a new feature or improvement
+labels: ["feature", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Got an idea? Let us know.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: What's the use case?
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: How would it work?
+      description: Describe what you have in mind.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you've considered
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Anything else?
+      description: Screenshots, links, mockups, etc.
+    validations:
+      required: false

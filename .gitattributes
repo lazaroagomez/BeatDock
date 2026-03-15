@@ -1,2 +1,49 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# JavaScript
+*.js text eol=lf
+*.mjs text eol=lf
+*.cjs text eol=lf
+
+# Config files
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.toml text eol=lf
+*.env text eol=lf
+
+# Documentation
+*.md text eol=lf diff=markdown
+*.txt text eol=lf
+LICENSE text eol=lf
+
+# Docker
+Dockerfile text eol=lf
+*.dockerignore text eol=lf
+
+# Shell scripts
+*.sh text eol=lf
+
+# Web
+*.html text eol=lf diff=html
+*.css text eol=lf
+*.svg text eol=lf
+
+# Images (binary)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.avif binary
+*.webp binary
+
+# Archives (binary)
+*.zip binary
+*.tar.gz binary
+*.tgz binary
+
+# Linguist overrides — exclude docs site and locales from language stats
+docs/** linguist-documentation
+locales/** linguist-data
