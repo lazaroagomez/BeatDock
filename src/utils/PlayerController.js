@@ -1,4 +1,5 @@
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require('discord.js');
+const { formatDuration } = require('./embeds');
 
 class PlayerController {
     constructor(client) {
@@ -15,7 +16,7 @@ class PlayerController {
             .setThumbnail(track.info?.artworkUrl || null)
             .addFields(
                 { name: this.client.languageManager.get(lang, 'PLAYER_ARTIST'), value: track.info?.author || 'Unknown', inline: true },
-                { name: this.client.languageManager.get(lang, 'PLAYER_DURATION'), value: this.formatDuration(track.info?.duration || 0), inline: true },
+                { name: this.client.languageManager.get(lang, 'PLAYER_DURATION'), value: formatDuration(track.info?.duration || 0), inline: true },
                 { name: this.client.languageManager.get(lang, 'PLAYER_QUEUE_COUNT'), value: this.client.languageManager.get(lang, 'PLAYER_SONGS_COUNT', player.queue.tracks.length), inline: true },
                 ...(track.userData?.autoplay
                     ? [{ name: this.client.languageManager.get(lang, 'PLAYER_REQUESTED_BY'), value: this.client.languageManager.get(lang, 'AUTOPLAY_REQUESTER'), inline: true }]
@@ -120,7 +121,8 @@ class PlayerController {
         if (!channel) return;
 
         try {
-            const message = await channel.messages.fetch(playerMessage.messageId);
+            const message = channel.messages.cache.get(playerMessage.messageId)
+                || await channel.messages.fetch(playerMessage.messageId);
             const embed = this.createPlayerEmbed(player, player.queue.current);
             const components = this.createPlayerButtons(player);
             
@@ -148,17 +150,6 @@ class PlayerController {
         this.playerMessages.delete(guildId);
     }
 
-    formatDuration(ms) {
-        const seconds = Math.floor((ms / 1000) % 60);
-        const minutes = Math.floor((ms / (1000 * 60)) % 60);
-        const hours = Math.floor(ms / (1000 * 60 * 60));
-
-        if (hours > 0) {
-            return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        } else {
-            return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-        }
-    }
 }
 
 module.exports = PlayerController; 

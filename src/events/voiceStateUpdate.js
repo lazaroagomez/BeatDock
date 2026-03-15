@@ -3,8 +3,10 @@ const searchSessions = require('../utils/searchSessions');
 
 // Keep track of disconnect timers per guild
 const emptyChannelTimeouts = new Map();
+const EMPTY_CHANNEL_TIMEOUT_MS = parseInt(process.env.EMPTY_CHANNEL_DESTROY_MS || "60000", 10);
 
 module.exports = {
+    emptyChannelTimeouts,
     name: Events.VoiceStateUpdate,
     async execute(oldState, newState) {
         const client = oldState.client;
@@ -58,8 +60,6 @@ module.exports = {
         // Count non-bot members in the channel
         const nonBotMembers = botChannel.members.filter((m) => !m.user.bot);
 
-        const timeoutMs = parseInt(process.env.EMPTY_CHANNEL_DESTROY_MS || "60000", 10);
-
         if (nonBotMembers.size === 0) {
             // Channel became empty – start a timer if not already running
             if (!emptyChannelTimeouts.has(guildId)) {
@@ -87,7 +87,7 @@ module.exports = {
                     client.activePlayers.delete(guildId);
                     client.autoplayEnabled.delete(guildId);
                     client.updatePresence();
-                }, timeoutMs);
+                }, EMPTY_CHANNEL_TIMEOUT_MS);
 
                 emptyChannelTimeouts.set(guildId, timeout);
             }

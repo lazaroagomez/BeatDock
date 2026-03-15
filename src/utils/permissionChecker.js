@@ -8,6 +8,12 @@
 
 const { PermissionsBitField } = require('discord.js');
 
+// Cache allowed roles at module level — env vars don't change at runtime
+const ALLOWED_ROLES = (process.env.ALLOWED_ROLES || '')
+    .split(',')
+    .map(role => role.trim())
+    .filter(role => role);
+
 /**
  * Checks if a member has Administrator permissions.
  * @param {PermissionsBitField} memberPermissions - The member's permissions.
@@ -15,18 +21,6 @@ const { PermissionsBitField } = require('discord.js');
  */
 function isAdmin(memberPermissions) {
     return memberPermissions.has(PermissionsBitField.Flags.Administrator);
-}
-
-/**
- * Parses and returns the list of allowed role IDs from environment variables.
- * @returns {string[]}
- */
-function getAllowedRoles() {
-    const allowedRolesString = process.env.ALLOWED_ROLES || '';
-    return allowedRolesString
-        .split(',')
-        .map(role => role.trim())
-        .filter(role => role);
 }
 
 /**
@@ -43,15 +37,13 @@ function hasPermission(member) {
         return true;
     }
 
-    const allowedRoles = getAllowedRoles();
-    
     // If no roles are specified, everyone can use the bot
-    if (!allowedRoles.length) {
+    if (!ALLOWED_ROLES.length) {
         return true;
     }
 
     // Check if member has any of the allowed roles
-    return member.roles.cache.some(role => allowedRoles.includes(role.id));
+    return member.roles.cache.some(role => ALLOWED_ROLES.includes(role.id));
 }
 
 /**

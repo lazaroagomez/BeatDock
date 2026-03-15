@@ -1,6 +1,7 @@
 // Utility functions that encapsulate common queue manipulations, allowing both
 // slash-commands and component interactions to share the same core logic.
 
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const { createTrackSelectMenu, truncateText } = require('./trackSelectMenu');
 
 /**
@@ -117,7 +118,6 @@ function paginatedQueue(player, page = 1, itemsPerPage = 9) {
 }
 
 function createPaginatedQueueResponse(client, player, page = 1) {
-    const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
     const lang = client.defaultLanguage;
     const t = (key, ...args) => client.languageManager.get(lang, key, ...args);
 

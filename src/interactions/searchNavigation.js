@@ -159,17 +159,13 @@ async function handleSearchNavigation(interaction) {
 
     } catch (error) {
         console.error('Error handling search navigation:', error);
-        try {
-            if (!interaction.replied && !interaction.deferred) {
-                await interaction.deferUpdate();
-            }
-            await interaction.followUp({
-                content: client.languageManager.get(lang, 'SEARCH_INTERACTION_ERROR'),
-                ephemeral: true
-            });
-        } catch (responseError) {
-            console.error('Failed to send error response for search navigation:', responseError);
+        if (!interaction.replied && !interaction.deferred) {
+            await interaction.deferUpdate().catch(() => {});
         }
+        await interaction.followUp({
+            content: client.languageManager.get(lang, 'SEARCH_INTERACTION_ERROR'),
+            ephemeral: true
+        }).catch(() => {});
     }
 }
 

@@ -9,7 +9,8 @@ module.exports = {
         .addStringOption(option =>
             option.setName('query')
                 .setDescription('The song to play (URL or search query).')
-                .setRequired(true))
+                .setRequired(true)
+                .setMaxLength(500))
         .addBooleanOption(option =>
             option.setName('next')
                 .setDescription('Add the song to play next in the queue.')

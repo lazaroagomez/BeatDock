@@ -15,8 +15,6 @@ services:
   lavalink:
     container_name: beatdock-lavalink
     image: ghcr.io/lavalink-devs/lavalink:4
-    ports:
-      - "2333:2333"
     networks:
       - beatdock-network
     volumes:

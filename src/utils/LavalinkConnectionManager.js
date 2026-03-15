@@ -1,3 +1,12 @@
+const CONNECTION_TIMEOUT_MS = 15000;
+const JITTER_MS = 1000;
+const RECONNECT_DELAY_ON_ERROR_MS = 5000;
+const MONITORING_CHECK_INTERVAL_MS = 5000;
+const MONITORING_FALLBACK_TIMEOUT_MS = 120000;
+const CRITICAL_TIMEOUT_MS = 300000;
+const PERIODIC_RESET_INTERVAL_MS = 60 * 60 * 1000;
+const PING_TIMEOUT_MS = 30 * 60 * 1000;
+
 class LavalinkConnectionManager {
     constructor(client) {
         this.client = client;
@@ -31,7 +40,7 @@ class LavalinkConnectionManager {
     // Exponential backoff delay calculation
     getReconnectDelay(attempt) {
         const delay = Math.min(this.state.baseDelay * Math.pow(2, attempt), this.state.maxDelay);
-        return delay + Math.random() * 1000; // Add jitter
+        return delay + Math.random() * JITTER_MS;
     }
 
     // Health check function
@@ -80,14 +89,12 @@ class LavalinkConnectionManager {
             const mainNode = this.client.lavalink.nodeManager.nodes.get('main-node');
             const timeSinceLastPing = Date.now() - this.state.lastPing;
             
-            // If we haven't had a successful ping in the last 30 minutes, try reconnecting
-            const PING_TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes
             if (!mainNode || !mainNode.connected || timeSinceLastPing > PING_TIMEOUT_MS) {
                 console.log('🔄 Periodic reset: No recent connection activity, attempting reconnection...');
                 this.state.reconnectAttempts = 0; // Reset attempts
                 this.attemptReconnection();
             }
-        }, 60 * 60 * 1000); // Check every hour
+        }, PERIODIC_RESET_INTERVAL_MS);
     }
 
     // Get node config based on mode (local or public)
@@ -187,7 +194,7 @@ class LavalinkConnectionManager {
                         newNode.off('error', onError);
                     }
                     reject(new Error('Connection timeout'));
-                }, 15000); // 15 second timeout
+                }, CONNECTION_TIMEOUT_MS);
                 
                 const onConnect = () => {
                     clearTimeout(timeout);
@@ -307,7 +314,7 @@ class LavalinkConnectionManager {
             // Only trigger reconnection for connection-related errors
             if (error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND' || error.message.includes('Unable to connect')) {
                 console.log('Connection error detected, will attempt reconnection...');
-                setTimeout(() => this.attemptReconnection(), 5000); // Wait 5 seconds before attempting
+                setTimeout(() => this.attemptReconnection(), RECONNECT_DELAY_ON_ERROR_MS);
             }
         }
     }
@@ -378,8 +385,8 @@ class LavalinkConnectionManager {
                 this.startHealthCheck();
                 this.startPeriodicReset();
             }
-        }, 5000);
-        
+        }, MONITORING_CHECK_INTERVAL_MS);
+
         // Stop monitoring after 2 minutes if no connection (fallback)
         setTimeout(() => {
             clearInterval(monitoringInterval);
@@ -388,8 +395,8 @@ class LavalinkConnectionManager {
                 this.startHealthCheck();
                 this.startPeriodicReset();
             }
-        }, 120000); // 2 minutes
-        
+        }, MONITORING_FALLBACK_TIMEOUT_MS);
+
         // Add a longer timeout to warn if Lavalink never starts
         setTimeout(() => {
             if (!this.isAvailable()) {
@@ -398,7 +405,7 @@ class LavalinkConnectionManager {
                 console.error('   - Check Lavalink logs: docker logs <lavalink-container>');
                 console.error('   - Verify network connectivity between containers');
             }
-        }, 300000); // 5 minutes
+        }, CRITICAL_TIMEOUT_MS);
     }
 
     // Check if Lavalink is available and start health checks if it is

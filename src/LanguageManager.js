@@ -20,12 +20,13 @@ class LanguageManager {
 
     get(locale, key, ...args) {
         const translations = this.locales.get(locale) || this.locales.get('en');
-        let translation = translations[key] || this.locales.get('en')[key];
+        const fallback = this.locales.get('en');
+        let translation = (Object.hasOwn(translations, key) ? translations[key] : null)
+            || (Object.hasOwn(fallback, key) ? fallback[key] : key);
 
         if (typeof translation === 'string') {
             args.forEach((arg, index) => {
-                const regex = new RegExp(`\\{${index}\\}`, 'g');
-                translation = translation.replace(regex, arg);
+                translation = translation.replaceAll(`{${index}}`, String(arg));
             });
         }
 

@@ -14,16 +14,17 @@ async function handlePlayerInteraction(interaction, action) {
     if (!sameVoice) return;
 
     switch (action) {
-        case 'back':
+        case 'back': {
             const track = await playPrevious(player);
-            await interaction.reply({ 
-                content: track 
+            await interaction.reply({
+                content: track
                     ? client.languageManager.get(lang, 'PLAYING_PREVIOUS', track.info?.title || 'Unknown')
                     : client.languageManager.get(lang, 'NO_PREVIOUS_SONG'),
-                ephemeral: true 
+                ephemeral: true
             });
             break;
-        case 'playpause':
+        }
+        case 'playpause': {
             if (player.paused) {
                 await player.resume();
                 await interaction.reply({ content: client.languageManager.get(lang, 'RESUMED'), ephemeral: true });
@@ -32,7 +33,8 @@ async function handlePlayerInteraction(interaction, action) {
                 await interaction.reply({ content: client.languageManager.get(lang, 'PAUSED'), ephemeral: true });
             }
             break;
-        case 'skip':
+        }
+        case 'skip': {
             const skipAutoplay = client.autoplayEnabled.get(interaction.guild.id) || false;
             if (player.queue.tracks.length === 0 && player.repeatMode === 'off' && !skipAutoplay) {
                 await interaction.reply({ content: client.languageManager.get(lang, 'QUEUE_EMPTY'), ephemeral: true });
@@ -44,12 +46,14 @@ async function handlePlayerInteraction(interaction, action) {
                 await interaction.reply({ content: client.languageManager.get(lang, 'SONG_SKIPPED'), ephemeral: true });
             }
             break;
-        case 'stop':
+        }
+        case 'stop': {
             client.autoplayEnabled.delete(interaction.guild.id);
             await player.destroy();
             await interaction.reply({ content: client.languageManager.get(lang, 'STOPPED_PLAYBACK'), ephemeral: true });
             break;
-        case 'shuffle':
+        }
+        case 'shuffle': {
             if (client.autoplayEnabled.get(interaction.guild.id)) {
                 await interaction.reply({ content: client.languageManager.get(lang, 'AUTOPLAY_BLOCKS_ACTION'), ephemeral: true });
                 return;
@@ -61,11 +65,13 @@ async function handlePlayerInteraction(interaction, action) {
                 await interaction.reply({ content: client.languageManager.get(lang, 'QUEUE_EMPTY'), ephemeral: true });
             }
             break;
-        case 'queue':
+        }
+        case 'queue': {
             const queueResponse = createPaginatedQueueResponse(client, player, 1);
             await interaction.reply(queueResponse);
             break;
-        case 'clear':
+        }
+        case 'clear': {
             if (client.autoplayEnabled.get(interaction.guild.id)) {
                 await interaction.reply({ content: client.languageManager.get(lang, 'AUTOPLAY_BLOCKS_ACTION'), ephemeral: true });
                 return;
@@ -77,7 +83,8 @@ async function handlePlayerInteraction(interaction, action) {
                 await interaction.reply({ content: client.languageManager.get(lang, 'QUEUE_EMPTY'), ephemeral: true });
             }
             break;
-        case 'loop':
+        }
+        case 'loop': {
             if (client.autoplayEnabled.get(interaction.guild.id)) {
                 await interaction.reply({ content: client.languageManager.get(lang, 'AUTOPLAY_BLOCKS_ACTION'), ephemeral: true });
                 return;
@@ -93,6 +100,7 @@ async function handlePlayerInteraction(interaction, action) {
             player.setRepeatMode(newMode);
             await interaction.reply({ content: modeMessage, ephemeral: true });
             break;
+        }
     }
 
     if (action !== 'stop') {
@@ -117,7 +125,7 @@ async function handleQueueInteraction(interaction, action, args) {
         case 'first':
         case 'last':
         case 'prev':
-        case 'next':
+        case 'next': {
             const targetPage = parseInt(args[0]);
             if (isNaN(targetPage)) return;
 
@@ -128,8 +136,9 @@ async function handleQueueInteraction(interaction, action, args) {
             const queueResponse = createPaginatedQueueResponse(client, player, targetPage);
             await interaction.update(queueResponse);
             break;
+        }
 
-        case 'jump':
+        case 'jump': {
             const trackIndex = parseInt(args[0]);
             const currentPage = parseInt(args[1]);
 
@@ -139,7 +148,6 @@ async function handleQueueInteraction(interaction, action, args) {
                 return interaction.update({ content: client.languageManager.get(lang, 'QUEUE_EMPTY'), embeds: [], components: [] });
             }
 
-            // Attempt to jump to the track
             const jumpedTrack = await jumpToTrack(player, trackIndex);
 
             if (!jumpedTrack) {
@@ -149,19 +157,17 @@ async function handleQueueInteraction(interaction, action, args) {
                 });
             }
 
-            // Update the queue display
             const updatedQueueResponse = createPaginatedQueueResponse(client, player, 1);
             await interaction.update(updatedQueueResponse);
 
-            // Send confirmation
             await interaction.followUp({
                 content: client.languageManager.get(lang, 'QUEUE_JUMPED', jumpedTrack.info?.title || 'Unknown'),
                 ephemeral: true
             });
 
-            // Update player controller
             setTimeout(() => client.playerController.updatePlayer(interaction.guild.id).catch(() => {}), 500);
             break;
+        }
     }
 }
 
