@@ -83,12 +83,20 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build]
     permissions:
-      contents: read
+      contents: write
       packages: write
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Set image name to lowercase
         run: echo "IMAGE_NAME=${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
+
+      - name: Read version from package.json
+        run: |
+          PKG_VERSION=$(jq -r .version package.json)
+          echo "PKG_VERSION=$PKG_VERSION" >> $GITHUB_ENV
 
       - name: Download digests
         uses: actions/download-artifact@v8
@@ -116,6 +124,7 @@ jobs:
             type=ref,event=branch
             type=sha,prefix={{branch}}-
             type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=v${{ env.PKG_VERSION }}
 
       - name: Create manifest list and push
         working-directory: /tmp/digests
@@ -126,3 +135,17 @@ jobs:
       - name: Inspect image
         run: |
           docker buildx imagetools inspect ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }}
+
+      - name: Create release if version tag is new
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="v${{ env.PKG_VERSION }}"
+          if git ls-remote --tags origin "refs/tags/$TAG" | grep -q "$TAG"; then
+            echo "Tag $TAG already exists, skipping release."
+          else
+            git tag "$TAG"
+            git push origin "$TAG"
+            gh release create "$TAG" --generate-notes --title "$TAG"
+            echo "Created release $TAG"
+          fi
