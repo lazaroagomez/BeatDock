@@ -21,6 +21,11 @@ module.exports = {
 
         shuffleQueue(player);
 
+        // Update the player display
+        setTimeout(() => {
+            client.playerController.updatePlayer(interaction.guild.id);
+        }, 100);
+
         return interaction.reply({ 
             content: client.languageManager.get(client.defaultLanguage, 'QUEUE_SHUFFLED'), 
             ephemeral: true 

@@ -22,6 +22,11 @@ module.exports = {
         // Set the volume
         player.setVolume(volume);
 
+        // Update the player display
+        setTimeout(() => {
+            client.playerController.updatePlayer(interaction.guild.id);
+        }, 100);
+
         return interaction.reply({ 
             content: client.languageManager.get(client.defaultLanguage, 'VOLUME_SET', volume), 
             ephemeral: true 
