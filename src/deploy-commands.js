@@ -2,6 +2,7 @@ require('dotenv').config();
 const { REST, Routes } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
+const logger = require('./utils/logger');
 
 const commands = [];
 const seenNames = new Set();
@@ -13,7 +14,7 @@ for (const file of commandFiles) {
     const commandData = command.data.toJSON();
 
     if (seenNames.has(commandData.name)) {
-        console.log(`[WARNING] Duplicate command name "${commandData.name}" found in ${file}, skipping.`);
+        logger.warn(`Duplicate command name "${commandData.name}" found in ${file}, skipping.`);
         continue;
     }
 
@@ -25,15 +26,15 @@ const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
 
 (async () => {
     try {
-        console.log(`Started refreshing ${commands.length} application (/) commands globally.`);
+        logger.info(`Started refreshing ${commands.length} application (/) commands globally.`);
 
         const data = await rest.put(
             Routes.applicationCommands(process.env.CLIENT_ID),
             { body: commands },
         );
 
-        console.log(`Successfully reloaded ${data.length} application (/) commands globally.`);
+        logger.info(`Successfully reloaded ${data.length} application (/) commands globally.`);
     } catch (error) {
-        console.error(error);
+        logger.error('Failed to deploy commands:', error);
     }
 })(); 

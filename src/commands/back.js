@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { requirePlayer } = require('../utils/interactionHelpers');
 const { playPrevious } = require('../utils/PlayerActions');
+const logger = require('../utils/logger');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -10,7 +11,9 @@ module.exports = {
         const { client } = interaction;
 
         const player = await requirePlayer(interaction);
-        if (!player) return; // Error already handled by helper
+        if (!player) return;
+
+        logger.cmd(`/back by ${interaction.user.tag} in #${interaction.channel.name} (Guild: ${interaction.guild.name})`);
 
         const track = await playPrevious(player);
 

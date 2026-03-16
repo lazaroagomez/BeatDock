@@ -1,5 +1,6 @@
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require('discord.js');
 const { formatDuration } = require('./embeds');
+const logger = require('./logger');
 
 class PlayerController {
     constructor(client) {
@@ -128,7 +129,7 @@ class PlayerController {
             
             await message.edit({ embeds: [embed], components });
         } catch (error) {
-            console.error('Error updating player:', error);
+            logger.error('Error updating player:', error);
             this.playerMessages.delete(guildId);
         }
     }

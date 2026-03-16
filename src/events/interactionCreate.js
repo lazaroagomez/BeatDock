@@ -2,6 +2,7 @@ const { checkInteractionPermission } = require('../utils/permissionChecker');
 const { handleSearchNavigation } = require('../interactions/searchNavigation');
 const { requirePlayer, requireSameVoice } = require('../utils/interactionHelpers');
 const { playPrevious, shuffleQueue, clearQueue, jumpToTrack, createPaginatedQueueResponse } = require('../utils/PlayerActions');
+const logger = require('../utils/logger');
 
 async function handlePlayerInteraction(interaction, action) {
     const { client } = interaction;
@@ -193,10 +194,10 @@ async function handleButtonInteraction(interaction) {
         }
     } catch (error) {
         if (error.code === 10062) {
-            console.warn('Interaction expired for button interaction');
+            logger.warn('Interaction expired for button interaction');
             return;
         }
-        console.error('Error handling button interaction:', error);
+        logger.error('Error handling button interaction:', error);
         const lang = client.defaultLanguage;
         const reply = { content: client.languageManager.get(lang, 'BUTTON_ERROR'), ephemeral: true };
         if (interaction.deferred || interaction.replied) {
@@ -227,10 +228,10 @@ async function handleSelectMenuInteraction(interaction) {
         }
     } catch (error) {
         if (error.code === 10062) {
-            console.warn('Interaction expired for select menu interaction');
+            logger.warn('Interaction expired for select menu interaction');
             return;
         }
-        console.error('Error handling select menu interaction:', error);
+        logger.error('Error handling select menu interaction:', error);
         const lang = client.defaultLanguage;
         const reply = { content: client.languageManager.get(lang, 'BUTTON_ERROR'), ephemeral: true };
         if (interaction.deferred || interaction.replied) {
@@ -255,10 +256,10 @@ module.exports = {
                 await command.execute(interaction);
             } catch (error) {
                 if (error.code === 10062) {
-                    console.warn(`Interaction expired for /${interaction.commandName}`);
+                    logger.warn(`Interaction expired for /${interaction.commandName}`);
                     return;
                 }
-                console.error(`Error executing command ${interaction.commandName}:`, error);
+                logger.error(`Error executing command ${interaction.commandName}:`, error);
                 const lang = interaction.client.defaultLanguage;
                 const reply = { content: interaction.client.languageManager.get(lang, 'ERROR_COMMAND_EXECUTION'), ephemeral: true };
                 if (interaction.deferred || interaction.replied) {

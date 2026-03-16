@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { isLavalinkAvailable, handleLavalinkError } = require('../utils/interactionHelpers');
 const { getValidVolume } = require('../utils/volumeValidator');
+const logger = require('../utils/logger');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -36,6 +37,7 @@ module.exports = {
             }
 
             await interaction.deferReply();
+            logger.cmd(`/play "${query}" by ${member.user.tag} in #${interaction.channel.name} (Guild: ${guild.name})`);
             let player = client.lavalink.getPlayer(guild.id);
 
             if (!player) {
@@ -102,10 +104,10 @@ module.exports = {
             
         } catch (error) {
             if (error.code === 10062) {
-                console.warn('Interaction expired for /play command');
+                logger.warn('Interaction expired for /play command');
                 return;
             }
-            console.error('Error in play command:', error);
+            logger.error('Error in play command:', error);
             await handleLavalinkError(interaction, error, client);
         }
     },

@@ -1,4 +1,5 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType, PermissionsBitField } = require('discord.js');
+const logger = require('../utils/logger');
 
 function findWelcomeChannel(guild) {
     if (guild.systemChannel && guild.systemChannel.permissionsFor(guild.members.me)?.has(PermissionsBitField.Flags.SendMessages)) {
@@ -40,7 +41,7 @@ module.exports = {
         try {
             await channel.send({ embeds: [embed], components: [row] });
         } catch (error) {
-            console.warn(`Could not send welcome message in ${guild.name}: ${error.message}`);
+            logger.warn(`Could not send welcome message in ${guild.name}: ${error.message}`);
         }
     },
 };

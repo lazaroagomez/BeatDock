@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
+const logger = require('../utils/logger');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -11,6 +12,8 @@ module.exports = {
 
         const player = await requirePlayer(interaction, { requireQueue: true });
         if (!player) return;
+
+        logger.cmd(`/queue by ${interaction.user.tag} in #${interaction.channel.name} (Guild: ${interaction.guild.name})`);
 
         const queueResponse = createPaginatedQueueResponse(client, player, 1);
         return interaction.reply(queueResponse);

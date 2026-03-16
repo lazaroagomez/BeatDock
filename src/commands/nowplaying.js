@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
+const logger = require('../utils/logger');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -10,6 +11,8 @@ module.exports = {
 
         const player = await requirePlayer(interaction);
         if (!player) return;
+
+        logger.cmd(`/nowplaying by ${interaction.user.tag} in #${interaction.channel.name} (Guild: ${interaction.guild.name})`);
 
         if (!player.playing || !player.queue.current) {
             return interaction.reply({ 

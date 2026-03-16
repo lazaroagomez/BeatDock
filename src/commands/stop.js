@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { requirePlayer } = require('../utils/interactionHelpers');
+const logger = require('../utils/logger');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -10,6 +11,8 @@ module.exports = {
 
         const player = await requirePlayer(interaction);
         if (!player) return;
+
+        logger.cmd(`/stop by ${interaction.user.tag} in #${interaction.channel.name} (Guild: ${interaction.guild.name})`);
 
         client.autoplayEnabled.delete(interaction.guild.id);
         await player.destroy();

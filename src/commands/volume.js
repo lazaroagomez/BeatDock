@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { requirePlayer } = require('../utils/interactionHelpers');
+const logger = require('../utils/logger');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -18,6 +19,8 @@ module.exports = {
         if (!player) return;
 
         const volume = options.getInteger('level');
+
+        logger.cmd(`/volume ${volume} by ${interaction.user.tag} in #${interaction.channel.name} (Guild: ${interaction.guild.name})`);
 
         // Set the volume
         player.setVolume(volume);

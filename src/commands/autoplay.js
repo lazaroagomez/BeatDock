@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
+const logger = require('../utils/logger');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -10,6 +11,8 @@ module.exports = {
 
         const player = await requirePlayer(interaction);
         if (!player) return;
+
+        logger.cmd(`/autoplay by ${interaction.user.tag} in #${interaction.channel.name} (Guild: ${interaction.guild.name})`);
 
         const guildId = interaction.guild.id;
         const newState = !client.autoplayEnabled.get(guildId);

@@ -1,3 +1,5 @@
+const logger = require('./logger');
+
 // Check if Lavalink is available
 const isLavalinkAvailable = (client) => {
     return client.lavalinkConnectionManager.isAvailable();
@@ -18,10 +20,10 @@ const handleLavalinkError = async (interaction, error, client) => {
         }
     } catch (replyError) {
         if (replyError.code === 10062) {
-            console.warn('Interaction expired while handling Lavalink error');
+            logger.warn('Interaction expired while handling Lavalink error');
             return;
         }
-        console.error('Failed to send error response:', replyError);
+        logger.error('Failed to send error response:', replyError);
     }
 };
 

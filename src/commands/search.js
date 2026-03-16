@@ -3,6 +3,7 @@ const searchSessions = require('../utils/searchSessions');
 const { isLavalinkAvailable, handleLavalinkError } = require('../utils/interactionHelpers');
 const { createSearchEmbed, createSearchComponents } = require('../utils/embeds');
 const { getValidVolume } = require('../utils/volumeValidator');
+const logger = require('../utils/logger');
 
 
 
@@ -76,6 +77,7 @@ module.exports = {
             }
 
             await interaction.deferReply({ ephemeral: true });
+            logger.cmd(`/search "${query}" by ${member.user.tag} in #${interaction.channel.name} (Guild: ${guild.name})`);
             // Get or create player (without connecting - connection deferred to track selection)
             let player = client.lavalink.getPlayer(guild.id);
             let createdNewPlayer = false;
@@ -142,10 +144,10 @@ module.exports = {
 
         } catch (error) {
             if (error.code === 10062) {
-                console.warn('Interaction expired for /search command');
+                logger.warn('Interaction expired for /search command');
                 return;
             }
-            console.error('Error in search command:', error);
+            logger.error('Error in search command:', error);
             await handleLavalinkError(interaction, error, client);
         }
     },

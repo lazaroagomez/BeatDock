@@ -9,6 +9,7 @@ const searchSessions = require('./utils/searchSessions');
 const { findAutoplayTracks } = require('./utils/autoplay');
 const loadCommands = require('./handlers/commandHandler');
 const registerEvents = require('./handlers/eventHandler');
+const logger = require('./utils/logger');
 
 const AUTOPLAY_TIMEOUT_MS = 5000;
 const TRACK_END_CLEANUP_DELAY_MS = 500;
@@ -22,7 +23,7 @@ function isLocalLavalinkConfigured() {
 
 async function getInitialNodes() {
     if (isLocalLavalinkConfigured()) {
-        console.log('Using local Lavalink server.');
+        logger.info('Using local Lavalink server');
         return {
             mode: 'local',
             nodes: [{
@@ -37,7 +38,7 @@ async function getInitialNodes() {
         };
     }
 
-    console.log('No local Lavalink configured. Fetching public Lavalink servers...');
+    logger.info('No local Lavalink configured, fetching public Lavalink servers...');
     const provider = new PublicNodeProvider();
     const success = await provider.fetchNodes();
 
@@ -47,8 +48,8 @@ async function getInitialNodes() {
 
     provider.startAutoRefresh();
     const firstNode = provider.getNextNode();
-    console.warn('WARNING: Using public Lavalink servers. Search queries and track requests are sent to third-party servers.');
-    console.log(`Selected public node: ${firstNode.secure ? 'wss' : 'ws'}://${firstNode.host}:${firstNode.port}`);
+    logger.warn('Using public Lavalink servers — search queries and track requests are sent to third-party servers');
+    logger.info(`Selected public node: ${firstNode.secure ? 'wss' : 'ws'}://${firstNode.host}:${firstNode.port}`);
 
     return {
         mode: 'public',
@@ -128,7 +129,7 @@ async function setupLavalink(client) {
                         }
                         await player.queue.add(tracks);
                     } catch (err) {
-                        console.error('Autoplay failed:', err);
+                        logger.error('Autoplay failed:', err);
                     }
                 },
             }
@@ -172,9 +173,12 @@ function registerLavalinkEvents(client) {
             startedAt: Date.now()
         });
         client.updatePresence();
+
+        logger.track(`Now playing: ${track.info?.title} — ${track.info?.author}`);
     });
 
     client.lavalink.on("trackEnd", (player, track, reason) => {
+        logger.debug(`Track ended: ${track.info?.title} (reason: ${reason?.reason || reason})`);
         if (reason === "replaced" || reason === "stopped") return;
 
         setTimeout(() => {
@@ -223,11 +227,19 @@ function registerLavalinkEvents(client) {
         }
         cleanupGuildPlayer(client, guildId);
     });
+
+    client.lavalink.on("trackStuck", (player, track, payload) => {
+        logger.warn(`Track stuck: ${track?.info?.title} (threshold: ${payload.thresholdMs}ms)`);
+    });
+
+    client.lavalink.on("trackError", (player, track, payload) => {
+        logger.error(`Track error: ${track?.info?.title} — ${payload.exception?.message || payload.error || 'Unknown error'}`);
+    });
 }
 
 function setupShutdown(client) {
     const shutdown = async (signal) => {
-        console.log(`Received ${signal}, shutting down gracefully...`);
+        logger.info(`Received ${signal}, shutting down gracefully...`);
 
         client.lavalinkConnectionManager.destroy();
 
@@ -266,10 +278,10 @@ async function bootstrap() {
 }
 
 process.on('unhandledRejection', (error) => {
-    console.error('Unhandled promise rejection:', error);
+    logger.error('Unhandled promise rejection:', error);
 });
 
 bootstrap().catch(err => {
-    console.error('Failed to start bot:', err);
+    logger.error('Failed to start bot:', err);
     process.exit(1);
 });

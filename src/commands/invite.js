@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const { generateInviteUrl } = require('../utils/inviteUrl');
+const logger = require('../utils/logger');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -8,6 +9,8 @@ module.exports = {
     async execute(interaction) {
         const { client } = interaction;
         const lang = client.defaultLanguage;
+
+        logger.cmd(`/invite by ${interaction.user.tag} in #${interaction.channel.name} (Guild: ${interaction.guild.name})`);
 
         await interaction.deferReply({ ephemeral: true });
 

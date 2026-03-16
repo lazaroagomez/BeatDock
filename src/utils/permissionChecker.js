@@ -7,6 +7,7 @@
  */
 
 const { PermissionsBitField } = require('discord.js');
+const logger = require('./logger');
 
 // Cache allowed roles at module level — env vars don't change at runtime
 const ALLOWED_ROLES = (process.env.ALLOWED_ROLES || '')
@@ -64,7 +65,7 @@ async function checkInteractionPermission(interaction) {
             });
         } catch (error) {
             if (error.code === 10062) {
-                console.warn('Interaction expired while checking permissions');
+                logger.warn('Interaction expired while checking permissions');
             }
         }
         return false;

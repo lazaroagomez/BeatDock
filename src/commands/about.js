@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const { version } = require('../../package.json');
 const os = require('os');
+const logger = require('../utils/logger');
 
 // Helper to format uptime from milliseconds to a readable string
 function formatUptime(ms) {
@@ -26,6 +27,8 @@ module.exports = {
     async execute(interaction) {
         const { client } = interaction;
         const lang = client.defaultLanguage;
+
+        logger.cmd(`/about by ${interaction.user.tag} in #${interaction.channel.name} (Guild: ${interaction.guild.name})`);
 
                 await interaction.deferReply({ ephemeral: true });
 

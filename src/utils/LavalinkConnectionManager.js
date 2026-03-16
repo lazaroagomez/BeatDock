@@ -1,3 +1,5 @@
+const logger = require('./logger');
+
 const CONNECTION_TIMEOUT_MS = 15000;
 const JITTER_MS = 1000;
 const RECONNECT_DELAY_ON_ERROR_MS = 5000;
@@ -57,22 +59,22 @@ class LavalinkConnectionManager {
             const isCurrentlyHealthy = mainNode && mainNode.connected;
             
             if (!isCurrentlyHealthy) {
-                console.error('Health check: Node not connected, attempting reconnection...');
+                logger.warn('Health check: Node not connected, attempting reconnection...');
                 lastHealthStatus = false;
                 this.attemptReconnection();
             } else {
                 // Update last ping time if node is connected
                 this.state.lastPing = Date.now();
-                
+
                 // Only log if status changed from unhealthy to healthy
                 if (!lastHealthStatus) {
-                    console.info('Health check: Node is healthy');
+                    logger.debug('Health check: Node is healthy');
                     lastHealthStatus = true;
                 }
-                
+
                 // Reset reconnection attempts if we're connected and healthy
                 if (this.state.reconnectAttempts > 0) {
-                    console.log('✅ Connection restored, resetting reconnection attempts');
+                    logger.info('Connection restored, resetting reconnection attempts');
                     this.state.reconnectAttempts = 0;
                 }
             }
@@ -90,7 +92,7 @@ class LavalinkConnectionManager {
             const timeSinceLastPing = Date.now() - this.state.lastPing;
             
             if (!mainNode || !mainNode.connected || timeSinceLastPing > PING_TIMEOUT_MS) {
-                console.log('🔄 Periodic reset: No recent connection activity, attempting reconnection...');
+                logger.debug('Periodic reset: No recent connection activity, attempting reconnection...');
                 this.state.reconnectAttempts = 0; // Reset attempts
                 this.attemptReconnection();
             }
@@ -104,7 +106,7 @@ class LavalinkConnectionManager {
             let nodeConfig = provider.getNextNode();
 
             if (!nodeConfig) {
-                console.log('No cached public nodes, refreshing list...');
+                logger.debug('No cached public nodes, refreshing list...');
                 await provider.fetchNodes();
                 nodeConfig = provider.getNextNode();
             }
@@ -113,7 +115,7 @@ class LavalinkConnectionManager {
                 throw new Error('No public Lavalink nodes available');
             }
 
-            console.log(`Rotating to public node: ${nodeConfig.secure ? 'wss' : 'ws'}://${nodeConfig.host}:${nodeConfig.port}`);
+            logger.info(`Rotating to public node: ${nodeConfig.secure ? 'wss' : 'ws'}://${nodeConfig.host}:${nodeConfig.port}`);
             return nodeConfig;
         }
 
@@ -130,7 +132,7 @@ class LavalinkConnectionManager {
     // Reconnection logic
     async attemptReconnection() {
         if (this.state.isReconnecting) {
-            console.log('Reconnection already in progress, skipping...');
+            logger.debug('Reconnection already in progress, skipping');
             return;
         }
 
@@ -140,29 +142,29 @@ class LavalinkConnectionManager {
 
         // Check if Lavalink manager is ready
         if (!this.isManagerReady()) {
-            console.log('Lavalink manager not ready yet, skipping reconnection...');
+            logger.debug('Lavalink manager not ready yet, skipping reconnection');
             return;
         }
-        
+
         this.state.isReconnecting = true;
-        console.log('Starting Lavalink reconnection process...');
+        logger.debug('Starting Lavalink reconnection process...');
         
         try {
             const mainNode = this.client.lavalink.nodeManager.nodes.get('main-node');
             
             if (mainNode && mainNode.connected) {
-                console.log('Node is already connected, skipping reconnection');
+                logger.debug('Node is already connected, skipping reconnection');
                 this.state.isReconnecting = false;
                 return;
             }
-            
+
             // Destroy existing node if it exists but is disconnected
             if (mainNode) {
-                console.log('Destroying existing disconnected node...');
+                logger.debug('Destroying existing disconnected node...');
                 try {
                     await mainNode.destroy();
                 } catch (error) {
-                    console.log('Error destroying existing node:', error.message);
+                    logger.debug('Error destroying existing node:', error.message);
                 }
             }
 
@@ -170,8 +172,8 @@ class LavalinkConnectionManager {
             const nodeConfig = await this.getNodeConfig();
 
             // Create new node
-            console.log(`Attempting to reconnect Lavalink (attempt ${this.state.reconnectAttempts + 1}/${this.state.maxReconnectAttempts})...`);
-            console.log(`Attempting to connect to Lavalink server at ${nodeConfig.host}:${nodeConfig.port}...`);
+            logger.info(`Reconnecting Lavalink (attempt ${this.state.reconnectAttempts + 1}/${this.state.maxReconnectAttempts})...`);
+            logger.debug(`Connecting to Lavalink server at ${nodeConfig.host}:${nodeConfig.port}...`);
 
             let newNode;
             try {
@@ -234,18 +236,18 @@ class LavalinkConnectionManager {
                 }
             });
             
-            console.log('✅ Lavalink reconnection successful!');
+            logger.info('Lavalink reconnection successful');
             this.state.reconnectAttempts = 0;
             this.state.isReconnecting = false;
-            
+
         } catch (error) {
-            console.error('❌ Reconnection attempt failed:', error.message);
+            logger.error('Reconnection attempt failed:', error.message);
             this.state.reconnectAttempts++;
-            
+
             if (this.state.reconnectAttempts >= this.state.maxReconnectAttempts) {
-                console.error('🚨 Max reconnection attempts reached. Will retry after 5 minutes...');
+                logger.error('Max reconnection attempts reached, will retry after 5 minutes...');
                 this.state.isReconnecting = false;
-                
+
                 // Reset attempts after configured period and try again
                 const resetMinutes = parseInt(process.env.LAVALINK_RESET_ATTEMPTS_AFTER_MINUTES || "5", 10);
                 const resetDelay = resetMinutes * 60 * 1000;
@@ -253,18 +255,18 @@ class LavalinkConnectionManager {
                 this.state.cooldownUntil = Date.now() + resetDelay;
                 if (this.state.reconnectTimer) clearTimeout(this.state.reconnectTimer);
                 this.state.reconnectTimer = setTimeout(() => {
-                    console.log('🔄 Resetting reconnection attempts and trying again...');
+                    logger.info('Resetting reconnection attempts and trying again...');
                     this.state.reconnectAttempts = 0;
                     this.state.isReconnecting = false;
                     this.attemptReconnection();
                 }, resetDelay);
-                
+
                 return;
             }
-            
+
             // Schedule next attempt with exponential backoff
             const delay = this.getReconnectDelay(this.state.reconnectAttempts);
-            console.log(`⏰ Scheduling next reconnection attempt in ${Math.round(delay / 1000)} seconds...`);
+            logger.debug(`Scheduling next reconnection attempt in ${Math.round(delay / 1000)} seconds...`);
 
             if (this.state.reconnectTimer) clearTimeout(this.state.reconnectTimer);
             this.state.reconnectTimer = setTimeout(() => {
@@ -276,25 +278,25 @@ class LavalinkConnectionManager {
 
     // Handle connection events
     onConnect(node) {
-        console.log('Lavalink node connected successfully.');
+        logger.info('Lavalink node connected successfully');
         this.state.lastPing = Date.now();
         this.state.reconnectAttempts = 0;
         this.state.isReconnecting = false;
         this.state.isInitialized = true;
-        this.state.hasHadSuccessfulConnection = true; // Mark successful connection
-        
+        this.state.hasHadSuccessfulConnection = true;
+
         // Clear any pending reconnection timers
         if (this.state.reconnectTimer) {
             clearTimeout(this.state.reconnectTimer);
             this.state.reconnectTimer = null;
         }
-        
+
         // Start health check after successful connection (if not already started)
         if (!this.state.healthCheckInterval) {
-            console.log('✅ Starting health checks after successful connection...');
+            logger.debug('Starting health checks after successful connection...');
             this.startHealthCheck();
         }
-        
+
         // Start periodic reset as safety net (if not already started)
         if (!this.state.periodicResetInterval) {
             this.startPeriodicReset();
@@ -309,11 +311,11 @@ class LavalinkConnectionManager {
         
         // Only log errors if we've had a successful connection before
         if (this.state.hasHadSuccessfulConnection) {
-            console.error('Lavalink node encountered an error:', error);
-            
+            logger.error('Lavalink node encountered an error:', error);
+
             // Only trigger reconnection for connection-related errors
             if (error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND' || error.message.includes('Unable to connect')) {
-                console.log('Connection error detected, will attempt reconnection...');
+                logger.debug('Connection error detected, will attempt reconnection...');
                 setTimeout(() => this.attemptReconnection(), RECONNECT_DELAY_ON_ERROR_MS);
             }
         }
@@ -327,45 +329,45 @@ class LavalinkConnectionManager {
         
         // Only log disconnects if we've had a successful connection before
         if (this.state.hasHadSuccessfulConnection) {
-            console.log(`Lavalink node disconnected. Reason: ${reason.reason || 'Unknown'}`);
-            
+            logger.warn(`Lavalink node disconnected (reason: ${reason.reason || 'Unknown'})`);
+
             // Clear health check interval
             if (this.state.healthCheckInterval) {
                 clearInterval(this.state.healthCheckInterval);
                 this.state.healthCheckInterval = null;
             }
-            
+
             // Clear periodic reset interval
             if (this.state.periodicResetInterval) {
                 clearInterval(this.state.periodicResetInterval);
                 this.state.periodicResetInterval = null;
             }
-            
+
             // Attempt reconnection for unexpected disconnections
             if (reason.reason !== 'destroy') {
-                console.log('Unexpected disconnection, attempting reconnection...');
-                
+                logger.info('Unexpected disconnection, attempting reconnection...');
+
                 // Different handling based on disconnect reason
                 let delay = 2000; // Default 2 seconds
-                
+
                 if (reason.reason === 'Socket got terminated due to no ping connection') {
-                    console.log('No ping connection detected - this might be a network issue');
+                    logger.debug('No ping connection detected — possible network issue');
                     delay = 5000; // Wait 5 seconds for network issues
                 } else if (reason.reason.includes('timeout')) {
-                    console.log('Connection timeout detected');
+                    logger.debug('Connection timeout detected');
                     delay = 3000; // Wait 3 seconds for timeouts
                 }
-                
+
                 setTimeout(() => this.attemptReconnection(), delay);
             }
         } else {
-            console.log('No successful connection yet, not triggering reconnection...');
+            logger.debug('No successful connection yet, not triggering reconnection');
         }
     }
 
     // Initialize the connection manager after a delay to let Lavalink start up
     initialize() {
-        console.log('🔄 Lavalink connection manager initializing...');
+        logger.info('Lavalink connection manager initializing...');
         this.state.isInitialized = true;
         
         // Start monitoring immediately
@@ -380,7 +382,7 @@ class LavalinkConnectionManager {
         // Then check every 5 seconds until we get a connection
         const monitoringInterval = setInterval(() => {
             if (this.isAvailable()) {
-                console.log('✅ Lavalink connection detected, starting health checks...');
+                logger.info('Lavalink connection detected, starting health checks...');
                 clearInterval(monitoringInterval);
                 this.startHealthCheck();
                 this.startPeriodicReset();
@@ -391,7 +393,7 @@ class LavalinkConnectionManager {
         setTimeout(() => {
             clearInterval(monitoringInterval);
             if (!this.isAvailable()) {
-                console.log('⚠️ No Lavalink connection detected after 2 minutes, starting health checks anyway...');
+                logger.warn('No Lavalink connection detected after 2 minutes, starting health checks anyway...');
                 this.startHealthCheck();
                 this.startPeriodicReset();
             }
@@ -400,10 +402,7 @@ class LavalinkConnectionManager {
         // Add a longer timeout to warn if Lavalink never starts
         setTimeout(() => {
             if (!this.isAvailable()) {
-                console.error('🚨 CRITICAL: Lavalink has not connected after 5 minutes!');
-                console.error('   - Check if Lavalink container is running: docker ps');
-                console.error('   - Check Lavalink logs: docker logs <lavalink-container>');
-                console.error('   - Verify network connectivity between containers');
+                logger.error('CRITICAL: Lavalink has not connected after 5 minutes!\n  - Check if Lavalink container is running: docker ps\n  - Check Lavalink logs: docker logs <lavalink-container>\n  - Verify network connectivity between containers');
             }
         }, CRITICAL_TIMEOUT_MS);
     }
@@ -411,7 +410,7 @@ class LavalinkConnectionManager {
     // Check if Lavalink is available and start health checks if it is
     checkAndStartHealthChecks() {
         if (this.isAvailable()) {
-            console.log('✅ Lavalink already connected, starting health checks...');
+            logger.debug('Lavalink already connected, starting health checks...');
             this.startHealthCheck();
             this.startPeriodicReset();
             return true;

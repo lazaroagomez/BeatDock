@@ -2,6 +2,7 @@ const searchSessions = require('../utils/searchSessions');
 const { isLavalinkAvailable } = require('../utils/interactionHelpers');
 const { createSearchEmbed, createSearchComponents } = require('../utils/embeds');
 const { getValidVolume } = require('../utils/volumeValidator');
+const logger = require('../utils/logger');
 
 async function handleSearchNavigation(interaction) {
     const { client, customId, user, guild } = interaction;
@@ -158,7 +159,7 @@ async function handleSearchNavigation(interaction) {
         }
 
     } catch (error) {
-        console.error('Error handling search navigation:', error);
+        logger.error('Error handling search navigation:', error);
         if (!interaction.replied && !interaction.deferred) {
             await interaction.deferUpdate().catch(() => {});
         }

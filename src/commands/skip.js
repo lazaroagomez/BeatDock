@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { requirePlayer } = require('../utils/interactionHelpers');
+const logger = require('../utils/logger');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -11,6 +12,8 @@ module.exports = {
 
         const player = await requirePlayer(interaction);
         if (!player) return;
+
+        logger.cmd(`/skip by ${interaction.user.tag} in #${interaction.channel.name} (Guild: ${interaction.guild.name})`);
 
         const autoplayOn = client.autoplayEnabled.get(interaction.guild.id) || false;
         if (player.queue.tracks.length === 0 && !autoplayOn) {
