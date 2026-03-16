@@ -111,7 +111,7 @@ async function setupLavalink(client) {
         },
         autoSkip: true,
         playerOptions: {
-            clientBasedPositionUpdateInterval: 150,
+            clientBasedPositionUpdateInterval: 1000,
             defaultSearchPlatform: "ytsearch",
             onEmptyQueue: {
                 destroyAfterMs: parseInt(process.env.QUEUE_EMPTY_DESTROY_MS || "30000", 10),
