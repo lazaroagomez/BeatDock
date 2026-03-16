@@ -95,5 +95,16 @@
     "INVITE_DESCRIPTION": "Click the button below to add BeatDock to your server.",
     "INVITE_BUTTON": "Add to Server",
     "WELCOME_TITLE": "Thanks for adding BeatDock!",
-    "WELCOME_DESCRIPTION": "BeatDock is ready to play music! Use `/play` to get started, or `/about` to learn more."
+    "WELCOME_DESCRIPTION": "BeatDock is ready to play music! Use `/play` to get started, or `/about` to learn more.",
+    "LYRICS_TITLE": "🎤 Lyrics",
+    "LYRICS_NOT_FOUND": "No lyrics found for this track.",
+    "LYRICS_INSTRUMENTAL": "🎵 This track is instrumental.",
+    "LYRICS_NO_TRACK": "There is nothing currently playing.",
+    "FILTER_TITLE": "🎛️ Audio Filters",
+    "FILTER_APPLIED": "✅ Applied: **{0}**",
+    "FILTER_REMOVED": "❌ Removed: **{0}**",
+    "FILTER_RESET": "🔄 All filters have been reset.",
+    "FILTER_ACTIVE": "Active",
+    "FILTER_NONE_ACTIVE": "No filters active.",
+    "FILTER_SELECT": "Select a filter to apply or remove."
 }

@@ -95,6 +95,17 @@
     "INVITE_DESCRIPTION": "BeatDock'u sunucunuza eklemek için aşağıdaki butona tıklayın.",
     "INVITE_BUTTON": "Sunucuya ekle",
     "WELCOME_TITLE": "BeatDock'u eklediğiniz için teşekkürler!",
-    "WELCOME_DESCRIPTION": "BeatDock müzik çalmaya hazır! Başlamak için `/play` kullanın veya daha fazla bilgi için `/about` yazın."
+    "WELCOME_DESCRIPTION": "BeatDock müzik çalmaya hazır! Başlamak için `/play` kullanın veya daha fazla bilgi için `/about` yazın.",
+    "LYRICS_TITLE": "🎤 Şarkı Sözleri",
+    "LYRICS_NOT_FOUND": "Bu şarkı için söz bulunamadı.",
+    "LYRICS_INSTRUMENTAL": "🎵 Bu parça enstrümantal.",
+    "LYRICS_NO_TRACK": "Şu anda hiçbir şey çalmıyor.",
+    "FILTER_TITLE": "🎛️ Ses Filtreleri",
+    "FILTER_APPLIED": "✅ Uygulandı: **{0}**",
+    "FILTER_REMOVED": "❌ Kaldırıldı: **{0}**",
+    "FILTER_RESET": "🔄 Tüm filtreler sıfırlandı.",
+    "FILTER_ACTIVE": "Aktif",
+    "FILTER_NONE_ACTIVE": "Aktif filtre yok.",
+    "FILTER_SELECT": "Uygulamak veya kaldırmak için bir filtre seçin."
 }
 

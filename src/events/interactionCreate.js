@@ -1,5 +1,6 @@
 const { checkInteractionPermission } = require('../utils/permissionChecker');
 const { handleSearchNavigation } = require('../interactions/searchNavigation');
+const { handleFilterNavigation } = require('../interactions/filterNavigation');
 const { requirePlayer, requireSameVoice } = require('../utils/interactionHelpers');
 const { playPrevious, shuffleQueue, clearQueue, jumpToTrack, createPaginatedQueueResponse } = require('../utils/PlayerActions');
 const logger = require('../utils/logger');
@@ -191,6 +192,9 @@ async function handleButtonInteraction(interaction) {
             case 'queue':
                 await handleQueueInteraction(interaction, action, args);
                 break;
+            case 'filter':
+                await handleFilterNavigation(interaction);
+                break;
         }
     } catch (error) {
         if (error.code === 10062) {
@@ -225,6 +229,8 @@ async function handleSelectMenuInteraction(interaction) {
             const selectedValue = interaction.values[0];
             const [trackIndexStr, pageStr] = selectedValue.split(':');
             await handleQueueInteraction(interaction, 'jump', [trackIndexStr, pageStr]);
+        } else if (component === 'filter' && action === 'select') {
+            await handleFilterNavigation(interaction);
         }
     } catch (error) {
         if (error.code === 10062) {

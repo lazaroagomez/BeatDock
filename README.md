@@ -205,6 +205,8 @@ To use public servers, simply comment out the Lavalink variables in your `.env`:
 | `/loop` | Toggle loop mode |
 | `/clear` | Clear queue |
 | `/volume <1-100>` | Set volume |
+| `/lyrics` | Show lyrics for the current song |
+| `/filter` | Apply audio effects and EQ presets |
 | `/nowplaying` | Current track info |
 | `/invite` | Get bot invite link |
 | `/about` | Bot info |
