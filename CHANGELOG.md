@@ -4,6 +4,13 @@ All notable changes to BeatDock are documented in this file.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/). This project uses [Semantic Versioning](https://semver.org/).
 
+## [2.7.3] - 2026-03-16
+
+### Changed
+- Slash commands are now auto-deployed on startup, no more manual `npm run deploy` step
+- Removed `CLIENT_ID` environment variable requirement, only `TOKEN` is needed now
+- Removed `deploy-commands.js` script and related documentation
+
 ## [2.7.1] - 2025-06-15
 
 ### Fixed

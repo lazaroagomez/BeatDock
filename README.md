@@ -43,7 +43,7 @@ A Discord music bot powered by Lavalink. Simple to deploy, easy to use.
 
 ### Prerequisites
 
-- A Discord bot token and client ID from the [Developer Portal](https://discord.com/developers/applications)
+- A Discord bot token from the [Developer Portal](https://discord.com/developers/applications)
 - [Docker](https://docs.docker.com/get-docker/) installed
 
 When creating your bot, enable **all 3 Privileged Gateway Intents** (Presence, Server Members, Message Content).
@@ -62,7 +62,6 @@ mkdir beatdock && cd beatdock
 
 ```env
 TOKEN=your_discord_bot_token
-CLIENT_ID=your_discord_client_id
 ```
 
 **3. Create `docker-compose.yml`:**
@@ -154,7 +153,6 @@ logging:
 **5. Deploy:**
 
 ```bash
-docker compose run --rm bot npm run deploy
 docker compose up -d
 ```
 
@@ -169,11 +167,9 @@ Create `.env` with your credentials (see [`.env.example`](.env.example) for all 
 
 ```env
 TOKEN=your_discord_bot_token
-CLIENT_ID=your_discord_client_id
 ```
 
 ```bash
-docker compose run --rm bot npm run deploy
 docker compose up -d
 ```
 
@@ -213,12 +209,11 @@ To use public servers, simply comment out the Lavalink variables in your `.env`:
 
 ## Configuration
 
-All configuration is done through the `.env` file. Only `TOKEN` and `CLIENT_ID` are required.
+All configuration is done through the `.env` file. Only `TOKEN` is required.
 
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `TOKEN` | - | Discord bot token (**required**) |
-| `CLIENT_ID` | - | Discord application client ID (**required**) |
 | `SPOTIFY_ENABLED` | `false` | Enable Spotify search support |
 | `SPOTIFY_CLIENT_ID` | - | Spotify app client ID |
 | `SPOTIFY_CLIENT_SECRET` | - | Spotify app client secret |
