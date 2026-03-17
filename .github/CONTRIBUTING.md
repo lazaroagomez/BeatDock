@@ -11,14 +11,13 @@ cd BeatDock
 npm install
 ```
 
-Copy `.env.example` to `.env` and fill in your Discord bot token and client ID. See the [README](../README.md#configuration) for all available options.
+Copy `.env.example` to `.env` and fill in your Discord bot token. See the [README](../README.md#configuration) for all available options.
 
 ## Available scripts
 
 | Command | Description |
 |---------|-------------|
 | `npm start` | Start the bot |
-| `npm run deploy` | Register slash commands with Discord |
 | `npm run docker:build` | Build the Docker image locally |
 | `npm run docker:up` | Start services with Docker Compose |
 | `npm run docker:down` | Stop services |

@@ -5,7 +5,6 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "deploy": "node src/deploy-commands.js",
     "docker:build": "docker build -t beatdock:latest .",
     "docker:up": "docker compose up -d",
     "docker:down": "docker compose down",
