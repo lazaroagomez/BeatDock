@@ -196,22 +196,11 @@ function createPaginatedQueueResponse(client, player, page = 1) {
     };
 }
 
-function formattedQueue(player, limit = 10) {
-    if (!player.queue.tracks.length) return '';
-    const list = player.queue.tracks
-        .slice(0, limit)
-        .map((track, i) => `${i + 1}. ${track.info?.title || 'Unknown'}`)
-        .join('\n');
-    const remaining = player.queue.tracks.length - limit;
-    return remaining > 0 ? `${list}\n…and ${remaining} more` : list;
-}
-
 module.exports = {
     playPrevious,
     shuffleQueue,
     clearQueue,
     jumpToTrack,
-    formattedQueue,
     paginatedQueue,
     createPaginatedQueueResponse,
-}; 
+};
