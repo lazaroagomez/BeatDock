@@ -221,6 +221,7 @@ All configuration is done through the `.env` file. Only `TOKEN` is required.
 | `DEFAULT_VOLUME` | `80` | Default playback volume (0-100) |
 | `AUTOPLAY_DEFAULT` | `false` | Enable autoplay by default when music starts |
 | `ALLOWED_ROLES` | - | Comma-separated role IDs to restrict access |
+| `DEFAULT_SEARCH_PLATFORM` | `ytsearch` | Default search platform for user queries | 
 | `LAVALINK_PASSWORD` | `youshallnotpass` | Lavalink server password |
 | `QUEUE_EMPTY_DESTROY_MS` | `30000` | Disconnect after queue empties (ms) |
 | `EMPTY_CHANNEL_DESTROY_MS` | `60000` | Disconnect from empty channel (ms) |
