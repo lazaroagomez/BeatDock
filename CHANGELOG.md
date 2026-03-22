@@ -4,6 +4,15 @@ All notable changes to BeatDock are documented in this file.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/). This project uses [Semantic Versioning](https://semver.org/).
 
+## [2.7.4] - 2026-03-22
+
+### Added
+- Default search platform configuration via `DEFAULT_SEARCH_PLATFORM` environment variable
+- Search platform documentation added to website
+
+### Changed
+- Default search platform changed from `ytsearch` (YouTube) to `ytmsearch` (YouTube Music)
+
 ## [2.7.3] - 2026-03-16
 
 ### Changed
@@ -57,6 +66,8 @@ Format based on [Keep a Changelog](https://keepachangelog.com/). This project us
 ### Changed
 - Rewrote README for clarity
 
+[2.7.4]: https://github.com/lazaroagomez/BeatDock/compare/v2.7.3...v2.7.4
+[2.7.3]: https://github.com/lazaroagomez/BeatDock/compare/v2.7.1...v2.7.3
 [2.7.1]: https://github.com/lazaroagomez/BeatDock/compare/v2.7.0...v2.7.1
 [2.7.0]: https://github.com/lazaroagomez/BeatDock/compare/v2.6.0...v2.7.0
 [2.6.0]: https://github.com/lazaroagomez/BeatDock/compare/v2.4.2...v2.6.0
