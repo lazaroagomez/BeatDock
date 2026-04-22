@@ -70,6 +70,7 @@
     "SEARCH_TRACK_ADDED": "Añadido **{0}** a la cola.",
     "SEARCH_PLAYER_STOPPED": "El reproductor de música se ha detenido. Únete a un canal de voz y comienza a reproducir música para usar las funciones de búsqueda.",
     "LAVALINK_UNAVAILABLE": "❌ El servicio de música no está disponible en este momento. Por favor, inténtalo de nuevo en unos momentos.",
+    "LAVALINK_TIMEOUT": "⏱ La búsqueda tardó demasiado. El nodo Lavalink puede estar lento o saturado — inténtalo de nuevo.",
     "LAVALINK_RECONNECTING": "⚠️ Se perdió la conexión con el servidor de música. Reconectando, por favor espera...",
     "LAVALINK_PUBLIC_NODE_SWITCH": "🔄 Cambiando a un servidor de música diferente...",
     "GENERIC_ERROR": "❌ Ocurrió un error al intentar reproducir música. Por favor, inténtalo de nuevo.",

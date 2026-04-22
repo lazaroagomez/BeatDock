@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const { isLavalinkAvailable, handleLavalinkError } = require('../utils/interactionHelpers');
 const { getValidVolume } = require('../utils/volumeValidator');
 const logger = require('../utils/logger');
@@ -25,14 +25,14 @@ module.exports = {
 
         try {
             if (!voiceChannel) {
-                return await interaction.reply({ content: client.languageManager.get(lang, 'NOT_IN_VOICE'), ephemeral: true });
+                return await interaction.reply({ content: client.languageManager.get(lang, 'NOT_IN_VOICE'), flags: MessageFlags.Ephemeral });
             }
 
             // Check if Lavalink is available
             if (!isLavalinkAvailable(client)) {
                 return await interaction.reply({
                     content: client.languageManager.get(lang, 'LAVALINK_UNAVAILABLE'),
-                    ephemeral: true
+                    flags: MessageFlags.Ephemeral
                 });
             }
 
@@ -56,7 +56,6 @@ module.exports = {
             if (player.voiceChannelId && player.voiceChannelId !== voiceChannel.id) {
                 return interaction.editReply({
                     content: client.languageManager.get(lang, 'ERROR_SAME_VOICE_CHANNEL'),
-                    ephemeral: true,
                 });
             }
             

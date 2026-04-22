@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const { requirePlayer } = require('../utils/interactionHelpers');
 const { shuffleQueue } = require('../utils/PlayerActions');
 const logger = require('../utils/logger');
@@ -18,7 +18,7 @@ module.exports = {
         if (client.autoplayEnabled.get(interaction.guild.id)) {
             return interaction.reply({
                 content: client.languageManager.get(client.defaultLanguage, 'AUTOPLAY_BLOCKS_ACTION'),
-                ephemeral: true,
+                flags: MessageFlags.Ephemeral,
             });
         }
 
@@ -30,8 +30,8 @@ module.exports = {
         }, 100);
 
         return interaction.reply({ 
-            content: client.languageManager.get(client.defaultLanguage, 'QUEUE_SHUFFLED'), 
-            ephemeral: true 
+            content: client.languageManager.get(client.defaultLanguage, 'QUEUE_SHUFFLED'),
+            flags: MessageFlags.Ephemeral
         });
     },
 }; 

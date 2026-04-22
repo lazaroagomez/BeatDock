@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const logger = require('../utils/logger');
 
 module.exports = {
@@ -17,7 +17,7 @@ module.exports = {
         if (!player.playing || !player.queue.current) {
             return interaction.reply({ 
                 content: client.languageManager.get(client.defaultLanguage, 'NOTHING_PLAYING'), 
-                ephemeral: true 
+                flags: MessageFlags.Ephemeral
             });
         }
 
@@ -39,6 +39,6 @@ module.exports = {
             });
         }
 
-        return interaction.reply({ embeds: [embed], ephemeral: true });
+        return interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral});
     },
 }; 

@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const { requirePlayer } = require('../utils/interactionHelpers');
 const { playPrevious } = require('../utils/PlayerActions');
 const logger = require('../utils/logger');
@@ -20,13 +20,13 @@ module.exports = {
         if (!track) {
             return interaction.reply({ 
                 content: client.languageManager.get(client.defaultLanguage, 'NO_PREVIOUS_SONG'), 
-                ephemeral: true 
+                flags: MessageFlags.Ephemeral
             });
         }
 
         return interaction.reply({ 
             content: client.languageManager.get(client.defaultLanguage, 'PLAYING_PREVIOUS', track.info?.title || 'Unknown'), 
-            ephemeral: true 
+            flags: MessageFlags.Ephemeral
         });
     },
 }; 

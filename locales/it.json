@@ -70,6 +70,7 @@
   "SEARCH_TRACK_ADDED": "Aggiunto **{0}** alla coda.",
   "SEARCH_PLAYER_STOPPED": "Il lettore musicale è stato fermato. Entra in un canale vocale e avvia la musica per usare le funzioni di ricerca.",
   "LAVALINK_UNAVAILABLE": "❌ Il servizio musicale non è disponibile al momento. Riprova tra qualche istante.",
+  "LAVALINK_TIMEOUT": "⏱ La ricerca ha impiegato troppo tempo. Il nodo Lavalink potrebbe essere lento o occupato — riprova.",
   "LAVALINK_RECONNECTING": "⚠️ Connessione al server musicale persa. Riconnessione in corso, attendere...",
   "LAVALINK_PUBLIC_NODE_SWITCH": "🔄 Passaggio a un server musicale diverso...",
   "GENERIC_ERROR": "❌ Si è verificato un errore durante il tentativo di riprodurre musica. Riprova.",

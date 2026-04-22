@@ -70,6 +70,7 @@
     "SEARCH_TRACK_ADDED": "**{0}** kuyruğa eklendi.",
     "SEARCH_PLAYER_STOPPED": "Müzik çalar durduruldu. Arama özelliklerini kullanmak için bir ses kanalına katılın ve müzik çalmaya başlayın.",
     "LAVALINK_UNAVAILABLE": "❌ Müzik servisi şu anda kullanılamıyor. Lütfen birkaç dakika sonra tekrar deneyin.",
+    "LAVALINK_TIMEOUT": "⏱ Arama çok uzun sürdü. Lavalink sunucusu yavaş veya meşgul olabilir — lütfen tekrar deneyin.",
     "LAVALINK_RECONNECTING": "⚠️ Müzik sunucusu bağlantısı kesildi. Yeniden bağlanılıyor, lütfen bekleyin...",
     "LAVALINK_PUBLIC_NODE_SWITCH": "🔄 Farklı bir müzik sunucusuna geçiliyor...",
     "GENERIC_ERROR": "❌ Müzik çalmaya çalışırken bir hata oluştu. Lütfen tekrar deneyin.",

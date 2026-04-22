@@ -1,4 +1,4 @@
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, MessageFlags } = require('discord.js');
 const { EQList } = require('lavalink-client');
 const { requirePlayer, requireSameVoice } = require('../utils/interactionHelpers');
 const logger = require('../utils/logger');
@@ -250,12 +250,12 @@ async function handleFilterNavigation(interaction) {
             const response = buildFilterResponse(client, player, page);
 
             await interaction.update({ ...response });
-            await interaction.followUp({ content, ephemeral: true });
+            await interaction.followUp({ content, flags: MessageFlags.Ephemeral });
         } catch (error) {
             logger.error('Error applying filter:', error);
             await interaction.followUp({
                 content: client.languageManager.get(lang, 'GENERIC_ERROR'),
-                ephemeral: true,
+                flags: MessageFlags.Ephemeral,
             });
         }
     }

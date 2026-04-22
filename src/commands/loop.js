@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const logger = require('../utils/logger');
 
 module.exports = {
@@ -17,7 +17,7 @@ module.exports = {
         if (client.autoplayEnabled.get(interaction.guild.id)) {
             return interaction.reply({
                 content: client.languageManager.get(client.defaultLanguage, 'AUTOPLAY_BLOCKS_ACTION'),
-                ephemeral: true,
+                flags: MessageFlags.Ephemeral,
             });
         }
 
@@ -51,6 +51,6 @@ module.exports = {
             client.playerController.updatePlayer(interaction.guild.id);
         }, 100);
 
-        return interaction.reply({ content: modeMessage, ephemeral: true });
+        return interaction.reply({ content: modeMessage, flags: MessageFlags.Ephemeral });
     },
 }; 
