@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const { requirePlayer } = require('../utils/interactionHelpers');
 const logger = require('../utils/logger');
 
@@ -17,8 +17,8 @@ module.exports = {
         client.autoplayEnabled.delete(interaction.guild.id);
         await player.destroy();
         return interaction.reply({ 
-            content: client.languageManager.get(client.defaultLanguage, 'STOPPED_PLAYBACK'), 
-            ephemeral: true 
+            content: client.languageManager.get(client.defaultLanguage, 'STOPPED_PLAYBACK'),
+            flags: MessageFlags.Ephemeral
         });
     },
 }; 

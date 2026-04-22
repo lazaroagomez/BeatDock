@@ -29,14 +29,14 @@ function formatDuration(ms) {
  */
 function createSearchEmbed(client, pageData, query) {
     const lang = client.defaultLanguage;
-    const { tracks, currentPage, totalPages, totalTracks, selectedCount } = pageData;
+    const { tracks, currentPage, totalPages, totalTracks } = pageData;
 
     const embed = new EmbedBuilder()
         .setColor(0x0099FF)
         .setTitle(client.languageManager.get(lang, 'SEARCH_RESULTS_TITLE'))
         .setDescription(client.languageManager.get(lang, 'SEARCH_QUERY', query))
         .setFooter({
-            text: client.languageManager.get(lang, 'SEARCH_PAGINATION_FOOTER', currentPage, totalPages, totalTracks, selectedCount)
+            text: client.languageManager.get(lang, 'SEARCH_PAGINATION_FOOTER', currentPage, totalPages, totalTracks)
         })
         .setTimestamp();
 

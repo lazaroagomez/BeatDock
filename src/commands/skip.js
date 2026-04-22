@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const { requirePlayer } = require('../utils/interactionHelpers');
 const logger = require('../utils/logger');
 
@@ -17,7 +17,7 @@ module.exports = {
 
         const autoplayOn = client.autoplayEnabled.get(interaction.guild.id) || false;
         if (player.queue.tracks.length === 0 && !autoplayOn) {
-            return interaction.reply({ content: client.languageManager.get(lang, 'QUEUE_EMPTY'), ephemeral: true });
+            return interaction.reply({ content: client.languageManager.get(lang, 'QUEUE_EMPTY'), flags: MessageFlags.Ephemeral });
         }
 
         if (player.queue.tracks.length === 0 && autoplayOn) {
@@ -28,7 +28,7 @@ module.exports = {
 
         return interaction.reply({
             content: client.languageManager.get(lang, 'SONG_SKIPPED'),
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     },
 }; 

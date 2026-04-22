@@ -1,3 +1,4 @@
+const { MessageFlags } = require('discord.js');
 const logger = require('./logger');
 
 // Check if Lavalink is available
@@ -8,15 +9,19 @@ const isLavalinkAvailable = (client) => {
 // Handle Lavalink connection errors consistently
 const handleLavalinkError = async (interaction, error, client) => {
     const lang = client.defaultLanguage;
-    const content = /No available Node|Unable to connect/.test(error.message)
-        ? client.languageManager.get(lang, 'LAVALINK_UNAVAILABLE')
-        : client.languageManager.get(lang, 'GENERIC_ERROR');
+    const msg = error?.message || '';
+    const key = error?.name === 'TimeoutError' || /aborted due to timeout/i.test(msg)
+        ? 'LAVALINK_TIMEOUT'
+        : /No available Node|Unable to connect/.test(msg)
+            ? 'LAVALINK_UNAVAILABLE'
+            : 'GENERIC_ERROR';
+    const content = client.languageManager.get(lang, key);
 
     try {
         if (interaction.deferred || interaction.replied) {
-            await interaction.editReply({ content, ephemeral: true });
+            await interaction.editReply({ content });
         } else {
-            await interaction.reply({ content, ephemeral: true });
+            await interaction.reply({ content, flags: MessageFlags.Ephemeral });
         }
     } catch (replyError) {
         if (replyError.code === 10062) {
@@ -35,7 +40,7 @@ const requirePlayer = async (interaction, { requireQueue = false } = {}) => {
     if (!isLavalinkAvailable(client)) {
         await interaction.reply({
             content: client.languageManager.get(lang, 'LAVALINK_UNAVAILABLE'),
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         }).catch(() => {});
         return null;
     }
@@ -44,7 +49,7 @@ const requirePlayer = async (interaction, { requireQueue = false } = {}) => {
     if (!player) {
         await interaction.reply({
             content: client.languageManager.get(lang, 'NOTHING_PLAYING'),
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         }).catch(() => {});
         return null;
     }
@@ -52,7 +57,7 @@ const requirePlayer = async (interaction, { requireQueue = false } = {}) => {
     if (requireQueue && player.queue.tracks.length === 0) {
         await interaction.reply({
             content: client.languageManager.get(lang, 'QUEUE_EMPTY'),
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         }).catch(() => {});
         return null;
     }
@@ -72,7 +77,7 @@ const requireSameVoice = async (interaction, player) => {
     if (!voiceChannel || voiceChannel.id !== player.voiceChannelId) {
         await interaction.reply({
             content: client.languageManager.get(lang, 'NOT_IN_VOICE'),
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         }).catch(() => {});
         return false;
     }
@@ -84,4 +89,4 @@ module.exports = {
     requireSameVoice,
     isLavalinkAvailable,
     handleLavalinkError,
-}; 
+};

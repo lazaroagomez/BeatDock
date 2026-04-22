@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
 const { requirePlayer } = require('../utils/interactionHelpers');
 const { version } = require('../../package.json');
 const logger = require('../utils/logger');
@@ -79,11 +79,11 @@ module.exports = {
         if (!player.playing || !player.queue.current) {
             return interaction.reply({
                 content: client.languageManager.get(lang, 'LYRICS_NO_TRACK'),
-                ephemeral: true,
+                flags: MessageFlags.Ephemeral,
             });
         }
 
-        await interaction.deferReply({ ephemeral: true });
+        await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
         const track = player.queue.current;
         const rawTitle = cleanTitle(track.info?.title || '');

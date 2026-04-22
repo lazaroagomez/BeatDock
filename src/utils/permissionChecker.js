@@ -6,7 +6,7 @@
  * - If no roles are specified, everyone can use the bot
  */
 
-const { PermissionsBitField } = require('discord.js');
+const { PermissionsBitField, MessageFlags } = require('discord.js');
 const logger = require('./logger');
 
 // Cache allowed roles at module level — env vars don't change at runtime
@@ -61,7 +61,7 @@ async function checkInteractionPermission(interaction) {
         try {
             await interaction.reply({
                 content: client.languageManager.get(lang, 'NO_PERMISSION'),
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
         } catch (error) {
             if (error.code === 10062) {

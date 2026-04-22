@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const searchSessions = require('../utils/searchSessions');
 const { isLavalinkAvailable, handleLavalinkError } = require('../utils/interactionHelpers');
 const { createSearchEmbed, createSearchComponents } = require('../utils/embeds');
@@ -50,21 +50,21 @@ module.exports = {
             if (!query || query.trim().length === 0) {
                 return await interaction.reply({
                     content: client.languageManager.get(lang, 'SEARCH_EMPTY_QUERY'),
-                    ephemeral: true
+                    flags: MessageFlags.Ephemeral
                 });
             }
 
             if (query.length > 200) {
                 return await interaction.reply({
                     content: client.languageManager.get(lang, 'SEARCH_QUERY_TOO_LONG'),
-                    ephemeral: true
+                    flags: MessageFlags.Ephemeral
                 });
             }
 
             if (!voiceChannel) {
                 return await interaction.reply({
                     content: client.languageManager.get(lang, 'NOT_IN_VOICE'),
-                    ephemeral: true
+                    flags: MessageFlags.Ephemeral
                 });
             }
 
@@ -72,11 +72,11 @@ module.exports = {
             if (!isLavalinkAvailable(client)) {
                 return await interaction.reply({
                     content: client.languageManager.get(lang, 'LAVALINK_UNAVAILABLE'),
-                    ephemeral: true
+                    flags: MessageFlags.Ephemeral
                 });
             }
 
-            await interaction.deferReply({ ephemeral: true });
+            await interaction.deferReply({ flags: MessageFlags.Ephemeral });
             logger.cmd(`/search "${query}" by ${member.user.tag} in #${interaction.channel.name} (Guild: ${guild.name})`);
             // Get or create player (without connecting - connection deferred to track selection)
             let player = client.lavalink.getPlayer(guild.id);

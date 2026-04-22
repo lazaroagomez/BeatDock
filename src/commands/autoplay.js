@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const logger = require('../utils/logger');
 
 module.exports = {
@@ -27,7 +27,7 @@ module.exports = {
 
         return interaction.reply({
             content: client.t(newState ? 'AUTOPLAY_ENABLED' : 'AUTOPLAY_DISABLED'),
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
     },
 };

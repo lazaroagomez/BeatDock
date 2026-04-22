@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const { requirePlayer } = require('../utils/interactionHelpers');
 const { buildFilterResponse } = require('../interactions/filterNavigation');
 const logger = require('../utils/logger');
@@ -16,6 +16,6 @@ module.exports = {
         logger.cmd(`/filter by ${interaction.user.tag} in #${interaction.channel.name} (Guild: ${interaction.guild.name})`);
 
         const response = buildFilterResponse(client, player, 1);
-        return interaction.reply({ ...response, ephemeral: true });
+        return interaction.reply({ ...response, flags: MessageFlags.Ephemeral });
     },
 };

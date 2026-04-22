@@ -1,3 +1,4 @@
+const { MessageFlags } = require('discord.js');
 const searchSessions = require('../utils/searchSessions');
 const { isLavalinkAvailable } = require('../utils/interactionHelpers');
 const { createSearchEmbed, createSearchComponents } = require('../utils/embeds');
@@ -29,7 +30,7 @@ async function handleSearchNavigation(interaction) {
         if (session.userId !== user.id) {
             return interaction.reply({
                 content: client.languageManager.get(lang, 'SEARCH_NOT_YOUR_SESSION'),
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
         }
 
@@ -37,7 +38,7 @@ async function handleSearchNavigation(interaction) {
         if (!isLavalinkAvailable(client)) {
             return interaction.reply({
                 content: client.languageManager.get(lang, 'LAVALINK_UNAVAILABLE'),
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
         }
 
@@ -72,7 +73,7 @@ async function handleSearchNavigation(interaction) {
                         if (!voiceChannel) {
                             return interaction.followUp({
                                 content: client.languageManager.get(lang, 'NOT_IN_VOICE'),
-                                ephemeral: true
+                                flags: MessageFlags.Ephemeral
                             });
                         }
 
@@ -155,7 +156,7 @@ async function handleSearchNavigation(interaction) {
         }
 
         if (responseMessage) {
-            await interaction.followUp({ content: responseMessage, ephemeral: true });
+            await interaction.followUp({ content: responseMessage, flags: MessageFlags.Ephemeral });
         }
 
     } catch (error) {
@@ -165,7 +166,7 @@ async function handleSearchNavigation(interaction) {
         }
         await interaction.followUp({
             content: client.languageManager.get(lang, 'SEARCH_INTERACTION_ERROR'),
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         }).catch(() => {});
     }
 }

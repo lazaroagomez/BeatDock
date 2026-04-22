@@ -1,7 +1,7 @@
 // Utility functions that encapsulate common queue manipulations, allowing both
 // slash-commands and component interactions to share the same core logic.
 
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageFlags } = require('discord.js');
 const { createTrackSelectMenu, truncateText } = require('./trackSelectMenu');
 
 /**
@@ -127,7 +127,7 @@ function createPaginatedQueueResponse(client, player, page = 1) {
     if (!pageData.tracks.length) {
         return {
             content: t('QUEUE_EMPTY'),
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         };
     }
 
@@ -192,18 +192,8 @@ function createPaginatedQueueResponse(client, player, page = 1) {
     return {
         embeds: [embed],
         components,
-        ephemeral: true
+        flags: MessageFlags.Ephemeral
     };
-}
-
-function formattedQueue(player, limit = 10) {
-    if (!player.queue.tracks.length) return '';
-    const list = player.queue.tracks
-        .slice(0, limit)
-        .map((track, i) => `${i + 1}. ${track.info?.title || 'Unknown'}`)
-        .join('\n');
-    const remaining = player.queue.tracks.length - limit;
-    return remaining > 0 ? `${list}\n…and ${remaining} more` : list;
 }
 
 module.exports = {
@@ -211,7 +201,6 @@ module.exports = {
     shuffleQueue,
     clearQueue,
     jumpToTrack,
-    formattedQueue,
     paginatedQueue,
     createPaginatedQueueResponse,
-}; 
+};

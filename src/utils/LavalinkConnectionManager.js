@@ -431,20 +431,6 @@ class LavalinkConnectionManager {
         }
     }
 
-    // Get connection status for status command
-    getStatus() {
-        const mainNode = this.client.lavalink.nodeManager.nodes.get('main-node');
-        const isConnected = mainNode && mainNode.connected;
-        
-        return {
-            isConnected,
-            reconnectAttempts: this.state.reconnectAttempts,
-            maxReconnectAttempts: this.state.maxReconnectAttempts,
-            isReconnecting: this.state.isReconnecting,
-            lastPing: this.state.lastPing,
-            node: mainNode
-        };
-    }
 }
 
 module.exports = LavalinkConnectionManager; 

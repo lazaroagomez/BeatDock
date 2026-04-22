@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const { requirePlayer } = require('../utils/interactionHelpers');
 const logger = require('../utils/logger');
 
@@ -18,13 +18,13 @@ module.exports = {
             await player.resume();
             return interaction.reply({ 
                 content: client.languageManager.get(client.defaultLanguage, 'RESUMED'), 
-                ephemeral: true 
+                flags: MessageFlags.Ephemeral
             });
         } else {
             await player.pause();
             return interaction.reply({ 
                 content: client.languageManager.get(client.defaultLanguage, 'PAUSED'), 
-                ephemeral: true 
+                flags: MessageFlags.Ephemeral
             });
         }
     },

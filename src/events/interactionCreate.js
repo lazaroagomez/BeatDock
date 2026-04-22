@@ -1,3 +1,4 @@
+const { MessageFlags } = require('discord.js');
 const { checkInteractionPermission } = require('../utils/permissionChecker');
 const { handleSearchNavigation } = require('../interactions/searchNavigation');
 const { handleFilterNavigation } = require('../interactions/filterNavigation');
@@ -22,49 +23,49 @@ async function handlePlayerInteraction(interaction, action) {
                 content: track
                     ? client.languageManager.get(lang, 'PLAYING_PREVIOUS', track.info?.title || 'Unknown')
                     : client.languageManager.get(lang, 'NO_PREVIOUS_SONG'),
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
             break;
         }
         case 'playpause': {
             if (player.paused) {
                 await player.resume();
-                await interaction.reply({ content: client.languageManager.get(lang, 'RESUMED'), ephemeral: true });
+                await interaction.reply({ content: client.languageManager.get(lang, 'RESUMED'), flags: MessageFlags.Ephemeral });
             } else {
                 await player.pause();
-                await interaction.reply({ content: client.languageManager.get(lang, 'PAUSED'), ephemeral: true });
+                await interaction.reply({ content: client.languageManager.get(lang, 'PAUSED'), flags: MessageFlags.Ephemeral });
             }
             break;
         }
         case 'skip': {
             const skipAutoplay = client.autoplayEnabled.get(interaction.guild.id) || false;
             if (player.queue.tracks.length === 0 && player.repeatMode === 'off' && !skipAutoplay) {
-                await interaction.reply({ content: client.languageManager.get(lang, 'QUEUE_EMPTY'), ephemeral: true });
+                await interaction.reply({ content: client.languageManager.get(lang, 'QUEUE_EMPTY'), flags: MessageFlags.Ephemeral });
             } else if (player.queue.tracks.length === 0 && skipAutoplay) {
                 await player.skip(0, false);
-                await interaction.reply({ content: client.languageManager.get(lang, 'SONG_SKIPPED'), ephemeral: true });
+                await interaction.reply({ content: client.languageManager.get(lang, 'SONG_SKIPPED'), flags: MessageFlags.Ephemeral });
             } else {
                 await player.skip();
-                await interaction.reply({ content: client.languageManager.get(lang, 'SONG_SKIPPED'), ephemeral: true });
+                await interaction.reply({ content: client.languageManager.get(lang, 'SONG_SKIPPED'), flags: MessageFlags.Ephemeral });
             }
             break;
         }
         case 'stop': {
             client.autoplayEnabled.delete(interaction.guild.id);
             await player.destroy();
-            await interaction.reply({ content: client.languageManager.get(lang, 'STOPPED_PLAYBACK'), ephemeral: true });
+            await interaction.reply({ content: client.languageManager.get(lang, 'STOPPED_PLAYBACK'), flags: MessageFlags.Ephemeral });
             break;
         }
         case 'shuffle': {
             if (client.autoplayEnabled.get(interaction.guild.id)) {
-                await interaction.reply({ content: client.languageManager.get(lang, 'AUTOPLAY_BLOCKS_ACTION'), ephemeral: true });
+                await interaction.reply({ content: client.languageManager.get(lang, 'AUTOPLAY_BLOCKS_ACTION'), flags: MessageFlags.Ephemeral });
                 return;
             }
             if (player.queue.tracks.length > 0) {
                 shuffleQueue(player);
-                await interaction.reply({ content: client.languageManager.get(lang, 'QUEUE_SHUFFLED'), ephemeral: true });
+                await interaction.reply({ content: client.languageManager.get(lang, 'QUEUE_SHUFFLED'), flags: MessageFlags.Ephemeral });
             } else {
-                await interaction.reply({ content: client.languageManager.get(lang, 'QUEUE_EMPTY'), ephemeral: true });
+                await interaction.reply({ content: client.languageManager.get(lang, 'QUEUE_EMPTY'), flags: MessageFlags.Ephemeral });
             }
             break;
         }
@@ -75,20 +76,20 @@ async function handlePlayerInteraction(interaction, action) {
         }
         case 'clear': {
             if (client.autoplayEnabled.get(interaction.guild.id)) {
-                await interaction.reply({ content: client.languageManager.get(lang, 'AUTOPLAY_BLOCKS_ACTION'), ephemeral: true });
+                await interaction.reply({ content: client.languageManager.get(lang, 'AUTOPLAY_BLOCKS_ACTION'), flags: MessageFlags.Ephemeral });
                 return;
             }
             if (player.queue.tracks.length > 0) {
                 clearQueue(player);
-                await interaction.reply({ content: client.languageManager.get(lang, 'QUEUE_CLEARED'), ephemeral: true });
+                await interaction.reply({ content: client.languageManager.get(lang, 'QUEUE_CLEARED'), flags: MessageFlags.Ephemeral });
             } else {
-                await interaction.reply({ content: client.languageManager.get(lang, 'QUEUE_EMPTY'), ephemeral: true });
+                await interaction.reply({ content: client.languageManager.get(lang, 'QUEUE_EMPTY'), flags: MessageFlags.Ephemeral });
             }
             break;
         }
         case 'loop': {
             if (client.autoplayEnabled.get(interaction.guild.id)) {
-                await interaction.reply({ content: client.languageManager.get(lang, 'AUTOPLAY_BLOCKS_ACTION'), ephemeral: true });
+                await interaction.reply({ content: client.languageManager.get(lang, 'AUTOPLAY_BLOCKS_ACTION'), flags: MessageFlags.Ephemeral });
                 return;
             }
             let newMode;
@@ -100,7 +101,7 @@ async function handlePlayerInteraction(interaction, action) {
                 default: newMode = 'track'; modeMessage = client.languageManager.get(lang, 'LOOP_TRACK_ENABLED');
             }
             player.setRepeatMode(newMode);
-            await interaction.reply({ content: modeMessage, ephemeral: true });
+            await interaction.reply({ content: modeMessage, flags: MessageFlags.Ephemeral });
             break;
         }
     }
@@ -155,7 +156,7 @@ async function handleQueueInteraction(interaction, action, args) {
             if (!jumpedTrack) {
                 return interaction.reply({
                     content: client.languageManager.get(lang, 'QUEUE_JUMP_INVALID'),
-                    ephemeral: true
+                    flags: MessageFlags.Ephemeral
                 });
             }
 
@@ -164,7 +165,7 @@ async function handleQueueInteraction(interaction, action, args) {
 
             await interaction.followUp({
                 content: client.languageManager.get(lang, 'QUEUE_JUMPED', jumpedTrack.info?.title || 'Unknown'),
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
 
             setTimeout(() => client.playerController.updatePlayer(interaction.guild.id).catch(() => {}), 500);
@@ -203,7 +204,7 @@ async function handleButtonInteraction(interaction) {
         }
         logger.error('Error handling button interaction:', error);
         const lang = client.defaultLanguage;
-        const reply = { content: client.languageManager.get(lang, 'BUTTON_ERROR'), ephemeral: true };
+        const reply = { content: client.languageManager.get(lang, 'BUTTON_ERROR'), flags: MessageFlags.Ephemeral };
         if (interaction.deferred || interaction.replied) {
             await interaction.followUp(reply).catch(() => {});
         } else {
@@ -239,7 +240,7 @@ async function handleSelectMenuInteraction(interaction) {
         }
         logger.error('Error handling select menu interaction:', error);
         const lang = client.defaultLanguage;
-        const reply = { content: client.languageManager.get(lang, 'BUTTON_ERROR'), ephemeral: true };
+        const reply = { content: client.languageManager.get(lang, 'BUTTON_ERROR'), flags: MessageFlags.Ephemeral };
         if (interaction.deferred || interaction.replied) {
             await interaction.followUp(reply).catch(() => {});
         } else {
@@ -267,7 +268,7 @@ module.exports = {
                 }
                 logger.error(`Error executing command ${interaction.commandName}:`, error);
                 const lang = interaction.client.defaultLanguage;
-                const reply = { content: interaction.client.languageManager.get(lang, 'ERROR_COMMAND_EXECUTION'), ephemeral: true };
+                const reply = { content: interaction.client.languageManager.get(lang, 'ERROR_COMMAND_EXECUTION'), flags: MessageFlags.Ephemeral };
                 if (interaction.deferred || interaction.replied) {
                     await interaction.followUp(reply).catch(() => {});
                 } else {

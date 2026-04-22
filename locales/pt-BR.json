@@ -78,6 +78,7 @@
     "SEARCH_TRACK_REMOVED": "Removido **{0}** da fila.",
     "SEARCH_PLAYER_STOPPED": "O player de música foi parado. Por favor, entre em um canal de voz e coloque uma música para tocar para usar a função de pesquisa.",
     "LAVALINK_UNAVAILABLE": "❌ Serviço de Música indisponível. Tente novamente mais tarde.",
+    "LAVALINK_TIMEOUT": "⏱ A busca demorou demais para completar. O nó Lavalink pode estar lento ou ocupado — tente novamente.",
     "LAVALINK_RECONNECTING": "⚠️ Conexão com o servidor de música foi perdida. Reconectando, por favor, espere...",
     "LAVALINK_PUBLIC_NODE_SWITCH": "🔄 Trocando servidor de música...",
     "GENERIC_ERROR": "❌ Ocorreu um erro a tentar tocar a música. Por favor, tente novamente.",

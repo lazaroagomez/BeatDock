@@ -1,821 +1,434 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BeatDock - Discord Music Bot</title>
-    <meta name="description" content="BeatDock is a modern Discord music bot with slash commands, multi-language support, and Docker deployment.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BeatDock — Discord Music Bot</title>
+  <meta name="description" content="A modern, open-source Discord music bot powered by Lavalink. Play from YouTube, SoundCloud, Spotify, and more.">
+  <meta property="og:title" content="BeatDock — Discord Music Bot">
+  <meta property="og:description" content="A modern, open-source Discord music bot powered by Lavalink. Simple to deploy, easy to use.">
+  <meta property="og:image" content="wallpaper.avif">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#0099FF">
+  <link rel="icon" type="image/avif" href="wallpaper.avif">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Scanline overlay -->
-    <div class="scanlines"></div>
 
-    <!-- Floating particles -->
-    <div class="particles" id="particles"></div>
-
-    <!-- Navigation -->
-    <nav class="nav">
-        <div class="nav-container">
-            <a href="#" class="nav-logo">
-                <span class="logo-icon"><i class="bi bi-music-note-beamed"></i></span>
-                <span class="logo-text">BEATDOCK</span>
-                <span class="version-badge" id="version"></span>
-            </a>
-            <div class="nav-links">
-                <a href="#features" class="nav-link">Features</a>
-                <a href="#commands" class="nav-link">Commands</a>
-                <a href="#setup" class="nav-link">Setup</a>
-                <a href="#config" class="nav-link">Config</a>
-                <a href="#troubleshooting" class="nav-link">Help</a>
-                <a href="https://github.com/lazaroagomez/BeatDock" target="_blank" rel="noopener" class="nav-link nav-github">
-                    <i class="bi bi-github"></i>
-                    GitHub
-                </a>
-            </div>
-            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
-    </nav>
-
-    <!-- Mobile menu -->
-    <div class="mobile-menu" id="mobileMenu">
-        <a href="#features" class="mobile-link">Features</a>
-        <a href="#commands" class="mobile-link">Commands</a>
-        <a href="#setup" class="mobile-link">Setup</a>
-        <a href="#config" class="mobile-link">Config</a>
-        <a href="#troubleshooting" class="mobile-link">Help</a>
-        <a href="https://github.com/lazaroagomez/BeatDock" target="_blank" rel="noopener" class="mobile-link">GitHub</a>
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="container navbar__inner">
+      <a href="#" class="navbar__brand">
+        <img src="wallpaper.avif" alt="BeatDock" class="navbar__logo">
+        <span class="navbar__name">BeatDock</span>
+      </a>
+      <div class="navbar__links" id="nav-links">
+        <a href="#features">Features</a>
+        <a href="#commands">Commands</a>
+        <a href="#quick-start">Quick Start</a>
+        <a href="#setup-guide">Setup Guide</a>
+        <a href="https://github.com/lazaroagomez/BeatDock" target="_blank" rel="noopener">GitHub</a>
+      </div>
+      <div class="navbar__actions">
+        <span class="btn btn--disabled btn--sm" title="Coming soon">Add to Discord <span class="btn__badge">Soon</span></span>
+        <button class="navbar__hamburger" id="hamburger" aria-label="Toggle menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
     </div>
+  </nav>
 
-    <!-- Hero Section -->
-    <section class="hero" id="hero">
-        <div class="hero-bg"></div>
-        <div class="hero-gradient"></div>
-        <div class="hero-content">
-            <div class="hero-badge">
-                <span class="badge-dot"></span>
-                DISCORD MUSIC BOT
-            </div>
-            <h1 class="hero-title" data-text="BEATDOCK">BEATDOCK</h1>
-            <p class="hero-subtitle">
-                Drop the beat. Control the vibe. <br>
-                <span class="highlight">High-quality audio</span> powered by Lavalink.
-            </p>
-            <div class="hero-stats">
-                <div class="stat">
-                    <span class="stat-value">17</span>
-                    <span class="stat-label">Commands</span>
-                </div>
-                <div class="stat-divider"></div>
-                <div class="stat">
-                    <span class="stat-value">4</span>
-                    <span class="stat-label">Languages</span>
-                </div>
-                <div class="stat-divider"></div>
-                <div class="stat">
-                    <span class="stat-value">&infin;</span>
-                    <span class="stat-label">Vibes</span>
-                </div>
-            </div>
-            <div class="hero-actions">
-                <a href="#setup" class="btn btn-primary">
-                    <span class="btn-icon"><i class="bi bi-play-fill"></i></span>
-                    Quick Start
-                </a>
-                <a href="https://github.com/lazaroagomez/BeatDock" target="_blank" rel="noopener" class="btn btn-secondary">
-                    View Source
-                </a>
-            </div>
-            <div class="hero-tech">
-                <span class="tech-item">Discord.js v14</span>
-                <span class="tech-item">Lavalink</span>
-                <span class="tech-item">Docker</span>
-                <span class="tech-item">Node.js 22+</span>
-            </div>
+  <!-- Hero -->
+  <section class="hero" id="hero">
+    <div class="hero__overlay"></div>
+    <div class="container hero__inner">
+      <h1 class="hero__title">Your server's soundtrack, handled.</h1>
+      <p class="hero__subtitle">A Discord music bot powered by Lavalink. Simple to deploy, easy to use.</p>
+      <div class="hero__actions">
+        <span class="btn btn--disabled btn--lg" title="Coming soon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
+          Add to Discord <span class="btn__badge">Soon</span>
+        </span>
+        <a href="https://github.com/lazaroagomez/BeatDock" class="btn btn--secondary btn--lg" target="_blank" rel="noopener">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          View on GitHub
+        </a>
+      </div>
+      <div class="hero__badges">
+        <span class="badge">v2.7.4</span>
+        <span class="badge">Apache-2.0</span>
+        <span class="badge">Docker Ready</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="section" id="features">
+    <div class="container">
+      <h2 class="section__title fade-in">Features</h2>
+      <p class="section__subtitle fade-in">Everything you need for music in Discord.</p>
+      <div class="features__grid">
+
+        <div class="card fade-in">
+          <div class="card__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+          </div>
+          <h3 class="card__title">Multi-Platform Playback</h3>
+          <p class="card__description">YouTube, SoundCloud, Bandcamp, Twitch, and Vimeo — all supported out of the box.</p>
         </div>
-        <div class="scroll-indicator">
-            <span>SCROLL</span>
-            <div class="scroll-line"></div>
+
+        <div class="card fade-in">
+          <div class="card__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          </div>
+          <h3 class="card__title">Spotify Support</h3>
+          <p class="card__description">Search Spotify tracks and playlists, resolved seamlessly via YouTube.</p>
         </div>
-    </section>
 
-    <!-- Features Section -->
-    <section class="section features" id="features">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">// CAPABILITIES</span>
-                <h2 class="section-title">Power Features</h2>
-                <p class="section-desc">Everything you need for the ultimate music experience</p>
-            </div>
-
-            <div class="features-grid">
-                <div class="feature-card" data-delay="0">
-                    <div class="feature-icon">
-                        <i class="bi bi-soundwave"></i>
-                    </div>
-                    <h3 class="feature-title">High-Quality Audio</h3>
-                    <p class="feature-desc">Crystal-clear playback powered by Lavalink with minimal latency and robust connection management.</p>
-                    <div class="feature-glow"></div>
-                </div>
-
-                <div class="feature-card" data-delay="1">
-                    <div class="feature-icon icon-search">
-                        <i class="bi bi-search"></i>
-                    </div>
-                    <h3 class="feature-title">Interactive Search</h3>
-                    <p class="feature-desc">Browse results with navigation buttons, select multiple tracks, and build your perfect queue.</p>
-                    <div class="feature-glow"></div>
-                </div>
-
-                <div class="feature-card" data-delay="2">
-                    <div class="feature-icon icon-terminal">
-                        <i class="bi bi-terminal"></i>
-                    </div>
-                    <h3 class="feature-title">Slash Commands</h3>
-                    <p class="feature-desc">Modern Discord.js v14 slash commands with auto-completion and parameter validation.</p>
-                    <div class="feature-glow"></div>
-                </div>
-
-                <div class="feature-card" data-delay="3">
-                    <div class="feature-icon icon-globe">
-                        <i class="bi bi-globe"></i>
-                    </div>
-                    <h3 class="feature-title">Multi-Language</h3>
-                    <p class="feature-desc">Built-in support for English, Spanish, Turkish, and Italian with easy extensibility.</p>
-                    <div class="feature-glow"></div>
-                </div>
-
-                <div class="feature-card" data-delay="4">
-                    <div class="feature-icon icon-controller">
-                        <i class="bi bi-controller"></i>
-                    </div>
-                    <h3 class="feature-title">Visual Controller</h3>
-                    <p class="feature-desc">Rich embeds with interactive buttons for complete playback control.</p>
-                    <div class="feature-glow"></div>
-                </div>
-
-                <div class="feature-card" data-delay="5">
-                    <div class="feature-icon icon-docker">
-                        <i class="bi bi-box-seam"></i>
-                    </div>
-                    <h3 class="feature-title">Docker Ready</h3>
-                    <p class="feature-desc">Deploy instantly with Docker Compose using official pre-built images.</p>
-                    <div class="feature-glow"></div>
-                </div>
-
-                <div class="feature-card" data-delay="6">
-                    <div class="feature-icon icon-shield">
-                        <i class="bi bi-shield-check"></i>
-                    </div>
-                    <h3 class="feature-title">Role Permissions</h3>
-                    <p class="feature-desc">Flexible permission system with admin override and role-based access control.</p>
-                    <div class="feature-glow"></div>
-                </div>
-
-                <div class="feature-card" data-delay="7">
-                    <div class="feature-icon icon-spotify">
-                        <i class="bi bi-spotify"></i>
-                    </div>
-                    <h3 class="feature-title">Spotify Integration</h3>
-                    <p class="feature-desc">Smart track resolution with ISRC matching for accurate Spotify playback.</p>
-                    <div class="feature-glow"></div>
-                </div>
-
-                <div class="feature-card" data-delay="8">
-                    <div class="feature-icon icon-cloud">
-                        <i class="bi bi-cloud"></i>
-                    </div>
-                    <h3 class="feature-title">Stateless Design</h3>
-                    <p class="feature-desc">No database required - perfect for containerized deployments.</p>
-                    <div class="feature-glow"></div>
-                </div>
-
-                <div class="feature-card" data-delay="9">
-                    <div class="feature-icon icon-search">
-                        <i class="bi bi-hdd-network"></i>
-                    </div>
-                    <h3 class="feature-title">Zero Config Lavalink</h3>
-                    <p class="feature-desc">No self-hosted Lavalink needed. Automatically connects to free public servers with automatic failover.</p>
-                    <div class="feature-glow"></div>
-                </div>
-
-                <div class="feature-card" data-delay="10">
-                    <div class="feature-icon icon-controller">
-                        <i class="bi bi-broadcast"></i>
-                    </div>
-                    <h3 class="feature-title">Autoplay Mode</h3>
-                    <p class="feature-desc">Continuous music playback that automatically finds and plays related tracks when your queue ends.</p>
-                    <div class="feature-glow"></div>
-                </div>
-            </div>
+        <div class="card fade-in">
+          <div class="card__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.4"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.4"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/><circle cx="12" cy="12" r="2"/></svg>
+          </div>
+          <h3 class="card__title">Autoplay Mode</h3>
+          <p class="card__description">Never let the music stop. Autoplay queues related tracks automatically.</p>
         </div>
-    </section>
 
-    <!-- Commands Section -->
-    <section class="section commands" id="commands">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">// ARSENAL</span>
-                <h2 class="section-title">Commands</h2>
-                <p class="section-desc">17 powerful slash commands at your fingertips</p>
-            </div>
-
-            <div class="commands-container">
-                <!-- Playback Controls -->
-                <div class="command-group">
-                    <h3 class="group-title">
-                        <span class="group-icon"><i class="bi bi-play-circle"></i></span>
-                        Playback Control
-                    </h3>
-                    <div class="commands-grid">
-                        <div class="command-card">
-                            <div class="command-header">
-                                <code class="command-name">/play</code>
-                                <span class="command-badge essential">Essential</span>
-                            </div>
-                            <p class="command-desc">Play music from URL or search query</p>
-                            <div class="command-usage">
-                                <span class="usage-label">Usage:</span>
-                                <code>/play Rick Astley Never Gonna Give You Up</code>
-                            </div>
-                        </div>
-
-                        <div class="command-card">
-                            <div class="command-header">
-                                <code class="command-name">/pause</code>
-                                <span class="command-badge control">Control</span>
-                            </div>
-                            <p class="command-desc">Toggle pause/resume playback</p>
-                        </div>
-
-                        <div class="command-card">
-                            <div class="command-header">
-                                <code class="command-name">/skip</code>
-                                <span class="command-badge">Playback</span>
-                            </div>
-                            <p class="command-desc">Skip to the next track in queue</p>
-                        </div>
-
-                        <div class="command-card">
-                            <div class="command-header">
-                                <code class="command-name">/back</code>
-                                <span class="command-badge">Playback</span>
-                            </div>
-                            <p class="command-desc">Play the previous track from history</p>
-                        </div>
-
-                        <div class="command-card">
-                            <div class="command-header">
-                                <code class="command-name">/stop</code>
-                                <span class="command-badge danger">Stop</span>
-                            </div>
-                            <p class="command-desc">Stop playback and disconnect</p>
-                        </div>
-
-                        <div class="command-card">
-                            <div class="command-header">
-                                <code class="command-name">/volume</code>
-                                <span class="command-badge control">Control</span>
-                            </div>
-                            <p class="command-desc">Adjust playback volume (1-100)</p>
-                            <div class="command-usage">
-                                <span class="usage-label">Usage:</span>
-                                <code>/volume 75</code>
-                            </div>
-                        </div>
-
-                        <div class="command-card">
-                            <div class="command-header">
-                                <code class="command-name">/filter</code>
-                                <span class="command-badge interactive">Interactive</span>
-                            </div>
-                            <p class="command-desc">Apply audio effects and EQ presets</p>
-                            <div class="command-features">
-                                <span><i class="bi bi-check"></i> Effects</span>
-                                <span><i class="bi bi-check"></i> EQ Presets</span>
-                                <span><i class="bi bi-check"></i> Toggle</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Search & Discovery -->
-                <div class="command-group">
-                    <h3 class="group-title">
-                        <span class="group-icon"><i class="bi bi-search"></i></span>
-                        Search & Discovery
-                    </h3>
-                    <div class="commands-grid">
-                        <div class="command-card featured">
-                            <div class="command-header">
-                                <code class="command-name">/search</code>
-                                <span class="command-badge interactive">Interactive</span>
-                            </div>
-                            <p class="command-desc">Interactive search with pagination and multi-selection</p>
-                            <div class="command-usage">
-                                <span class="usage-label">Usage:</span>
-                                <code>/search ambient music</code>
-                            </div>
-                            <div class="command-features">
-                                <span><i class="bi bi-check"></i> Pagination</span>
-                                <span><i class="bi bi-check"></i> Multi-select</span>
-                                <span><i class="bi bi-check"></i> Quick add</span>
-                            </div>
-                        </div>
-
-                        <div class="command-card">
-                            <div class="command-header">
-                                <code class="command-name">/lyrics</code>
-                                <span class="command-badge">Info</span>
-                            </div>
-                            <p class="command-desc">Show lyrics for the currently playing song</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Queue Management -->
-                <div class="command-group">
-                    <h3 class="group-title">
-                        <span class="group-icon"><i class="bi bi-list-ol"></i></span>
-                        Queue Management
-                    </h3>
-                    <div class="commands-grid">
-                        <div class="command-card">
-                            <div class="command-header">
-                                <code class="command-name">/queue</code>
-                                <span class="command-badge">Info</span>
-                            </div>
-                            <p class="command-desc">Display current queue with pagination</p>
-                        </div>
-
-                        <div class="command-card">
-                            <div class="command-header">
-                                <code class="command-name">/clear</code>
-                                <span class="command-badge danger">Clear</span>
-                            </div>
-                            <p class="command-desc">Clear the entire queue</p>
-                        </div>
-
-                        <div class="command-card">
-                            <div class="command-header">
-                                <code class="command-name">/shuffle</code>
-                                <span class="command-badge success">Shuffle</span>
-                            </div>
-                            <p class="command-desc">Shuffle the current queue randomly</p>
-                        </div>
-
-                        <div class="command-card">
-                            <div class="command-header">
-                                <code class="command-name">/autoplay</code>
-                                <span class="command-badge success">Toggle</span>
-                            </div>
-                            <p class="command-desc">Toggle autoplay for continuous related tracks</p>
-                        </div>
-
-                        <div class="command-card">
-                            <div class="command-header">
-                                <code class="command-name">/loop</code>
-                                <span class="command-badge">Toggle</span>
-                            </div>
-                            <p class="command-desc">Cycle: off &rarr; track &rarr; queue</p>
-                        </div>
-
-                        <div class="command-card">
-                            <div class="command-header">
-                                <code class="command-name">/nowplaying</code>
-                                <span class="command-badge">Info</span>
-                            </div>
-                            <p class="command-desc">Show current track details</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Information -->
-                <div class="command-group">
-                    <h3 class="group-title">
-                        <span class="group-icon"><i class="bi bi-info-circle"></i></span>
-                        Information
-                    </h3>
-                    <div class="commands-grid">
-                        <div class="command-card">
-                            <div class="command-header">
-                                <code class="command-name">/invite</code>
-                                <span class="command-badge">Info</span>
-                            </div>
-                            <p class="command-desc">Get a link to invite BeatDock to your server</p>
-                        </div>
-
-                        <div class="command-card">
-                            <div class="command-header">
-                                <code class="command-name">/about</code>
-                                <span class="command-badge">Info</span>
-                            </div>
-                            <p class="command-desc">Display bot info, stats, version, and system details</p>
-                            <div class="command-features">
-                                <span><i class="bi bi-check"></i> Version</span>
-                                <span><i class="bi bi-check"></i> Uptime</span>
-                                <span><i class="bi bi-check"></i> Latency</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="card fade-in">
+          <div class="card__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15V6"/><path d="M18.5 18a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/><path d="M12 12H3"/><path d="M16 6H3"/><path d="M12 18H3"/></svg>
+          </div>
+          <h3 class="card__title">Queue Management</h3>
+          <p class="card__description">Shuffle, loop, play-next, and full queue control at your fingertips.</p>
         </div>
-    </section>
 
-    <!-- Setup Section -->
-    <section class="section setup" id="setup">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">// INSTALLATION</span>
-                <h2 class="section-title">Quick Setup</h2>
-                <p class="section-desc">Get BeatDock running in 4 simple steps</p>
-            </div>
-
-            <!-- Prerequisites Warning -->
-            <div class="warning-box">
-                <div class="warning-icon"><i class="bi bi-exclamation-triangle"></i></div>
-                <div class="warning-content">
-                    <h4>Required: Discord Gateway Intents</h4>
-                    <p>Enable these in <a href="https://discord.com/developers/applications" target="_blank" rel="noopener">Discord Developer Portal</a> &rarr; Bot &rarr; Privileged Gateway Intents:</p>
-                    <div class="intents-list">
-                        <span class="intent"><i class="bi bi-check-lg"></i> Presence Intent</span>
-                        <span class="intent"><i class="bi bi-check-lg"></i> Server Members Intent</span>
-                        <span class="intent"><i class="bi bi-check-lg"></i> Message Content Intent</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="steps">
-                <div class="step">
-                    <div class="step-number">01</div>
-                    <div class="step-content">
-                        <h3 class="step-title">Clone Repository</h3>
-                        <div class="terminal">
-                            <div class="terminal-header">
-                                <span class="terminal-dot"></span>
-                                <span class="terminal-dot"></span>
-                                <span class="terminal-dot"></span>
-                                <span class="terminal-title">Terminal</span>
-                            </div>
-                            <div class="terminal-body">
-                                <div class="terminal-line">
-                                    <span class="prompt">$</span>
-                                    <span class="command">git clone https://github.com/lazaroagomez/BeatDock.git</span>
-                                </div>
-                                <div class="terminal-line">
-                                    <span class="prompt">$</span>
-                                    <span class="command">cd BeatDock</span>
-                                </div>
-                            </div>
-                            <button class="copy-btn" data-copy="git clone https://github.com/lazaroagomez/BeatDock.git && cd BeatDock">
-                                <span class="copy-icon"><i class="bi bi-clipboard"></i></span>
-                                <span class="copy-text">Copy</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="step">
-                    <div class="step-number">02</div>
-                    <div class="step-content">
-                        <h3 class="step-title">Configure Environment</h3>
-                        <div class="terminal">
-                            <div class="terminal-header">
-                                <span class="terminal-dot"></span>
-                                <span class="terminal-dot"></span>
-                                <span class="terminal-dot"></span>
-                                <span class="terminal-title">.env</span>
-                            </div>
-                            <div class="terminal-body config">
-                                <div class="config-line">
-                                    <span class="config-comment"># Required</span>
-                                </div>
-                                <div class="config-line">
-                                    <span class="config-key">TOKEN</span>=<span class="config-value">your_discord_bot_token</span>
-                                </div>
-                                <div class="config-line">&nbsp;</div>
-                                <div class="config-line">
-                                    <span class="config-comment"># Lavalink &mdash; optional, leave empty for free public servers</span>
-                                </div>
-                                <div class="config-line">
-                                    <span style="color: var(--text-muted); opacity: 0.5;"># LAVALINK_HOST=lavalink</span>
-                                </div>
-                                <div class="config-line">
-                                    <span style="color: var(--text-muted); opacity: 0.5;"># LAVALINK_PORT=2333</span>
-                                </div>
-                                <div class="config-line">
-                                    <span style="color: var(--text-muted); opacity: 0.5;"># LAVALINK_PASSWORD=youshallnotpass</span>
-                                </div>
-                            </div>
-                            <button class="copy-btn" data-copy="cp .env.example .env">
-                                <span class="copy-icon"><i class="bi bi-clipboard"></i></span>
-                                <span class="copy-text">Copy</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="step">
-                    <div class="step-number">03</div>
-                    <div class="step-content">
-                        <h3 class="step-title">Launch BeatDock</h3>
-                        <div class="terminal">
-                            <div class="terminal-header">
-                                <span class="terminal-dot"></span>
-                                <span class="terminal-dot"></span>
-                                <span class="terminal-dot"></span>
-                                <span class="terminal-title">Terminal</span>
-                            </div>
-                            <div class="terminal-body">
-                                <div class="terminal-line">
-                                    <span class="prompt">$</span>
-                                    <span class="command">docker compose up -d</span>
-                                </div>
-                                <div class="terminal-output success"><i class="bi bi-lightning-fill"></i> BeatDock is now running!</div>
-                            </div>
-                            <button class="copy-btn" data-copy="docker compose up -d">
-                                <span class="copy-icon"><i class="bi bi-clipboard"></i></span>
-                                <span class="copy-text">Copy</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Docker Commands Quick Reference -->
-            <div class="docker-commands">
-                <h3 class="docker-title">Docker Quick Reference</h3>
-                <div class="docker-grid">
-                    <div class="docker-card">
-                        <span class="docker-icon"><i class="bi bi-stop-fill"></i></span>
-                        <span class="docker-label">Stop</span>
-                        <code>docker compose down</code>
-                    </div>
-                    <div class="docker-card">
-                        <span class="docker-icon"><i class="bi bi-arrow-clockwise"></i></span>
-                        <span class="docker-label">Restart</span>
-                        <code>docker compose restart</code>
-                    </div>
-                    <div class="docker-card">
-                        <span class="docker-icon"><i class="bi bi-file-text"></i></span>
-                        <span class="docker-label">Logs</span>
-                        <code>docker compose logs -f</code>
-                    </div>
-                    <div class="docker-card">
-                        <span class="docker-icon"><i class="bi bi-arrow-up-circle"></i></span>
-                        <span class="docker-label">Update</span>
-                        <code>docker compose pull && docker compose up -d</code>
-                    </div>
-                </div>
-            </div>
+        <div class="card fade-in">
+          <div class="card__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          </div>
+          <h3 class="card__title">Interactive Search</h3>
+          <p class="card__description">Browse search results and pick the exact track you want to play.</p>
         </div>
-    </section>
 
-    <!-- Troubleshooting Section -->
-    <section class="section" id="troubleshooting">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">// TROUBLESHOOTING</span>
-                <h2 class="section-title">Common Issues</h2>
-                <p class="section-desc">Solutions for known platform-specific problems</p>
-            </div>
-
-            <div class="commands-container">
-                <div class="command-group">
-                    <h3 class="group-title">
-                        <span class="group-icon"><i class="bi bi-cpu"></i></span>
-                        Audio not working on Raspberry Pi
-                    </h3>
-                    <div style="padding: 0 24px 24px;">
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">
-                            Raspberry Pi 5 (Debian 13) may use a <strong style="color: var(--text-primary);">16KB memory page size</strong>, which is incompatible with Lavalink's DAVE encryption library (<code style="color: var(--neon-cyan); font-size: 0.85em;">libdave.jvm.so</code>), compiled for 4KB pages.
-                        </p>
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">
-                            <strong style="color: var(--text-primary);">1. Check your page size:</strong>
-                        </p>
-                        <div class="terminal" style="margin-bottom: 16px;">
-                            <div class="terminal-header">
-                                <span class="terminal-dot"></span>
-                                <span class="terminal-dot"></span>
-                                <span class="terminal-dot"></span>
-                                <span class="terminal-title">Terminal</span>
-                            </div>
-                            <div class="terminal-body">
-                                <div class="terminal-line">
-                                    <span class="prompt">$</span>
-                                    <span class="command">getconf PAGE_SIZE</span>
-                                </div>
-                            </div>
-                            <button class="copy-btn" data-copy="getconf PAGE_SIZE">
-                                <span class="copy-icon"><i class="bi bi-clipboard"></i></span>
-                                <span class="copy-text">Copy</span>
-                            </button>
-                        </div>
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">
-                            If the result is not <code style="color: var(--neon-green); font-size: 0.85em;">4096</code>:
-                        </p>
-                        <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">
-                            <strong style="color: var(--text-primary);">2. Fix by switching to a 4KB kernel:</strong>
-                        </p>
-                        <div class="terminal" style="margin-bottom: 16px;">
-                            <div class="terminal-header">
-                                <span class="terminal-dot"></span>
-                                <span class="terminal-dot"></span>
-                                <span class="terminal-dot"></span>
-                                <span class="terminal-title">Terminal</span>
-                            </div>
-                            <div class="terminal-body">
-                                <div class="terminal-line">
-                                    <span class="prompt">#</span>
-                                    <span class="command" style="color: var(--text-muted);">Add kernel=kernel8.img under [all] in boot config</span>
-                                </div>
-                                <div class="terminal-line">
-                                    <span class="prompt">$</span>
-                                    <span class="command">sudo nano /boot/firmware/config.txt</span>
-                                </div>
-                                <div class="terminal-line">
-                                    <span class="prompt">$</span>
-                                    <span class="command">sudo reboot</span>
-                                </div>
-                                <div class="terminal-line">&nbsp;</div>
-                                <div class="terminal-line">
-                                    <span class="prompt">#</span>
-                                    <span class="command" style="color: var(--text-muted);">Then restart BeatDock</span>
-                                </div>
-                                <div class="terminal-line">
-                                    <span class="prompt">$</span>
-                                    <span class="command">docker compose down && docker compose up -d</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="permission-note">
-                            <div class="note-icon"><i class="bi bi-info-circle"></i></div>
-                            <div class="note-content">
-                                See <a href="https://github.com/lazaroagomez/BeatDock/issues/109" target="_blank" rel="noopener" style="color: var(--neon-cyan);">issue #109</a> for the full discussion and details. Thanks to <a href="https://github.com/Kru3mel" target="_blank" rel="noopener" style="color: var(--neon-cyan);">@Kru3mel</a> for reporting this fix.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="card fade-in">
+          <div class="card__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
+          </div>
+          <h3 class="card__title">Multi-Language</h3>
+          <p class="card__description">Available in English, Spanish, Turkish, and Italian.</p>
         </div>
-    </section>
 
-    <!-- Configuration Section -->
-    <section class="section config" id="config">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">// CONFIGURATION</span>
-                <h2 class="section-title">Environment Variables</h2>
-                <p class="section-desc">Complete configuration reference</p>
-            </div>
-
-            <div class="config-container">
-                <div class="config-group">
-                    <h3 class="config-group-title">
-                        <span class="config-icon required"><i class="bi bi-star-fill"></i></span>
-                        Required
-                    </h3>
-                    <div class="config-table">
-                        <div class="config-row">
-                            <code class="config-var">TOKEN</code>
-                            <span class="config-desc">Discord bot token from Developer Portal</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="config-group">
-                    <h3 class="config-group-title">
-                        <span class="config-icon"><i class="bi bi-gear"></i></span>
-                        Lavalink
-                        <span style="font-family: var(--font-mono); font-size: 0.65rem; font-weight: 400; color: var(--text-muted); margin-left: auto; letter-spacing: 0.03em;">Optional &mdash; leave empty to use free public servers</span>
-                    </h3>
-                    <div class="config-table">
-                        <div class="config-row">
-                            <code class="config-var">LAVALINK_HOST</code>
-                            <span class="config-default">lavalink</span>
-                            <span class="config-desc">Lavalink server hostname</span>
-                        </div>
-                        <div class="config-row">
-                            <code class="config-var">LAVALINK_PORT</code>
-                            <span class="config-default">2333</span>
-                            <span class="config-desc">Lavalink server port</span>
-                        </div>
-                        <div class="config-row">
-                            <code class="config-var">LAVALINK_PASSWORD</code>
-                            <span class="config-default">youshallnotpass</span>
-                            <span class="config-desc">Lavalink server password</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="config-group">
-                    <h3 class="config-group-title">
-                        <span class="config-icon spotify"><i class="bi bi-spotify"></i></span>
-                        Spotify (Optional)
-                    </h3>
-                    <div class="config-table">
-                        <div class="config-row">
-                            <code class="config-var">SPOTIFY_ENABLED</code>
-                            <span class="config-default">false</span>
-                            <span class="config-desc">Enable Spotify integration</span>
-                        </div>
-                        <div class="config-row">
-                            <code class="config-var">SPOTIFY_CLIENT_ID</code>
-                            <span class="config-desc">Spotify application client ID</span>
-                        </div>
-                        <div class="config-row">
-                            <code class="config-var">SPOTIFY_CLIENT_SECRET</code>
-                            <span class="config-desc">Spotify application client secret</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="config-group">
-                    <h3 class="config-group-title">
-                        <span class="config-icon"><i class="bi bi-sliders"></i></span>
-                        Bot Behavior
-                    </h3>
-                    <div class="config-table">
-                        <div class="config-row">
-                            <code class="config-var">DEFAULT_LANGUAGE</code>
-                            <span class="config-default">en</span>
-                            <span class="config-desc">Default language (en/es/tr/it)</span>
-                        </div>
-                        <div class="config-row">
-                            <code class="config-var">DEFAULT_VOLUME</code>
-                            <span class="config-default">80</span>
-                            <span class="config-desc">Default playback volume (0-100)</span>
-                        </div>
-                        <div class="config-row">
-                            <code class="config-var">ALLOWED_ROLES</code>
-                            <span class="config-default">empty</span>
-                            <span class="config-desc">Comma-separated role IDs (empty = everyone)</span>
-                        </div>
-                        <div class="config-row">
-                            <code class="config-var">AUTOPLAY_DEFAULT</code>
-                            <span class="config-default">false</span>
-                            <span class="config-desc">Enable autoplay by default when music starts</span>
-                        </div>
-                        <div class="config-row">
-                            <code class="config-var">QUEUE_EMPTY_DESTROY_MS</code>
-                            <span class="config-default">30000</span>
-                            <span class="config-desc">Leave after queue empty (ms)</span>
-                        </div>
-                        <div class="config-row">
-                            <code class="config-var">EMPTY_CHANNEL_DESTROY_MS</code>
-                            <span class="config-default">60000</span>
-                            <span class="config-desc">Leave empty channel after (ms)</span>
-                        </div>
-                        <div class="config-row">
-                            <code class="config-var">DEFAULT_SEARCH_PLATFORM</code>
-                            <span class="config-default">ytmsearch</span>
-                            <span class="config-desc">Default search platform (ytsearch, ytmsearch, etc.)</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="permission-note">
-                <div class="note-icon"><i class="bi bi-lock"></i></div>
-                <div class="note-content">
-                    <strong>Permission System:</strong>
-                    Empty ALLOWED_ROLES = everyone can use the bot.
-                    Administrators always have access regardless of role settings.
-                </div>
-            </div>
+        <div class="card fade-in">
+          <div class="card__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+          </div>
+          <h3 class="card__title">Access Control</h3>
+          <p class="card__description">Role-based permissions to control who can use the bot.</p>
         </div>
-    </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <span class="footer-logo"><i class="bi bi-music-note-beamed"></i> BEATDOCK</span>
-                    <p class="footer-tagline">Drop the beat. Control the vibe.</p>
-                </div>
-                <div class="footer-links">
-                    <a href="https://github.com/lazaroagomez/BeatDock" target="_blank" rel="noopener">GitHub</a>
-                    <a href="https://github.com/lazaroagomez/BeatDock/issues" target="_blank" rel="noopener">Issues</a>
-                    <a href="mailto:lazaro98@duck.com">Contact</a>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 Lazaro Gomez &middot; Apache-2.0 License</p>
-                <p class="footer-credit">Built with love for the Discord community</p>
-            </div>
+        <div class="card fade-in">
+          <div class="card__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+          </div>
+          <h3 class="card__title">Docker Deployment</h3>
+          <p class="card__description">One command to deploy. Pre-built images, no host dependencies.</p>
         </div>
-    </footer>
 
-    <script src="script.js"></script>
+        <div class="card fade-in">
+          <div class="card__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h.01"/><path d="M2 8.82a15 15 0 0 1 20 0"/><path d="M5 12.859a10 10 0 0 1 14 0"/><path d="M8.5 16.429a5 5 0 0 1 7 0"/></svg>
+          </div>
+          <h3 class="card__title">Public Lavalink Fallback</h3>
+          <p class="card__description">No self-hosted server needed. Auto-connects to free public Lavalink nodes.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Commands -->
+  <section class="section section--alt" id="commands">
+    <div class="container">
+      <h2 class="section__title fade-in">Commands</h2>
+      <p class="section__subtitle fade-in">Simple slash commands. Nothing to memorize.</p>
+      <div class="commands__grid">
+        <div class="command fade-in"><code class="command__name">/play <span>&lt;query&gt;</span></code><span class="command__desc">Play a song or add to queue</span></div>
+        <div class="command fade-in"><code class="command__name">/search <span>&lt;query&gt;</span></code><span class="command__desc">Search and select tracks</span></div>
+        <div class="command fade-in"><code class="command__name">/pause</code><span class="command__desc">Pause or resume playback</span></div>
+        <div class="command fade-in"><code class="command__name">/skip</code><span class="command__desc">Skip to next track</span></div>
+        <div class="command fade-in"><code class="command__name">/back</code><span class="command__desc">Go to previous track</span></div>
+        <div class="command fade-in"><code class="command__name">/stop</code><span class="command__desc">Stop and disconnect</span></div>
+        <div class="command fade-in"><code class="command__name">/queue</code><span class="command__desc">View the current queue</span></div>
+        <div class="command fade-in"><code class="command__name">/shuffle</code><span class="command__desc">Shuffle the queue</span></div>
+        <div class="command fade-in"><code class="command__name">/autoplay</code><span class="command__desc">Toggle autoplay mode</span></div>
+        <div class="command fade-in"><code class="command__name">/loop</code><span class="command__desc">Toggle loop mode</span></div>
+        <div class="command fade-in"><code class="command__name">/clear</code><span class="command__desc">Clear the queue</span></div>
+        <div class="command fade-in"><code class="command__name">/volume <span>&lt;1-100&gt;</span></code><span class="command__desc">Set playback volume</span></div>
+        <div class="command fade-in"><code class="command__name">/lyrics</code><span class="command__desc">Show lyrics for current song</span></div>
+        <div class="command fade-in"><code class="command__name">/filter</code><span class="command__desc">Apply audio effects and EQ</span></div>
+        <div class="command fade-in"><code class="command__name">/nowplaying</code><span class="command__desc">Current track info</span></div>
+        <div class="command fade-in"><code class="command__name">/invite</code><span class="command__desc">Get bot invite link</span></div>
+        <div class="command fade-in"><code class="command__name">/about</code><span class="command__desc">Bot info and stats</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Start -->
+  <section class="section" id="quick-start">
+    <div class="container">
+      <h2 class="section__title fade-in">Get Started in 3 Steps</h2>
+      <p class="section__subtitle fade-in">From zero to music in under a minute.</p>
+      <div class="steps">
+        <div class="step fade-in">
+          <div class="step__number">1</div>
+          <h3 class="step__title">Create a Bot Token</h3>
+          <p class="step__desc">Head to the <a href="https://discord.com/developers/applications" target="_blank" rel="noopener">Discord Developer Portal</a> and create a new application. Enable all Privileged Gateway Intents.</p>
+        </div>
+        <div class="step__connector" aria-hidden="true"></div>
+        <div class="step fade-in">
+          <div class="step__number">2</div>
+          <h3 class="step__title">Deploy with Docker</h3>
+          <p class="step__desc">Create your <code>.env</code> and <code>docker-compose.yml</code>, then run <code>docker compose up -d</code>.</p>
+        </div>
+        <div class="step__connector" aria-hidden="true"></div>
+        <div class="step fade-in">
+          <div class="step__number">3</div>
+          <h3 class="step__title">Play Music</h3>
+          <p class="step__desc">Use <code>/play</code> in any voice channel. BeatDock handles the rest.</p>
+        </div>
+      </div>
+      <p class="steps__cta fade-in">
+        Need more detail? See the <a href="#setup-guide">full setup guide</a> below.
+      </p>
+    </div>
+  </section>
+
+  <!-- Setup Guide -->
+  <section class="section section--alt" id="setup-guide">
+    <div class="container">
+      <h2 class="section__title fade-in">Setup Guide</h2>
+      <p class="section__subtitle fade-in">Everything you need to get BeatDock running on your server.</p>
+
+      <div class="guide">
+
+        <!-- Prerequisites -->
+        <div class="guide__block fade-in">
+          <h3 class="guide__heading">
+            <span class="guide__heading-number">1</span>
+            Prerequisites
+          </h3>
+          <ul class="guide__list">
+            <li>A Discord bot token from the <a href="https://discord.com/developers/applications" target="_blank" rel="noopener">Discord Developer Portal</a></li>
+            <li><a href="https://docs.docker.com/get-docker/" target="_blank" rel="noopener">Docker</a> installed on your server</li>
+          </ul>
+        </div>
+
+        <!-- Discord Developer Portal -->
+        <div class="guide__block fade-in">
+          <h3 class="guide__heading">
+            <span class="guide__heading-number">2</span>
+            Discord Developer Portal Setup
+          </h3>
+          <p class="guide__text">Create a new application, then go to the <strong>Bot</strong> tab and enable all 3 <strong>Privileged Gateway Intents</strong>:</p>
+          <div class="guide__intents">
+            <div class="guide__intent">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              Presence Intent
+            </div>
+            <div class="guide__intent">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              Server Members Intent
+            </div>
+            <div class="guide__intent">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              Message Content Intent
+            </div>
+          </div>
+          <p class="guide__text guide__text--muted">Copy your bot token from this page — you'll need it for the <code>.env</code> file.</p>
+        </div>
+
+        <!-- .env Example -->
+        <div class="guide__block fade-in">
+          <h3 class="guide__heading">
+            <span class="guide__heading-number">3</span>
+            Environment Configuration
+          </h3>
+          <p class="guide__text">Create a <code>.env</code> file. Only <code>TOKEN</code> is required — everything else is optional.</p>
+          <div class="guide__code">
+            <div class="guide__code-header">
+              <span>.env</span>
+            </div>
+            <pre><code># Required
+TOKEN=your_discord_bot_token
+
+# Spotify (optional)
+SPOTIFY_ENABLED=false
+SPOTIFY_CLIENT_ID=
+SPOTIFY_CLIENT_SECRET=
+
+# Playback
+DEFAULT_VOLUME=80
+AUTOPLAY_DEFAULT=false
+DEFAULT_SEARCH_PLATFORM=ytmsearch
+
+# Language: en, es, tr, it
+DEFAULT_LANGUAGE=en
+
+# Access control (optional)
+# ALLOWED_ROLES=role_id_1,role_id_2
+
+# Lavalink (leave commented for public server fallback)
+# LAVALINK_HOST=lavalink
+# LAVALINK_PORT=2333
+# LAVALINK_PASSWORD=youshallnotpass
+
+# Timeouts
+QUEUE_EMPTY_DESTROY_MS=30000
+EMPTY_CHANNEL_DESTROY_MS=60000</code></pre>
+          </div>
+        </div>
+
+        <!-- Configuration Reference -->
+        <div class="guide__block fade-in">
+          <h3 class="guide__heading">
+            <span class="guide__heading-number">4</span>
+            Configuration Reference
+          </h3>
+          <div class="guide__table-wrap">
+            <table class="guide__table">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Default</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><code>TOKEN</code></td><td>—</td><td>Discord bot token <strong>(required)</strong></td></tr>
+                <tr><td><code>SPOTIFY_ENABLED</code></td><td><code>false</code></td><td>Enable Spotify search support</td></tr>
+                <tr><td><code>SPOTIFY_CLIENT_ID</code></td><td>—</td><td>Spotify app client ID</td></tr>
+                <tr><td><code>SPOTIFY_CLIENT_SECRET</code></td><td>—</td><td>Spotify app client secret</td></tr>
+                <tr><td><code>DEFAULT_LANGUAGE</code></td><td><code>en</code></td><td>Bot language (en, es, tr, it)</td></tr>
+                <tr><td><code>DEFAULT_VOLUME</code></td><td><code>80</code></td><td>Default playback volume (0–100)</td></tr>
+                <tr><td><code>AUTOPLAY_DEFAULT</code></td><td><code>false</code></td><td>Enable autoplay by default</td></tr>
+                <tr><td><code>ALLOWED_ROLES</code></td><td>—</td><td>Comma-separated role IDs to restrict access</td></tr>
+                <tr><td><code>DEFAULT_SEARCH_PLATFORM</code></td><td><code>ytmsearch</code></td><td>Default search platform</td></tr>
+                <tr><td><code>LAVALINK_PASSWORD</code></td><td><code>youshallnotpass</code></td><td>Lavalink server password</td></tr>
+                <tr><td><code>QUEUE_EMPTY_DESTROY_MS</code></td><td><code>30000</code></td><td>Disconnect after queue empties (ms)</td></tr>
+                <tr><td><code>EMPTY_CHANNEL_DESTROY_MS</code></td><td><code>60000</code></td><td>Disconnect from empty channel (ms)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Docker Deploy -->
+        <div class="guide__block fade-in">
+          <h3 class="guide__heading">
+            <span class="guide__heading-number">5</span>
+            Deploy
+          </h3>
+          <div class="guide__code">
+            <div class="guide__code-header">
+              <span>Terminal</span>
+            </div>
+            <pre><code>mkdir beatdock && cd beatdock
+
+# Add your .env and docker-compose.yml, then:
+docker compose up -d</code></pre>
+          </div>
+        </div>
+
+        <!-- Managing -->
+        <div class="guide__block fade-in">
+          <h3 class="guide__heading">
+            <span class="guide__heading-number">6</span>
+            Managing the Bot
+          </h3>
+          <div class="guide__code">
+            <div class="guide__code-header">
+              <span>Terminal</span>
+            </div>
+            <pre><code>docker compose logs -f          # View logs
+docker compose restart          # Restart
+docker compose down             # Stop
+docker compose pull && \
+  docker compose up -d          # Update to latest</code></pre>
+          </div>
+          <p class="guide__text guide__text--muted">No self-hosted Lavalink? No problem — leave the Lavalink variables commented out and BeatDock will automatically connect to free public servers.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Built With -->
+  <section class="section section--alt" id="built-with">
+    <div class="container">
+      <h2 class="section__title fade-in">Built With</h2>
+      <div class="tech__grid fade-in">
+        <a href="https://discord.js.org/" class="tech__item" target="_blank" rel="noopener">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/discordjs/discordjs-original.svg" alt="discord.js" class="tech__logo">
+          <span class="tech__name">discord.js</span>
+        </a>
+        <a href="https://github.com/lavalink-devs/Lavalink" class="tech__item" target="_blank" rel="noopener">
+          <div class="tech__logo tech__logo--text">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          </div>
+          <span class="tech__name">Lavalink</span>
+        </a>
+        <a href="https://www.docker.com/" class="tech__item" target="_blank" rel="noopener">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg" alt="Docker" class="tech__logo">
+          <span class="tech__name">Docker</span>
+        </a>
+        <a href="https://nodejs.org/" class="tech__item" target="_blank" rel="noopener">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg" alt="Node.js" class="tech__logo">
+          <span class="tech__name">Node.js 22+</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <div class="footer__brand-row">
+          <img src="wallpaper.avif" alt="BeatDock" class="footer__logo">
+          <span class="footer__name">BeatDock</span>
+        </div>
+        <p class="footer__tagline">Open-source Discord music bot.</p>
+      </div>
+      <div class="footer__links">
+        <div class="footer__column">
+          <h4 class="footer__heading">Project</h4>
+          <a href="https://github.com/lazaroagomez/BeatDock" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://github.com/lazaroagomez/BeatDock/issues" target="_blank" rel="noopener">Issues</a>
+          <a href="https://github.com/lazaroagomez/BeatDock/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Changelog</a>
+        </div>
+        <div class="footer__column">
+          <h4 class="footer__heading">Resources</h4>
+          <a href="#features">Features</a>
+          <a href="#commands">Commands</a>
+          <a href="#quick-start">Quick Start</a>
+        </div>
+        <div class="footer__column">
+          <h4 class="footer__heading">Support</h4>
+          <a href="https://ko-fi.com/lazaroagomez" target="_blank" rel="noopener">Ko-fi</a>
+          <a href="https://github.com/lazaroagomez/BeatDock/blob/main/.github/CONTRIBUTING.md" target="_blank" rel="noopener">Contributing</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <div class="container">
+        <p>&copy; 2025 BeatDock. Apache-2.0 License.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
 </body>
 </html>
