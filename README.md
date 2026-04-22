@@ -34,7 +34,7 @@ A Discord music bot powered by Lavalink. Simple to deploy, easy to use.
 - Autoplay mode for continuous music playback
 - Queue management with shuffle, loop, and play-next
 - Interactive search with track selection
-- Multi-language support (English, Spanish, Turkish, Italian)
+- Multi-language support (English, Spanish, Turkish, Italian, Brazilian Portuguese)
 - Role-based access control
 - Runs entirely in Docker, no host dependencies
 - Works without a self-hosted Lavalink server (automatic public server fallback)
@@ -217,7 +217,7 @@ All configuration is done through the `.env` file. Only `TOKEN` is required.
 | `SPOTIFY_ENABLED` | `false` | Enable Spotify search support |
 | `SPOTIFY_CLIENT_ID` | - | Spotify app client ID |
 | `SPOTIFY_CLIENT_SECRET` | - | Spotify app client secret |
-| `DEFAULT_LANGUAGE` | `en` | Bot language (`en`, `es`, `tr`, `it`) |
+| `DEFAULT_LANGUAGE` | `en` | Bot language (`en`, `es`, `tr`, `it`, `pt-BR`) |
 | `DEFAULT_VOLUME` | `80` | Default playback volume (0-100) |
 | `AUTOPLAY_DEFAULT` | `false` | Enable autoplay by default when music starts |
 | `ALLOWED_ROLES` | - | Comma-separated role IDs to restrict access |
