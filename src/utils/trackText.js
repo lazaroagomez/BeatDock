@@ -1,5 +1,5 @@
 const TITLE_NOISE = /\s*[\(\[](official\s*(video|audio|music\s*video|lyric\s*video|visualizer)|lyric\s*video|lyrics?|audio|video|mv|hd|hq|4k|remaster(ed)?|live|ft\.?.*|feat\.?.*|prod\.?.*|visualizer)[\)\]]\s*/gi;
-const ARTIST_NOISE = /\s*(official\s*(youtube\s*)?channel|official|music|vevo|records?|entertainment)\s*/gi;
+const ARTIST_NOISE = /\s*\b(official(?:\s*youtube)?\s*channel|official|vevo|records?|entertainment)\b\s*/gi;
 const TOPIC_SUFFIX = /\s*-\s*Topic$/i;
 
 function normalizeString(str = '') {

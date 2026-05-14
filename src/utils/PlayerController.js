@@ -28,7 +28,7 @@ class PlayerController {
 
         const embed = new EmbedBuilder()
             .setColor(0x0099FF)
-            .setTitle(this.client.languageManager.get(lang, 'PLAYER_TITLE'))
+            .setTitle(truncateText(this.client.languageManager.get(lang, 'PLAYER_TITLE'), EMBED_TITLE_LIMIT))
             .setDescription(description)
             .setThumbnail(track.info?.artworkUrl || null)
             .addFields(

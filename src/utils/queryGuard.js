@@ -18,6 +18,8 @@ const BLOCKED_PROTOCOLS = new Set([
     'javascript:',
 ]);
 
+const QUERY_VALIDATION_TIMEOUT_MS = 2500;
+
 function stripToken(token) {
     return token.replace(/^[<("'`]+|[>)"',`]+$/g, '');
 }
@@ -35,7 +37,7 @@ function parseUrlToken(token) {
         return new URL(cleaned);
     }
 
-    if (/^[a-z][a-z0-9+.-]*:\/\//i.test(cleaned)) {
+    if (/^[a-z][a-z0-9+.-]*:/i.test(cleaned)) {
         return new URL(cleaned);
     }
 
@@ -50,7 +52,7 @@ function parseUrlToken(token) {
     return null;
 }
 
-async function validatePlaybackQuery(query) {
+async function validatePlaybackQueryInner(query) {
     const trimmed = String(query || '').trim();
     if (!trimmed || hasSearchPrefix(trimmed)) {
         return { allowed: true };
@@ -76,13 +78,38 @@ async function validatePlaybackQuery(query) {
             continue;
         }
 
-        const safeHost = await isSafeExternalHost(url.hostname);
+        let safeHost = false;
+        try {
+            safeHost = await isSafeExternalHost(url.hostname);
+        } catch {
+            return { allowed: false, reason: 'blocked-host' };
+        }
         if (!safeHost) {
             return { allowed: false, reason: 'blocked-host' };
         }
     }
 
     return { allowed: true };
+}
+
+// Caps total validation latency so callers can run this before the Discord
+// interaction ACK (3s budget). Timeout fails closed to match the security
+// guarantees documented in the PR.
+async function validatePlaybackQuery(query) {
+    let timeoutId;
+    try {
+        return await Promise.race([
+            validatePlaybackQueryInner(query),
+            new Promise(resolve => {
+                timeoutId = setTimeout(
+                    () => resolve({ allowed: false, reason: 'timeout' }),
+                    QUERY_VALIDATION_TIMEOUT_MS,
+                );
+            }),
+        ]);
+    } finally {
+        clearTimeout(timeoutId);
+    }
 }
 
 module.exports = { validatePlaybackQuery };
